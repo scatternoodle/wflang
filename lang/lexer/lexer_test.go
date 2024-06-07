@@ -12,6 +12,8 @@ func TestNextToken(t *testing.T) {
 	s := `
 	= + - ! * / % > >= < <=
 	"hello world"
+	42
+	45.5
 	`
 	l := New(s)
 
@@ -31,6 +33,8 @@ func TestNextToken(t *testing.T) {
 		{token.T_LT, "<"},               // 9
 		{token.T_LTE, "<="},             // 10
 		{token.T_STRING, "hello world"}, // 11
+		{token.T_NUM, "42"},             // 12
+		{token.T_NUM, "45.5"},           // 13
 		{token.T_EOF, ""},               // last
 	}
 

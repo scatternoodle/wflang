@@ -91,10 +91,12 @@ func (l *Lexer) NextToken() token.Token {
 		tokn = newToken(l, token.T_DOLLAR, '$')
 
 	case '"':
-		s := l.readString()
-		tokn = newToken(l, token.T_STRING, s)
+		tokn = newToken(l, token.T_STRING, l.readString())
 
 	default:
+		if util.IsDigit(l.ch) {
+			tokn = newToken(l, token.T_NUM, l.readNumber())
+		}
 	}
 
 	l.advance()
@@ -147,6 +149,29 @@ func (l *Lexer) readString() string {
 		l.advance()
 		if l.ch == '"' || l.ch == eof {
 			break
+		}
+	}
+	return l.input[start:l.pos]
+}
+
+// readNumber is called on a digit, and reads until it reaches the end of the number.
+// A "number" can be a an int or a float, and apart from digits, up to one decimal point
+// is recognized. Returns the number as a string.
+func (l *Lexer) readNumber() string {
+	start := l.pos
+	dots := 0 // we allow up to one decimal place
+
+	for {
+		l.advance()
+		if l.ch != '.' && !util.IsDigit(l.ch) {
+			break
+		}
+
+		if l.ch == '.' {
+			if dots > 0 {
+				break
+			}
+			dots++
 		}
 	}
 	return l.input[start:l.pos]

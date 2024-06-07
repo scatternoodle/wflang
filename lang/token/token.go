@@ -20,7 +20,7 @@ type Type string
 
 // Types that may be used to build a Token literal.
 type Literal interface {
-	~rune | ~byte | ~string
+	rune | byte | ~string
 }
 
 // New creates a new token with the given type and position data. Takes a single
@@ -65,7 +65,7 @@ const (
 
 	T_IDENT  Type = "IDENT"
 	T_INT    Type = "INT"
-	T_FLOAT  Type = "FLOAT"
+	T_NUM    Type = "NUMBER" // A la Javascript, a number is a number is a runtime error.
 	T_STRING Type = "STRING"
 
 	// comments
