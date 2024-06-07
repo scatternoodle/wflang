@@ -2,6 +2,7 @@
 # https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
 #
 # Binaries for programs and plugins
+wflsrv
 *.exe
 *.exe~
 *.dll
@@ -19,4 +20,21 @@
 
 # Go workspace file
 go.work
-go.work.sum
+
+# node / vscode ignores
+out
+dist
+node_modules
+.vscode-test/
+*.vsix
+extension/out
+extension/dist
+extension/node_modules
+extension/.vscode-test/
+extension/*.vsix
+
+# log / temp files
+extension/server/logs/*
+
+nextjob.txt
+#
