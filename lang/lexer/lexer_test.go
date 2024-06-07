@@ -10,6 +10,8 @@ import (
 
 func TestNextToken(t *testing.T) {
 	s := `
+	= + - ! * / % > >= < <=
+	"hello world"
 	`
 	l := New(s)
 
@@ -17,7 +19,19 @@ func TestNextToken(t *testing.T) {
 		wantType    token.Type
 		wantLiteral string
 	}{
-		{token.T_EOF, ""}, // 0
+		{token.T_EQ, "="},               // 0
+		{token.T_PLUS, "+"},             // 1
+		{token.T_MINUS, "-"},            // 2
+		{token.T_BANG, "!"},             // 3
+		{token.T_ASTERISK, "*"},         // 4
+		{token.T_SLASH, "/"},            // 5
+		{token.T_MODULO, "%"},           // 6
+		{token.T_GT, ">"},               // 7
+		{token.T_GTE, ">="},             // 8
+		{token.T_LT, "<"},               // 9
+		{token.T_LTE, "<="},             // 10
+		{token.T_STRING, "hello world"}, // 11
+		{token.T_EOF, ""},               // last
 	}
 
 	for i, tt := range tests {
@@ -36,12 +50,14 @@ func TestPositionInfo(t *testing.T) {
 	s := "\n"
 	l := New(s)
 
-	// First, check if token is in the right position
-	tk := l.NextToken()
 	sBytes := []byte(s)
 	wantLen := len(sBytes)
 	wantLine := bytes.Count(sBytes, []byte("\n"))
-	if l.pos != wantLen {
+	tk := l.NextToken()
+
+	// First, check if token is in the right position
+	// lexer advances before returning token so at EOF, pos is 1 greater than input length.
+	if l.pos != wantLen+1 {
 		t.Fatalf("l.pos = %d, want %d", l.pos, wantLen)
 	}
 	if l.line != wantLine {
@@ -55,6 +71,6 @@ func TestPositionInfo(t *testing.T) {
 		Col:  0,
 	}
 	if !reflect.DeepEqual(tk.Pos, wantPos) {
-		t.Fatalf("token.Pos = %s, have %s", tk.Pos.String(), wantPos.String())
+		t.Fatalf("token.Pos = %s, want %s", tk.Pos.String(), wantPos.String())
 	}
 }

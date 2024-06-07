@@ -1,6 +1,8 @@
 package lexer
 
 import (
+	"log"
+
 	"github.com/scatternoodle/wflang/lang/token"
 	"github.com/scatternoodle/wflang/util"
 )
@@ -32,11 +34,77 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.ch {
 	case eof:
-		tokn = l.newToken(token.T_EOF, eof)
+		tokn = newToken(l, token.T_EOF, eof)
 		tokn.Literal = ""
+
+	case '=': // single = used for both assignment and equality (yuck)
+		tokn = newToken(l, token.T_EQ, '=')
+	case '+':
+		tokn = newToken(l, token.T_PLUS, '+')
+	case '-':
+		tokn = newToken(l, token.T_MINUS, '-')
+	case '!':
+		tokn = newToken(l, token.T_BANG, '!')
+	case '*':
+		tokn = newToken(l, token.T_ASTERISK, '*')
+	case '/':
+		tokn = newToken(l, token.T_SLASH, '/')
+	case '%':
+		tokn = newToken(l, token.T_MODULO, '%')
+
+	case '>':
+		if l.peek() == '=' {
+			l.advance()
+			tokn = newToken(l, token.T_GTE, ">=")
+		} else {
+			tokn = newToken(l, token.T_GT, '>')
+		}
+	case '<':
+		if l.peek() == '=' {
+			l.advance()
+			tokn = newToken(l, token.T_LTE, "<=")
+		} else {
+			tokn = newToken(l, token.T_LT, '<')
+		}
+
+	// TODO: take a closer look at these... delimeters are a bit more complex.
+	case ',':
+		tokn = newToken(l, token.T_COMMA, ',')
+	case ';':
+		tokn = newToken(l, token.T_SEMICOLON, ';')
+	case ':':
+		tokn = newToken(l, token.T_COLON, ':')
+	case '(':
+		tokn = newToken(l, token.T_LPAREN, '(')
+	case ')':
+		tokn = newToken(l, token.T_RPAREN, ')')
+	case '{':
+		tokn = newToken(l, token.T_LBRACE, '{')
+	case '}':
+		tokn = newToken(l, token.T_RBRACE, '}')
+	case '[':
+		tokn = newToken(l, token.T_LBRACKET, '[')
+	case ']':
+		tokn = newToken(l, token.T_RBRACKET, ']')
+	case '.':
+		tokn = newToken(l, token.T_PERIOD, '.')
+	case '$':
+		tokn = newToken(l, token.T_DOLLAR, '$')
+
+	case '"':
+		s := l.readString()
+		log.Printf("found string %s", s)
+		tokn = newToken(l, token.T_STRING, s)
+
+	default:
 	}
 
+	l.advance()
 	return tokn
+}
+
+func newToken[T token.Literal](l *Lexer, tType token.Type, literal T) token.Token {
+	return token.New(l.pos, l.line, l.lPos, tType, literal)
 }
 
 func (l *Lexer) advance() {
@@ -49,6 +117,15 @@ func (l *Lexer) advance() {
 	l.next++
 }
 
+func (l *Lexer) peek() byte {
+	if l.next > len(l.input) {
+		return eof
+	}
+	return l.input[l.next]
+}
+
+// skipWhiteSpace advances until a non-whitespace character is met. Increments the
+// Lexer's line number whenever \n is encountered.
 func (l *Lexer) skipWhiteSpace() {
 	for util.IsWhitespace(l.ch) {
 		if l.ch == '\n' {
@@ -58,6 +135,15 @@ func (l *Lexer) skipWhiteSpace() {
 	}
 }
 
-func (l *Lexer) newToken(t token.Type, ch byte) token.Token {
-	return token.New(l.pos, l.line, l.lPos, t, ch)
+// readString returns the string literal between two \" characters. Call this at
+// the first \"
+func (l *Lexer) readString() string {
+	start := l.pos + 1 // +1 because we assume this is called from first '"' in the token.
+	for {
+		l.advance()
+		if l.ch == '"' || l.ch == eof {
+			break
+		}
+	}
+	return l.input[start:l.pos]
 }
