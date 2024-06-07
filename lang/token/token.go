@@ -36,6 +36,7 @@ func New[T Literal](num, line, col int, t Type, lit T) Token {
 	}
 }
 
+// Token represents a word, or "semantic token" in WFLang.
 type Token struct {
 	Type    Type   // The token type - see "T_" consts in this pkg.
 	Literal string // The token expressed as a string literal.

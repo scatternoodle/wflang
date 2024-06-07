@@ -47,7 +47,7 @@ func TestNextToken(t *testing.T) {
 }
 
 func TestPositionInfo(t *testing.T) {
-	s := "\n"
+	s := ">\n"
 	l := New(s)
 
 	sBytes := []byte(s)

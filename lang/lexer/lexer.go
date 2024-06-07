@@ -1,8 +1,6 @@
 package lexer
 
 import (
-	"log"
-
 	"github.com/scatternoodle/wflang/lang/token"
 	"github.com/scatternoodle/wflang/util"
 )
@@ -15,6 +13,7 @@ func New(input string) *Lexer {
 	return l
 }
 
+// Lexer is the font of all semantic tokens. Here be words.
 type Lexer struct {
 	input string // Holds the entire text context of the Lexer
 	pos   int    // Current position in input
@@ -93,7 +92,6 @@ func (l *Lexer) NextToken() token.Token {
 
 	case '"':
 		s := l.readString()
-		log.Printf("found string %s", s)
 		tokn = newToken(l, token.T_STRING, s)
 
 	default:
@@ -103,10 +101,15 @@ func (l *Lexer) NextToken() token.Token {
 	return tokn
 }
 
+// newToken is a helper wrapper around token.New(), which inserts additional data
+// from the Lexer's internal state. literal can be any type that satisfies the
+// token.Literal interface.
 func newToken[T token.Literal](l *Lexer, tType token.Type, literal T) token.Token {
 	return token.New(l.pos, l.line, l.lPos, tType, literal)
 }
 
+// advance safely advances the Lexer further into its input string, correctly handling
+// EOF and internal state updates. This is the only way you should advance the Lexer.
 func (l *Lexer) advance() {
 	if l.next >= len(l.input) {
 		l.ch = eof
@@ -117,6 +120,7 @@ func (l *Lexer) advance() {
 	l.next++
 }
 
+// peek returns the character in the next position without advancing the Lexer.
 func (l *Lexer) peek() byte {
 	if l.next > len(l.input) {
 		return eof
