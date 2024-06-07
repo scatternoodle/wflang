@@ -8,6 +8,7 @@ wflsrv
 *.dll
 *.so
 *.dylib
+out
 
 # Test binary, built with `go test -c`
 *.test
@@ -22,19 +23,18 @@ wflsrv
 go.work
 
 # node / vscode ignores
-out
 dist
 node_modules
 .vscode-test/
 *.vsix
-extension/out
-extension/dist
-extension/node_modules
-extension/.vscode-test/
-extension/*.vsix
+vscode/out
+vscode/dist
+vscode/node_modules
+vscode/.vscode-test/
+vscode/*.vsix
 
 # log / temp files
-extension/server/logs/*
+vscode/server/logs/*
 
 nextjob.txt
 #
