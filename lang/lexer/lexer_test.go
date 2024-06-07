@@ -15,6 +15,9 @@ func TestNextToken(t *testing.T) {
 	42
 	45.5
 	Aardvark
+	var
+	Var
+	if over where order by
 	`
 	l := New(s)
 
@@ -37,6 +40,13 @@ func TestNextToken(t *testing.T) {
 		{token.T_NUM, "42"},             // 12
 		{token.T_NUM, "45.5"},           // 13
 		{token.T_IDENT, "Aardvark"},     // 14
+		{token.T_VAR, "var"},            // 15
+		{token.T_VAR, "Var"},            // 16
+		{token.T_IF, "if"},              // 17
+		{token.T_OVER, "over"},          // 18
+		{token.T_WHERE, "where"},        // 19
+		{token.T_ORDER, "order"},        // 20
+		{token.T_BY, "by"},              // 21
 		{token.T_EOF, ""},               // last
 	}
 
