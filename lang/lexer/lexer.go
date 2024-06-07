@@ -96,7 +96,19 @@ func (l *Lexer) NextToken() token.Token {
 	default:
 		if util.IsDigit(l.ch) {
 			tokn = newToken(l, token.T_NUM, l.readNumber())
+			l.advance()
+			return tokn
 		}
+
+		if util.IsLetter(l.ch) {
+			s := l.readIdent()
+			t := token.LookupKeyword(s)
+			tokn = newToken(l, t, s)
+			l.advance()
+			return tokn
+		}
+
+		tokn = newToken(l, token.T_ILLEGAL, l.ch)
 	}
 
 	l.advance()
@@ -144,7 +156,7 @@ func (l *Lexer) skipWhiteSpace() {
 // readString returns the string literal between two \" characters. Call this at
 // the first \"
 func (l *Lexer) readString() string {
-	start := l.pos + 1 // +1 because we assume this is called from first '"' in the token.
+	start := l.pos + 1 // +1 because this is called from first '"' in the token.
 	for {
 		l.advance()
 		if l.ch == '"' || l.ch == eof {
@@ -172,6 +184,20 @@ func (l *Lexer) readNumber() string {
 				break
 			}
 			dots++
+		}
+	}
+	return l.input[start:l.pos]
+}
+
+// readIdent is similar to readString in that it reads a string, but this version
+// is specifically for non quote-wrapped strings that resolve to idents or WFLang
+// keywords. Only recognizes alphanumeric characters.
+func (l *Lexer) readIdent() string {
+	start := l.pos
+	for {
+		l.advance()
+		if !util.IsLetter(l.ch) && !util.IsDigit(l.ch) {
+			break
 		}
 	}
 	return l.input[start:l.pos]

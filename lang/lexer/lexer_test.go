@@ -14,6 +14,7 @@ func TestNextToken(t *testing.T) {
 	"hello world"
 	42
 	45.5
+	Aardvark
 	`
 	l := New(s)
 
@@ -35,6 +36,7 @@ func TestNextToken(t *testing.T) {
 		{token.T_STRING, "hello world"}, // 11
 		{token.T_NUM, "42"},             // 12
 		{token.T_NUM, "45.5"},           // 13
+		{token.T_IDENT, "Aardvark"},     // 14
 		{token.T_EOF, ""},               // last
 	}
 
