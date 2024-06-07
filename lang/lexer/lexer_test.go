@@ -47,7 +47,7 @@ func TestNextToken(t *testing.T) {
 }
 
 func TestPositionInfo(t *testing.T) {
-	s := ">\n"
+	s := "\n>"
 	l := New(s)
 
 	sBytes := []byte(s)
@@ -57,7 +57,7 @@ func TestPositionInfo(t *testing.T) {
 
 	// First, check if token is in the right position
 	// lexer advances before returning token so at EOF, pos is 1 greater than input length.
-	if l.pos != wantLen+1 {
+	if l.pos != wantLen {
 		t.Fatalf("l.pos = %d, want %d", l.pos, wantLen)
 	}
 	if l.line != wantLine {
@@ -66,7 +66,7 @@ func TestPositionInfo(t *testing.T) {
 
 	// Then check the same for the token
 	wantPos := token.Pos{
-		Num:  wantLen,
+		Num:  wantLen - 1,
 		Line: wantLine,
 		Col:  0,
 	}

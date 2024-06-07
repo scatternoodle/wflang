@@ -122,7 +122,7 @@ func (l *Lexer) advance() {
 
 // peek returns the character in the next position without advancing the Lexer.
 func (l *Lexer) peek() byte {
-	if l.next > len(l.input) {
+	if l.next >= len(l.input) {
 		return eof
 	}
 	return l.input[l.next]
