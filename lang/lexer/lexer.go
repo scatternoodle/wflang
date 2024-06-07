@@ -15,7 +15,7 @@ func New(input string) *Lexer {
 
 type Lexer struct {
 	input string // Holds the entire text context of the Lexer
-	curr  int    // Current position in input
+	pos   int    // Current position in input
 	next  int    // Next reading position (char after pos.Num)
 	ch    byte   // The current character
 	line  int    // The current line
@@ -45,7 +45,7 @@ func (l *Lexer) advance() {
 	} else {
 		l.ch = l.input[l.next]
 	}
-	l.curr = l.next
+	l.pos = l.next
 	l.next++
 }
 
@@ -59,5 +59,5 @@ func (l *Lexer) skipWhiteSpace() {
 }
 
 func (l *Lexer) newToken(t token.Type, ch byte) token.Token {
-	return token.New(l.curr, l.line, l.lPos, t, ch)
+	return token.New(l.pos, l.line, l.lPos, t, ch)
 }
