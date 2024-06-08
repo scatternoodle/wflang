@@ -69,7 +69,9 @@ block */
 }
 
 func TestPositionInfo(t *testing.T) {
-	input := "var x = 1;\nx * 42"
+	input := `var x = 1;
+x * 42
+"so long and thanks for all the fish"`
 	l := New(input)
 
 	tests := []struct {
@@ -119,8 +121,13 @@ func TestPositionInfo(t *testing.T) {
 		}, // 42
 		{
 			8,
-			token.Pos{Num: 17, Line: 1, Col: 5},
-			token.Pos{Num: 17, Line: 1, Col: 5},
+			token.Pos{Num: 18, Line: 2, Col: 0},
+			token.Pos{Num: 54, Line: 2, Col: 36},
+		}, // "so long and thanks for all the fish"
+		{
+			9,
+			token.Pos{Num: 55, Line: 2, Col: 36},
+			token.Pos{Num: 55, Line: 2, Col: 36},
 		}, // EOF
 	}
 
