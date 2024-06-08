@@ -21,6 +21,7 @@ if over where order by
 // comment line
 /* comment
 block */
+!=
 `
 	l := New(s)
 
@@ -52,6 +53,7 @@ block */
 		{token.T_BY, "by"},                              // 21
 		{token.T_COMMENT_LINE, "// comment line\n"},     // 22
 		{token.T_COMMENT_BLOCK, "/* comment\nblock */"}, // 23
+		{token.T_NEQ, "!="},                             // 24
 		{token.T_EOF, ""},                               // last
 	}
 
