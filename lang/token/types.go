@@ -3,19 +3,19 @@ package token
 const (
 	// misc
 
-	T_ILLEGAL Type = "illegal"
-	T_EOF     Type = "eof"
+	T_ILLEGAL Type = "ILLEGAL"
+	T_EOF     Type = "EOF"
 
 	// literals
 
-	T_IDENT  Type = "ident"
-	T_NUM    Type = "number" // A la Javascript, a number is a number is a runtime error.
-	T_STRING Type = "string"
+	T_IDENT  Type = "IDENT"
+	T_NUM    Type = "NUMBER" // A la Javascript, a number is atokn = newToken(l, token.T_SLASH, '/') number is a runtime error.
+	T_STRING Type = "STRING"
 
 	// comments
 
-	T_LINE_COMMENT  = "commentLine"
-	T_BLOCK_COMMENT = "commentBlock"
+	T_COMMENT_LINE  Type = "COMMENT_LINE"
+	T_COMMENT_BLOCK Type = "COMMENT_BLOCK"
 
 	// operators
 
@@ -25,8 +25,9 @@ const (
 	T_PLUS     Type = "+"
 	T_MINUS    Type = "-"
 	T_BANG     Type = "!"
+	T_NEQ      Type = "!="
 	T_ASTERISK Type = "*"
-	T_SLASH    Type = "/"
+	T_SLASH    Type = "/" // This is only a discreet token in case of division.
 	T_MODULO   Type = "%" // Modulo is the only semantic use for the percent sign.
 	T_LT       Type = ">"
 	T_GT       Type = "<"

@@ -28,11 +28,18 @@ type Literal interface {
 // This is to be used within the Lexer, either for single-char literals or as a
 // "Starter" for longer tokens.
 func New[T Literal](num, line, col int, t Type, lit T) Token {
+	var length int
+	if s, ok := any(lit).(string); ok {
+		length = len(s)
+	} else {
+		length = 1
+	}
+
 	return Token{
 		Type:    t,
 		Literal: string(lit),
 		Pos:     Pos{num, line, col},
-		Len:     1,
+		Len:     length,
 	}
 }
 

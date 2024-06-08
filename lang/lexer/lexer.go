@@ -17,7 +17,7 @@ func New(input string) *Lexer {
 type Lexer struct {
 	input string // Holds the entire text context of the Lexer
 	pos   int    // Current position in input
-	next  int    // Next reading position (char after pos.Num)
+	next  int    // Next reading position (char after pos)
 	ch    byte   // The current character
 	line  int    // The current line
 	lPos  int    // The position within the current line
@@ -42,12 +42,27 @@ func (l *Lexer) NextToken() token.Token {
 		tokn = newToken(l, token.T_PLUS, '+')
 	case '-':
 		tokn = newToken(l, token.T_MINUS, '-')
+
 	case '!':
-		tokn = newToken(l, token.T_BANG, '!')
+		if l.peek() == '=' {
+			l.advance()
+			tokn = newToken(l, token.T_NEQ, "!=")
+		} else {
+			tokn = newToken(l, token.T_BANG, '!')
+		}
+
 	case '*':
 		tokn = newToken(l, token.T_ASTERISK, '*')
+
 	case '/':
-		tokn = newToken(l, token.T_SLASH, '/')
+		if l.peek() == '/' {
+			tokn = newToken(l, token.T_COMMENT_LINE, l.readLineComment())
+		} else if l.peek() == '*' {
+			tokn = newToken(l, token.T_COMMENT_BLOCK, l.readBlockComment())
+		} else {
+			tokn = newToken(l, token.T_SLASH, '/')
+		}
+
 	case '%':
 		tokn = newToken(l, token.T_MODULO, '%')
 
@@ -201,4 +216,37 @@ func (l *Lexer) readIdent() string {
 		}
 	}
 	return l.input[start:l.pos]
+}
+
+// readLineComment advances from a '//' symbol until it reaches a newline or EOF.
+// Returns the full comment string, including the '//' symbol.
+func (l *Lexer) readLineComment() string {
+	start := l.pos
+	for {
+		l.advance()
+		if l.ch == '\n' || l.ch == eof {
+			break
+		}
+	}
+	return l.input[start : l.pos+1]
+}
+
+// readBlockComment advances from a '/*' opening symbol until it reaches the closing
+// '*/' symbol or EOF. Returns the full comment string, including the opening and
+// closing symbols.
+func (l *Lexer) readBlockComment() string {
+	start := l.pos
+	for {
+		l.advance()
+		if l.ch == eof {
+			break
+		}
+		if l.ch == '*' {
+			if l.peek() == '/' {
+				break
+			}
+		}
+	}
+	l.advance()
+	return l.input[start : l.pos+1]
 }

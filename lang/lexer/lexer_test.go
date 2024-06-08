@@ -10,44 +10,49 @@ import (
 
 func TestNextToken(t *testing.T) {
 	s := `
-	= + - ! * / % > >= < <=
-	"hello world"
-	42
-	45.5
-	Aardvark
-	var
-	Var
-	if over where order by
-	`
+= + - ! * / % > >= < <=
+"hello world"
+42
+45.5
+Aardvark
+var
+Var
+if over where order by
+// comment line
+/* comment
+block */
+`
 	l := New(s)
 
 	tests := []struct {
 		wantType    token.Type
 		wantLiteral string
 	}{
-		{token.T_EQ, "="},               // 0
-		{token.T_PLUS, "+"},             // 1
-		{token.T_MINUS, "-"},            // 2
-		{token.T_BANG, "!"},             // 3
-		{token.T_ASTERISK, "*"},         // 4
-		{token.T_SLASH, "/"},            // 5
-		{token.T_MODULO, "%"},           // 6
-		{token.T_GT, ">"},               // 7
-		{token.T_GTE, ">="},             // 8
-		{token.T_LT, "<"},               // 9
-		{token.T_LTE, "<="},             // 10
-		{token.T_STRING, "hello world"}, // 11
-		{token.T_NUM, "42"},             // 12
-		{token.T_NUM, "45.5"},           // 13
-		{token.T_IDENT, "Aardvark"},     // 14
-		{token.T_VAR, "var"},            // 15
-		{token.T_VAR, "Var"},            // 16
-		{token.T_IF, "if"},              // 17
-		{token.T_OVER, "over"},          // 18
-		{token.T_WHERE, "where"},        // 19
-		{token.T_ORDER, "order"},        // 20
-		{token.T_BY, "by"},              // 21
-		{token.T_EOF, ""},               // last
+		{token.T_EQ, "="},                               // 0
+		{token.T_PLUS, "+"},                             // 1
+		{token.T_MINUS, "-"},                            // 2
+		{token.T_BANG, "!"},                             // 3
+		{token.T_ASTERISK, "*"},                         // 4
+		{token.T_SLASH, "/"},                            // 5
+		{token.T_MODULO, "%"},                           // 6
+		{token.T_GT, ">"},                               // 7
+		{token.T_GTE, ">="},                             // 8
+		{token.T_LT, "<"},                               // 9
+		{token.T_LTE, "<="},                             // 10
+		{token.T_STRING, "hello world"},                 // 11
+		{token.T_NUM, "42"},                             // 12
+		{token.T_NUM, "45.5"},                           // 13
+		{token.T_IDENT, "Aardvark"},                     // 14
+		{token.T_VAR, "var"},                            // 15
+		{token.T_VAR, "Var"},                            // 16
+		{token.T_IF, "if"},                              // 17
+		{token.T_OVER, "over"},                          // 18
+		{token.T_WHERE, "where"},                        // 19
+		{token.T_ORDER, "order"},                        // 20
+		{token.T_BY, "by"},                              // 21
+		{token.T_COMMENT_LINE, "// comment line\n"},     // 22
+		{token.T_COMMENT_BLOCK, "/* comment\nblock */"}, // 23
+		{token.T_EOF, ""},                               // last
 	}
 
 	for i, tt := range tests {
