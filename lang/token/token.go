@@ -25,10 +25,11 @@ type Literal interface {
 
 // Token represents a word, or "semantic token" in WFLang.
 type Token struct {
-	Type    Type   // The token type - see "T_" consts in this pkg.
-	Literal string // The token expressed as a string literal.
-	Pos     Pos    // The starting position of the token.
-	Len     int    // The length of the token, in bytes.
+	Type     Type   // The token type - see "T_" consts in this pkg.
+	Literal  string // The token expressed as a string literal.
+	StartPos Pos    // The starting position of the token.
+	EndPos   Pos    // The ending position of the token.
+	Len      int    // The length of the token, in bytes.
 }
 
 // Pos represents the textual position of a token

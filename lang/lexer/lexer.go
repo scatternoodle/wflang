@@ -8,7 +8,7 @@ import (
 // New creates a new lexer and advances it into the first byte within the input
 // string.
 func New(input string) *Lexer {
-	l := &Lexer{input: input}
+	l := &Lexer{input: input, lines: []int{0}}
 	l.advance()
 	return l
 }
@@ -21,6 +21,7 @@ type Lexer struct {
 	ch    byte   // The current character
 	line  int    // The current line
 	lPos  int    // The position within the current line
+	lines []int  // Slice holding the lengths of all lines. Updated whenever lexer advances.
 }
 
 const eof byte = 0
@@ -33,108 +34,117 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.ch {
 	case eof:
-		tokn = newToken(l, token.T_EOF, eof)
+		tokn = newToken(l, token.T_EOF, eof, l.here())
 		tokn.Literal = ""
 
 	// this is always a one-shot as = is both assignment and equality. There is no double =.
 	case '=':
-		tokn = newToken(l, token.T_EQ, '=')
+		tokn = newToken(l, token.T_EQ, '=', l.here())
 	case '+':
-		tokn = newToken(l, token.T_PLUS, '+')
+		tokn = newToken(l, token.T_PLUS, '+', l.here())
 	case '-':
-		tokn = newToken(l, token.T_MINUS, '-')
+		tokn = newToken(l, token.T_MINUS, '-', l.here())
 
 	// Bang can either be ! or !=
 	case '!':
 		if l.peek() == '=' {
+			start := l.here()
 			l.advance()
-			tokn = newToken(l, token.T_NEQ, "!=")
+			tokn = newToken(l, token.T_NEQ, "!=", start)
 		} else {
-			tokn = newToken(l, token.T_BANG, '!')
+			tokn = newToken(l, token.T_BANG, '!', l.here())
 		}
 
 	// Can also be part of a block comment terminator (*/) but as the first char in a token,
 	// this is always a multiplication infix.
 	case '*':
-		tokn = newToken(l, token.T_ASTERISK, '*')
+		tokn = newToken(l, token.T_ASTERISK, '*', l.here())
 
 	// / starts comments or division infix
 	case '/':
+		start := l.here()
 		if l.peek() == '/' {
-			tokn = newToken(l, token.T_COMMENT_LINE, l.readLineComment())
+			lit := l.readLineComment()
+			tokn = newToken(l, token.T_COMMENT_LINE, lit, start)
 		} else if l.peek() == '*' {
-			tokn = newToken(l, token.T_COMMENT_BLOCK, l.readBlockComment())
+			lit := l.readBlockComment()
+			tokn = newToken(l, token.T_COMMENT_BLOCK, lit, start)
 		} else {
-			tokn = newToken(l, token.T_SLASH, '/')
+			tokn = newToken(l, token.T_SLASH, '/', start)
 		}
 
 	// This will always be a modulo infix
 	case '%':
-		tokn = newToken(l, token.T_MODULO, '%')
+		tokn = newToken(l, token.T_MODULO, '%', l.here())
 
 	// GT or GTE infix
 	case '>':
+		start := l.here()
 		if l.peek() == '=' {
 			l.advance()
-			tokn = newToken(l, token.T_GTE, ">=")
+			tokn = newToken(l, token.T_GTE, ">=", start)
 		} else {
-			tokn = newToken(l, token.T_GT, '>')
+			tokn = newToken(l, token.T_GT, '>', start)
 		}
 
 	// LT or LTE infix
 	case '<':
+		start := l.here()
 		if l.peek() == '=' {
 			l.advance()
-			tokn = newToken(l, token.T_LTE, "<=")
+			tokn = newToken(l, token.T_LTE, "<=", start)
 		} else {
-			tokn = newToken(l, token.T_LT, '<')
+			tokn = newToken(l, token.T_LT, '<', start)
 		}
 
 	// TODO: take a closer look at these... delimeters are a bit more complex.
 	case ',':
-		tokn = newToken(l, token.T_COMMA, ',')
+		tokn = newToken(l, token.T_COMMA, ',', l.here())
 	case ';':
-		tokn = newToken(l, token.T_SEMICOLON, ';')
+		tokn = newToken(l, token.T_SEMICOLON, ';', l.here())
 	case ':':
-		tokn = newToken(l, token.T_COLON, ':')
+		tokn = newToken(l, token.T_COLON, ':', l.here())
 	case '(':
-		tokn = newToken(l, token.T_LPAREN, '(')
+		tokn = newToken(l, token.T_LPAREN, '(', l.here())
 	case ')':
-		tokn = newToken(l, token.T_RPAREN, ')')
+		tokn = newToken(l, token.T_RPAREN, ')', l.here())
 	case '{':
-		tokn = newToken(l, token.T_LBRACE, '{')
+		tokn = newToken(l, token.T_LBRACE, '{', l.here())
 	case '}':
-		tokn = newToken(l, token.T_RBRACE, '}')
+		tokn = newToken(l, token.T_RBRACE, '}', l.here())
 	case '[':
-		tokn = newToken(l, token.T_LBRACKET, '[')
+		tokn = newToken(l, token.T_LBRACKET, '[', l.here())
 	case ']':
-		tokn = newToken(l, token.T_RBRACKET, ']')
+		tokn = newToken(l, token.T_RBRACKET, ']', l.here())
 	case '.':
-		tokn = newToken(l, token.T_PERIOD, '.')
+		tokn = newToken(l, token.T_PERIOD, '.', l.here())
 	case '$':
-		tokn = newToken(l, token.T_DOLLAR, '$')
+		tokn = newToken(l, token.T_DOLLAR, '$', l.here())
 
 	// Always a string literal.
 	case '"':
-		tokn = newToken(l, token.T_STRING, l.readString())
+		start := l.here()
+		tokn = newToken(l, token.T_STRING, l.readString(), start)
 
 	// Otherwise, will be some sort of num / ident, or illegal. This is baking in some opinions about
 	default:
+		start := l.here()
+
 		if util.IsDigit(l.ch) {
-			tokn = newToken(l, token.T_NUM, l.readNumber())
+			tokn = newToken(l, token.T_NUM, l.readNumber(), start)
 			l.advance()
 			return tokn
 		}
 
 		if util.IsLetter(l.ch) {
-			s := l.readIdent()
-			t := token.LookupKeyword(s)
-			tokn = newToken(l, t, s)
+			lit := l.readIdent()
+			tType := token.LookupKeyword(lit)
+			tokn = newToken(l, tType, lit, start)
 			l.advance()
 			return tokn
 		}
 
-		tokn = newToken(l, token.T_ILLEGAL, l.ch)
+		tokn = newToken(l, token.T_ILLEGAL, l.ch, start)
 	}
 
 	l.advance()
@@ -143,19 +153,20 @@ func (l *Lexer) NextToken() token.Token {
 
 // newToken creates a new token.Token, drawing Lexer's internal state. literal can
 // be any type that satisfies the token.Literal interface.
-func newToken[T token.Literal](l *Lexer, tType token.Type, literal T) token.Token {
+func newToken[T token.Literal](l *Lexer, tType token.Type, lit T, start token.Pos) token.Token {
 	var tLen int
-	if s, ok := any(literal).(string); ok {
+	if s, ok := any(lit).(string); ok {
 		tLen = len(s)
 	} else {
 		tLen = 1
 	}
 
 	return token.Token{
-		Type:    tType,
-		Literal: string(literal),
-		Len:     tLen,
-		Pos: token.Pos{
+		Type:     tType,
+		Literal:  string(lit),
+		Len:      tLen,
+		StartPos: start,
+		EndPos: token.Pos{
 			Num:  l.pos,
 			Line: l.line,
 			Col:  l.lPos,
@@ -173,6 +184,31 @@ func (l *Lexer) advance() {
 	}
 	l.pos = l.next
 	l.next++
+
+	// next, we're going to update line state, but not if we're EOF - that would
+	// result in overflowing the input string later, so we're just done.
+	if l.ch == eof {
+		return
+	}
+
+	// we increment length even if newline, because that's still technically a char on
+	// the current line. We may need to change this depending on how this impacts
+	// behaviour in the Language server / text editor
+	l.lines[l.line]++
+
+	if l.pos > 0 {
+		if l.input[l.pos-1] == '\n' {
+			l.lPos = 0
+		} else {
+			l.lPos++
+		}
+	}
+
+	// TODO - think about whether we need to handle any other bytes here?
+	if l.ch == '\n' {
+		l.line++
+		l.lines = append(l.lines, 0)
+	}
 }
 
 // peek returns the character in the next position without advancing the Lexer.
@@ -187,9 +223,6 @@ func (l *Lexer) peek() byte {
 // Lexer's line number whenever \n is encountered.
 func (l *Lexer) skipWhiteSpace() {
 	for util.IsWhitespace(l.ch) {
-		if l.ch == '\n' {
-			l.line++
-		}
 		l.advance()
 	}
 }
@@ -215,19 +248,19 @@ func (l *Lexer) readNumber() string {
 	dots := 0 // we allow up to one decimal place
 
 	for {
-		l.advance()
-		if l.ch != '.' && !util.IsDigit(l.ch) {
+		if l.peek() != '.' && !util.IsDigit(l.peek()) {
 			break
 		}
 
-		if l.ch == '.' {
+		if l.peek() == '.' {
 			if dots > 0 {
 				break
 			}
 			dots++
 		}
+		l.advance()
 	}
-	return l.input[start:l.pos]
+	return l.input[start : l.pos+1]
 }
 
 // readIdent is similar to readString in that it reads a string, but this version
@@ -236,10 +269,10 @@ func (l *Lexer) readNumber() string {
 func (l *Lexer) readIdent() string {
 	start := l.pos
 	for {
-		l.advance()
 		if !util.IsLetter(l.peek()) && !util.IsDigit(l.peek()) {
 			break
 		}
+		l.advance()
 	}
 	return l.input[start : l.pos+1]
 }
@@ -275,4 +308,14 @@ func (l *Lexer) readBlockComment() string {
 	}
 	l.advance()
 	return l.input[start : l.pos+1]
+}
+
+// here generates a token.Pos object for the current location of the lexer. This
+// is used as a helper for generating start and end positions for new tokens.
+func (l *Lexer) here() token.Pos {
+	return token.Pos{
+		Num:  l.pos,
+		Line: l.line,
+		Col:  l.lPos,
+	}
 }

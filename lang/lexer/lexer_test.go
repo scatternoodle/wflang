@@ -1,15 +1,14 @@
 package lexer
 
 import (
-	"bytes"
-	"reflect"
+	"fmt"
 	"testing"
 
 	"github.com/scatternoodle/wflang/lang/token"
 )
 
 func TestNextToken(t *testing.T) {
-	s := `
+	input := `
 = + - ! * / % > >= < <=
 "hello world"
 42
@@ -23,7 +22,7 @@ if over where order by
 block */
 !=
 `
-	l := New(s)
+	l := New(input)
 
 	tests := []struct {
 		wantType    token.Type
@@ -61,39 +60,81 @@ block */
 		tk := l.NextToken()
 
 		if tk.Type != tt.wantType {
-			t.Fatalf("tests[%d] type = %s, want %s", i, tk.Type, tt.wantType)
+			t.Errorf("tests[%d] type = %s, want %s", i, tk.Type, tt.wantType)
 		}
 		if tk.Literal != tt.wantLiteral {
-			t.Fatalf("tests[%d] literal = %s, want %s", i, tk.Literal, tt.wantLiteral)
+			t.Errorf("tests[%d] literal = %s, want %s", i, tk.Literal, tt.wantLiteral)
 		}
 	}
 }
 
 func TestPositionInfo(t *testing.T) {
-	s := "\n>"
-	l := New(s)
+	input := "var x = 1;\nx * 42"
+	l := New(input)
 
-	sBytes := []byte(s)
-	wantLen := len(sBytes)
-	wantLine := bytes.Count(sBytes, []byte("\n"))
-	tk := l.NextToken()
+	tests := []struct {
+		n     int
+		start token.Pos
+		end   token.Pos
+	}{
+		{
+			0,
+			token.Pos{Num: 0, Line: 0, Col: 0},
+			token.Pos{Num: 2, Line: 0, Col: 2},
+		}, // var
+		{
+			1,
+			token.Pos{Num: 4, Line: 0, Col: 4},
+			token.Pos{Num: 4, Line: 0, Col: 4},
+		}, // x
+		{
+			2,
+			token.Pos{Num: 6, Line: 0, Col: 6},
+			token.Pos{Num: 6, Line: 0, Col: 6},
+		}, // =
+		{
+			3,
+			token.Pos{Num: 8, Line: 0, Col: 8},
+			token.Pos{Num: 8, Line: 0, Col: 8},
+		}, // 1
+		{
+			4,
+			token.Pos{Num: 9, Line: 0, Col: 9},
+			token.Pos{Num: 9, Line: 0, Col: 9},
+		}, // ;
+		{
+			5,
+			token.Pos{Num: 11, Line: 1, Col: 0},
+			token.Pos{Num: 11, Line: 1, Col: 0},
+		}, // x
+		{
+			6,
+			token.Pos{Num: 13, Line: 1, Col: 2},
+			token.Pos{Num: 13, Line: 1, Col: 2},
+		}, // *
+		{
+			7,
+			token.Pos{Num: 15, Line: 1, Col: 4},
+			token.Pos{Num: 16, Line: 1, Col: 5},
+		}, // 42
+		{
+			8,
+			token.Pos{Num: 17, Line: 1, Col: 5},
+			token.Pos{Num: 17, Line: 1, Col: 5},
+		}, // EOF
+	}
 
-	// First, check if token is in the right position
-	// lexer advances before returning token so at EOF, pos is 1 greater than input length.
-	if l.pos != wantLen {
-		t.Fatalf("l.pos = %d, want %d", l.pos, wantLen)
-	}
-	if l.line != wantLine {
-		t.Fatalf("l.line = %d, want %d", l.line, wantLine)
+	for _, tt := range tests {
+		t.Run(fmt.Sprintf("%d", tt.n), func(t *testing.T) {
+			tk := l.NextToken()
+
+			if tk.StartPos != tt.start {
+				t.Fatalf("start = %v, want %v", tk.StartPos, tt.start)
+			}
+			if tk.EndPos != tt.end {
+				t.Fatalf("end = %v, want %v", tk.EndPos, tt.end)
+			}
+		})
 	}
 
-	// Then check the same for the token
-	wantPos := token.Pos{
-		Num:  wantLen - 1,
-		Line: wantLine,
-		Col:  0,
-	}
-	if !reflect.DeepEqual(tk.Pos, wantPos) {
-		t.Fatalf("token.Pos = %s, want %s", tk.Pos.String(), wantPos.String())
-	}
 }
