@@ -23,26 +23,6 @@ type Literal interface {
 	rune | byte | ~string
 }
 
-// New creates a new token with the given type and position data. Takes a single
-// byte, which is converted to a string and set as the Literal, with Len set to 1.
-// This is to be used within the Lexer, either for single-char literals or as a
-// "Starter" for longer tokens.
-func New[T Literal](num, line, col int, t Type, lit T) Token {
-	var length int
-	if s, ok := any(lit).(string); ok {
-		length = len(s)
-	} else {
-		length = 1
-	}
-
-	return Token{
-		Type:    t,
-		Literal: string(lit),
-		Pos:     Pos{num, line, col},
-		Len:     length,
-	}
-}
-
 // Token represents a word, or "semantic token" in WFLang.
 type Token struct {
 	Type    Type   // The token type - see "T_" consts in this pkg.

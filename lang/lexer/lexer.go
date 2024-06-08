@@ -36,13 +36,15 @@ func (l *Lexer) NextToken() token.Token {
 		tokn = newToken(l, token.T_EOF, eof)
 		tokn.Literal = ""
 
-	case '=': // single = used for both assignment and equality (yuck)
+	// this is always a one-shot as = is both assignment and equality. There is no double =.
+	case '=':
 		tokn = newToken(l, token.T_EQ, '=')
 	case '+':
 		tokn = newToken(l, token.T_PLUS, '+')
 	case '-':
 		tokn = newToken(l, token.T_MINUS, '-')
 
+	// Bang can either be ! or !=
 	case '!':
 		if l.peek() == '=' {
 			l.advance()
@@ -51,9 +53,12 @@ func (l *Lexer) NextToken() token.Token {
 			tokn = newToken(l, token.T_BANG, '!')
 		}
 
+	// Can also be part of a block comment terminator (*/) but as the first char in a token,
+	// this is always a multiplication infix.
 	case '*':
 		tokn = newToken(l, token.T_ASTERISK, '*')
 
+	// / starts comments or division infix
 	case '/':
 		if l.peek() == '/' {
 			tokn = newToken(l, token.T_COMMENT_LINE, l.readLineComment())
@@ -63,9 +68,11 @@ func (l *Lexer) NextToken() token.Token {
 			tokn = newToken(l, token.T_SLASH, '/')
 		}
 
+	// This will always be a modulo infix
 	case '%':
 		tokn = newToken(l, token.T_MODULO, '%')
 
+	// GT or GTE infix
 	case '>':
 		if l.peek() == '=' {
 			l.advance()
@@ -73,6 +80,8 @@ func (l *Lexer) NextToken() token.Token {
 		} else {
 			tokn = newToken(l, token.T_GT, '>')
 		}
+
+	// LT or LTE infix
 	case '<':
 		if l.peek() == '=' {
 			l.advance()
@@ -105,9 +114,11 @@ func (l *Lexer) NextToken() token.Token {
 	case '$':
 		tokn = newToken(l, token.T_DOLLAR, '$')
 
+	// Always a string literal.
 	case '"':
 		tokn = newToken(l, token.T_STRING, l.readString())
 
+	// Otherwise, will be some sort of num / ident, or illegal. This is baking in some opinions about
 	default:
 		if util.IsDigit(l.ch) {
 			tokn = newToken(l, token.T_NUM, l.readNumber())
@@ -130,11 +141,26 @@ func (l *Lexer) NextToken() token.Token {
 	return tokn
 }
 
-// newToken is a helper wrapper around token.New(), which inserts additional data
-// from the Lexer's internal state. literal can be any type that satisfies the
-// token.Literal interface.
+// newToken creates a new token.Token, drawing Lexer's internal state. literal can
+// be any type that satisfies the token.Literal interface.
 func newToken[T token.Literal](l *Lexer, tType token.Type, literal T) token.Token {
-	return token.New(l.pos, l.line, l.lPos, tType, literal)
+	var tLen int
+	if s, ok := any(literal).(string); ok {
+		tLen = len(s)
+	} else {
+		tLen = 1
+	}
+
+	return token.Token{
+		Type:    tType,
+		Literal: string(literal),
+		Len:     tLen,
+		Pos: token.Pos{
+			Num:  l.pos,
+			Line: l.line,
+			Col:  l.lPos,
+		},
+	}
 }
 
 // advance safely advances the Lexer further into its input string, correctly handling
