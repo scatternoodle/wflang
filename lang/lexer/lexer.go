@@ -211,11 +211,14 @@ func (l *Lexer) readIdent() string {
 	start := l.pos
 	for {
 		l.advance()
-		if !util.IsLetter(l.ch) && !util.IsDigit(l.ch) {
+		// fmt.Printf("ch %s isLetter? %t, isDigit? %t\n", string(l.ch), util.IsLetter(l.ch), util.IsDigit(l.ch))
+		if !util.IsLetter(l.peek()) && !util.IsDigit(l.peek()) {
+			// fmt.Println("break and return")
 			break
 		}
 	}
-	return l.input[start:l.pos]
+	// fmt.Printf("returning %s", l.input[start:l.pos])
+	return l.input[start : l.pos+1]
 }
 
 // readLineComment advances from a '//' symbol until it reaches a newline or EOF.
