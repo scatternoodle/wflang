@@ -211,13 +211,10 @@ func (l *Lexer) readIdent() string {
 	start := l.pos
 	for {
 		l.advance()
-		// fmt.Printf("ch %s isLetter? %t, isDigit? %t\n", string(l.ch), util.IsLetter(l.ch), util.IsDigit(l.ch))
 		if !util.IsLetter(l.peek()) && !util.IsDigit(l.peek()) {
-			// fmt.Println("break and return")
 			break
 		}
 	}
-	// fmt.Printf("returning %s", l.input[start:l.pos])
 	return l.input[start : l.pos+1]
 }
 
