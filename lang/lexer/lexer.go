@@ -1,3 +1,6 @@
+// lexer package provides the lexer for WFLang, which is the first step in the
+// static analysis process. The lexer reads the input text and produces a stream
+// of semantic tokens, which are then used by the parser to generate the AST.
 package lexer
 
 import (

@@ -5,13 +5,13 @@ import (
 	"strings"
 )
 
-// LookupKeyword returns the Type of s if it is a keyword, or T_IDENT if not.
-func LookupKeyword(s string) Type {
-	s = strings.ToLower(s)
-	if t, ok := keywords()[s]; ok {
-		return t
-	}
-	return T_IDENT
+// Token represents a word, or "semantic token" in WFLang.
+type Token struct {
+	Type     Type   // The token type - see "T_" consts in this pkg.
+	Literal  string // The token expressed as a string literal.
+	StartPos Pos    // The starting position of the token.
+	EndPos   Pos    // The ending position of the token.
+	Len      int    // The length of the token, in bytes.
 }
 
 // Type is a string that represents the type of a token. See the consts beginning
@@ -23,13 +23,13 @@ type Literal interface {
 	rune | byte | ~string
 }
 
-// Token represents a word, or "semantic token" in WFLang.
-type Token struct {
-	Type     Type   // The token type - see "T_" consts in this pkg.
-	Literal  string // The token expressed as a string literal.
-	StartPos Pos    // The starting position of the token.
-	EndPos   Pos    // The ending position of the token.
-	Len      int    // The length of the token, in bytes.
+// LookupKeyword returns the Type of s if it is a keyword, or T_IDENT if not.
+func LookupKeyword(s string) Type {
+	s = strings.ToLower(s)
+	if t, ok := keywords()[s]; ok {
+		return t
+	}
+	return T_IDENT
 }
 
 // Pos represents the textual position of a token
@@ -41,4 +41,10 @@ type Pos struct {
 
 func (p Pos) String() string {
 	return fmt.Sprintf("[n:%d, l:%d, c:%d]", p.Num, p.Line, p.Col)
+}
+
+// Positional represents a type that has a start and end position, each
+// represented by a Pos struct.
+type Positional interface {
+	Pos() (start, end Pos)
 }
