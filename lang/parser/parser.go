@@ -42,7 +42,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.advance()
 
 	// register parser functions
-	p.prefixParsers[token.T_NUM] = p.parseNumericExpression
+	p.prefixParsers[token.T_NUM] = p.parseNumberLiteral
+	p.prefixParsers[token.T_IDENT] = p.parseIdent
 
 	return p
 }
@@ -74,6 +75,10 @@ func (p *Parser) Errors() []error {
 	return p.errors
 }
 
+func (p *Parser) Trace() string {
+	return p.trace.String()
+}
+
 type (
 	prefixParser func() (ast.Expression, error)
 	infixParser  func(ast.Expression) (ast.Expression, error)
@@ -101,9 +106,6 @@ func (p *Parser) wantPeek(want token.Type) error {
 // parseStatement is the triage function for the parser. It delegates to the
 // appropriate parsing function based on the current token type.
 func (p *Parser) parseStatement() (ast.Statement, error) {
-	p.trace.trace("STATEMENT")
-	defer p.trace.untrace("STATEMENT")
-
 	switch p.current.Type {
 	case token.T_VAR:
 		return p.parseVarStatement()
@@ -116,6 +118,9 @@ func (p *Parser) parseStatement() (ast.Statement, error) {
 // with a keyword, and is therefore assumed to just be an expression. These are
 // commonplace in WFLang, as all formulas are ultimately expressions.
 func (p *Parser) parseExpressionStatement() (ast.ExpressionStatement, error) {
+	p.trace.trace("ExpressionStatement")
+	defer p.trace.untrace("ExpressionStatement")
+
 	stmt := ast.ExpressionStatement{Token: p.current}
 	exp, err := p.parseExpression(p_LOWEST)
 	if err != nil {
@@ -130,6 +135,9 @@ func (p *Parser) parseExpressionStatement() (ast.ExpressionStatement, error) {
 //
 //	var [T_IDENT] = [Expression];
 func (p *Parser) parseVarStatement() (ast.VarStatement, error) {
+	p.trace.trace("VarStatement")
+	defer p.trace.untrace("VarStatement")
+
 	eWrap := func(e error) error {
 		return fmt.Errorf("error parsing var statement at token %+v: %w", p.current, e)
 	}
@@ -141,11 +149,11 @@ func (p *Parser) parseVarStatement() (ast.VarStatement, error) {
 	}
 	p.advance()
 
-	name, err := p.parseIdentifier()
+	name, err := p.parseIdent()
 	if err != nil {
 		return ast.VarStatement{}, eWrap(err)
 	}
-	stmt.Name = name
+	stmt.Name = name.(ast.Ident)
 
 	// ... = ...
 	if err := p.wantPeek(token.T_EQ); err != nil {
@@ -200,23 +208,32 @@ func (p *Parser) parseExpression(precedence int) (ast.Expression, error) {
 	return leftExp, nil
 }
 
-// parseIdentifier attempts to resolve an Identifier expression.
-func (p *Parser) parseIdentifier() (ast.Identifier, error) {
+// parseIdent attempts to resolve an Identifier expression.
+func (p *Parser) parseIdent() (ast.Expression, error) {
+	p.trace.trace("Ident")
+	defer p.trace.untrace("Ident")
+
 	val := p.current.Literal
 
 	if val == "" {
-		return ast.Identifier{}, newParseErr("blank ident string", p.current)
+		return ast.Ident{}, newParseErr("blank ident string", p.current)
 	}
 	if isKeyword(val) {
 		msg := fmt.Sprintf("token %s is a reserved keyword, and cannot be used as an identifier", val)
-		return ast.Identifier{}, newParseErr(msg, p.current)
+		return ast.Ident{}, newParseErr(msg, p.current)
 	}
 
-	ident := ast.Identifier{Token: p.current, Value: val}
+	ident := ast.Ident{Token: p.current, Value: val}
 	return ident, nil
 }
 
-func (p *Parser) parseNumericExpression() (ast.Expression, error) {
+// parseNumberLiteral attempts to resolve a numeric literal expression. The expression
+// can can be a float or int type, but will resolve to float64, which is how all WFLang
+// numbers are represented in Golang.
+func (p *Parser) parseNumberLiteral() (ast.Expression, error) {
+	p.trace.trace("NumberLiteral")
+	defer p.trace.untrace("NumberLiteral")
+
 	lit := p.current.Literal
 	val, err := strconv.ParseFloat(lit, 64)
 	if err != nil {

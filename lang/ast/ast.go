@@ -44,7 +44,7 @@ type AST struct {
 func (a *AST) String() string {
 	var out strings.Builder
 	for _, s := range a.Statements {
-		out.WriteString(s.String())
+		out.WriteString(s.String() + "\n")
 	}
 	return out.String()
 }
@@ -97,7 +97,7 @@ func (e ExpressionStatement) Pos() (start, end token.Pos) {
 // the name of the variable.
 type VarStatement struct {
 	Token token.Token // expected to be token.T_VAR type
-	Name  Identifier
+	Name  Ident
 	Value Expression
 }
 
@@ -113,17 +113,17 @@ func (v VarStatement) Pos() (start, end token.Pos) {
 	return v.Token.StartPos, end
 }
 
-// Identifier is an expression that represents a variable name. It is used in
+// Ident is an expression that represents a variable name. It is used in
 // VarStatements to declare variables, and in other expressions to reference them.
-type Identifier struct {
+type Ident struct {
 	Token token.Token
 	Value string
 }
 
-func (i Identifier) ExpressionNode()             {}
-func (i Identifier) TokenLiteral() string        { return i.Token.Literal }
-func (i Identifier) String() string              { return i.Value }
-func (i Identifier) Pos() (start, end token.Pos) { return i.Token.StartPos, i.Token.EndPos }
+func (i Ident) ExpressionNode()             {}
+func (i Ident) TokenLiteral() string        { return i.Token.Literal }
+func (i Ident) String() string              { return i.Value }
+func (i Ident) Pos() (start, end token.Pos) { return i.Token.StartPos, i.Token.EndPos }
 
 // NumberLiteral is an expression that represents a number literal. The value
 // is stored as a float64 but can also hold an integer type (WFLang has one number
