@@ -23,7 +23,7 @@ type Node interface {
 // statements from expressions.
 type Statement interface {
 	Node
-	statementNode()
+	StatementNode()
 }
 
 // Expression must be implemented by all expression nodes in the AST. Aside from
@@ -31,7 +31,7 @@ type Statement interface {
 // expressions from statements.
 type Expression interface {
 	Node
-	expressionNode()
+	ExpressionNode()
 }
 
 // The AST struct is the root node of the AST. It contains a slice of Statement
@@ -76,7 +76,7 @@ type ExpressionStatement struct {
 	Expression Expression
 }
 
-func (e ExpressionStatement) statementNode()       {}
+func (e ExpressionStatement) StatementNode()       {}
 func (e ExpressionStatement) TokenLiteral() string { return e.Token.Literal }
 
 func (e ExpressionStatement) String() string {
@@ -101,11 +101,8 @@ type VarStatement struct {
 	Value Expression
 }
 
-func (v VarStatement) statementNode() {}
-func (v VarStatement) TokenLiteral() string {
-	return v.Token.Literal
-}
-
+func (v VarStatement) StatementNode()       {}
+func (v VarStatement) TokenLiteral() string { return v.Token.Literal }
 func (v VarStatement) String() string {
 	return fmt.Sprintf("var %s = %s;", v.Name.String(), v.Value.String())
 }
@@ -123,7 +120,22 @@ type Identifier struct {
 	Value string
 }
 
-func (i Identifier) expressionNode()             {}
+func (i Identifier) ExpressionNode()             {}
 func (i Identifier) TokenLiteral() string        { return i.Token.Literal }
 func (i Identifier) String() string              { return i.Value }
 func (i Identifier) Pos() (start, end token.Pos) { return i.Token.StartPos, i.Token.EndPos }
+
+// NumberLiteral is an expression that represents a number literal. The value
+// is stored as a float64 but can also hold an integer type (WFLang has one number
+// type).
+type NumberLiteral struct {
+	Token token.Token
+	Value float64
+}
+
+func (n NumberLiteral) ExpressionNode()      {}
+func (n NumberLiteral) TokenLiteral() string { return n.Token.Literal }
+func (n NumberLiteral) String() string       { return fmt.Sprint(n.Value) }
+func (n NumberLiteral) Pos() (start, end token.Pos) {
+	return n.Token.StartPos, n.Token.EndPos
+}

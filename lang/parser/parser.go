@@ -5,6 +5,7 @@ package parser
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/scatternoodle/wflang/lang/ast"
@@ -41,6 +42,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.advance()
 
 	// register parser functions
+	p.prefixParsers[token.T_NUM] = p.parseNumericExpression
 
 	return p
 }
@@ -58,7 +60,7 @@ func (p *Parser) Parse() *ast.AST {
 		if err != nil {
 			err = fmt.Errorf("error parsing statement: %w", err)
 			p.errors = append(p.errors, err)
-			continue
+			return nil
 		}
 
 		AST.Statements = append(AST.Statements, stmt)
@@ -66,6 +68,10 @@ func (p *Parser) Parse() *ast.AST {
 	}
 
 	return AST
+}
+
+func (p *Parser) Errors() []error {
+	return p.errors
 }
 
 type (
@@ -110,7 +116,14 @@ func (p *Parser) parseStatement() (ast.Statement, error) {
 // with a keyword, and is therefore assumed to just be an expression. These are
 // commonplace in WFLang, as all formulas are ultimately expressions.
 func (p *Parser) parseExpressionStatement() (ast.ExpressionStatement, error) {
-	return ast.ExpressionStatement{}, nil
+	stmt := ast.ExpressionStatement{Token: p.current}
+	exp, err := p.parseExpression(p_LOWEST)
+	if err != nil {
+		err = fmt.Errorf("error parsing expression: %w", err)
+		return ast.ExpressionStatement{}, err
+	}
+	stmt.Expression = exp
+	return stmt, nil
 }
 
 // parseVarStatement resolves a statement following this format:
@@ -141,17 +154,18 @@ func (p *Parser) parseVarStatement() (ast.VarStatement, error) {
 	p.advance()
 	p.advance()
 
-	// ...[Expression];
+	// ...[Expression]
 	exp, err := p.parseExpression(p_LOWEST)
 	if err != nil {
 		return ast.VarStatement{}, eWrap(err)
 	}
-	p.advance()
 	stmt.Value = exp
 
+	// ...;
 	if err := p.wantPeek(token.T_SEMICOLON); err != nil {
 		return ast.VarStatement{}, eWrap(err)
 	}
+	p.advance()
 	return stmt, nil
 }
 
@@ -188,5 +202,30 @@ func (p *Parser) parseExpression(precedence int) (ast.Expression, error) {
 
 // parseIdentifier attempts to resolve an Identifier expression.
 func (p *Parser) parseIdentifier() (ast.Identifier, error) {
-	return ast.Identifier{}, nil
+	val := p.current.Literal
+
+	if val == "" {
+		return ast.Identifier{}, newParseErr("blank ident string", p.current)
+	}
+	if isKeyword(val) {
+		msg := fmt.Sprintf("token %s is a reserved keyword, and cannot be used as an identifier", val)
+		return ast.Identifier{}, newParseErr(msg, p.current)
+	}
+
+	ident := ast.Identifier{Token: p.current, Value: val}
+	return ident, nil
+}
+
+func (p *Parser) parseNumericExpression() (ast.Expression, error) {
+	lit := p.current.Literal
+	val, err := strconv.ParseFloat(lit, 64)
+	if err != nil {
+		msg := fmt.Sprintf("error parsing number literal: %s", err)
+		return nil, newParseErr(msg, p.current)
+	}
+	return ast.NumberLiteral{Token: p.current, Value: val}, nil
+}
+
+func isKeyword(s string) bool {
+	return token.LookupKeyword(s) != token.T_IDENT
 }
