@@ -6,6 +6,7 @@ import (
 
 	"github.com/scatternoodle/wflang/lang/ast"
 	"github.com/scatternoodle/wflang/lang/lexer"
+	"github.com/scatternoodle/wflang/testhelper"
 )
 
 func TestParse(t *testing.T) {
@@ -50,7 +51,14 @@ func TestParseVarStatement(t *testing.T) {
 	}
 }
 
-func testVarStatement(t *testing.T, stmt ast.Statement, name string, val any) bool {
+func BenchmarkParse(b *testing.B) {
+	input := "var x = 1;"
+	for i := 0; i < b.N; i++ {
+		_, _ = testRunParser(b, input, 1, false)
+	}
+}
+
+func testVarStatement(t testhelper.TestHelper, stmt ast.Statement, name string, val any) bool {
 	if stmt.TokenLiteral() != "var" {
 		t.Errorf(`TokenLiteral(): have %s, want "var"`, stmt.TokenLiteral())
 		return false
@@ -74,7 +82,7 @@ func testVarStatement(t *testing.T, stmt ast.Statement, name string, val any) bo
 	return true
 }
 
-func testLiteral(t *testing.T, exp ast.Expression, want any) bool {
+func testLiteral(t testhelper.TestHelper, exp ast.Expression, want any) bool {
 	switch v := want.(type) {
 	case float64:
 		return testNumberLiteral(t, exp, v)
@@ -83,7 +91,7 @@ func testLiteral(t *testing.T, exp ast.Expression, want any) bool {
 	return false
 }
 
-func testNumberLiteral(t *testing.T, exp ast.Expression, want float64) bool {
+func testNumberLiteral(t testhelper.TestHelper, exp ast.Expression, want float64) bool {
 	nstmt, ok := exp.(ast.NumberLiteral)
 	if !ok {
 		t.Errorf("expression type: have %T, want ast.NumberLiteral", exp)
@@ -107,7 +115,7 @@ func testNumberLiteral(t *testing.T, exp ast.Expression, want float64) bool {
 	return true
 }
 
-func testRunParser(t *testing.T, input string, wantLen int, errOk bool) (*Parser, *ast.AST) {
+func testRunParser(t testhelper.TestHelper, input string, wantLen int, errOk bool) (*Parser, *ast.AST) {
 	l := lexer.New(input)
 	prg := New(l)
 	AST := prg.Parse()
@@ -120,6 +128,7 @@ func testRunParser(t *testing.T, input string, wantLen int, errOk bool) (*Parser
 
 	if AST == nil {
 		t.Fatal("AST is nil")
+		return nil, nil
 	}
 	if AST.Statements == nil {
 		t.Fatal("AST.Statements is nil")
@@ -130,7 +139,7 @@ func testRunParser(t *testing.T, input string, wantLen int, errOk bool) (*Parser
 	return prg, AST
 }
 
-func checkParseErrors(t *testing.T, p *Parser) {
+func checkParseErrors(t testhelper.TestHelper, p *Parser) {
 	if len(p.errors) != 0 {
 		t.Errorf("parser has %d errors:", len(p.errors))
 		for _, err := range p.errors {
