@@ -97,7 +97,8 @@ func keywords() map[string]Type {
 		"accrued":       T_ACCRUED,
 		"accruedbefore": T_ACCRUEDBEFORE,
 		"balance":       T_BALANCE,
-		"callsql":       T_CALLSQL,
+
+		"callsql": T_CALLSQL,
 
 		// ...consecutive ranges
 		"longestconsecutiverange": T_LCONSECUTIVERANGE,

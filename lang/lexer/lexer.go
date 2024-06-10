@@ -124,6 +124,23 @@ func (l *Lexer) NextToken() token.Token {
 	case '$':
 		tokn = newToken(l, token.T_DOLLAR, '$', l.here())
 
+	case '&':
+		start := l.here()
+		if l.peek() != '&' {
+			tokn = newToken(l, token.T_ILLEGAL, '&', start)
+		} else {
+			l.advance()
+			tokn = newToken(l, token.T_AND, "&&", start)
+		}
+	case '|':
+		start := l.here()
+		if l.peek() != '|' {
+			tokn = newToken(l, token.T_ILLEGAL, '|', start)
+		} else {
+			l.advance()
+			tokn = newToken(l, token.T_OR, "||", start)
+		}
+
 	// Always a string literal.
 	case '"':
 		start := l.here()

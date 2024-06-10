@@ -21,6 +21,9 @@ if over where order by
 /* comment/*
 block */
 !=
+1 = 2
+1 || 2
+x && y
 `
 	l := New(input)
 
@@ -53,6 +56,15 @@ block */
 		{token.T_COMMENT_LINE, "// comment line\n"},       // 22
 		{token.T_COMMENT_BLOCK, "/* comment/*\nblock */"}, // 23
 		{token.T_NEQ, "!="},                               // 24
+		{token.T_NUM, "1"},                                // 25
+		{token.T_EQ, "="},                                 // 26
+		{token.T_NUM, "2"},                                // 27
+		{token.T_NUM, "1"},                                // 28
+		{token.T_OR, "||"},                                // 29
+		{token.T_NUM, "2"},                                // 30
+		{token.T_IDENT, "x"},                              // 31
+		{token.T_AND, "&&"},                               // 32
+		{token.T_IDENT, "y"},                              // 33
 		{token.T_EOF, ""},                                 // last
 	}
 

@@ -57,6 +57,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.infixParsers[token.T_LTE] = p.parseInfixExpression
 	p.infixParsers[token.T_EQ] = p.parseInfixExpression
 	p.infixParsers[token.T_NEQ] = p.parseInfixExpression
+	p.infixParsers[token.T_AND] = p.parseInfixExpression
+	p.infixParsers[token.T_OR] = p.parseInfixExpression
 
 	return p
 }
@@ -206,7 +208,7 @@ func (p *Parser) parseExpression(precedence int) (ast.Expression, error) {
 		return nil, fmt.Errorf("error parsing prefix: %w", err)
 	}
 
-	for p.next.Type != token.T_SEMICOLON && p.next.Type != token.T_EOF && precedence < p.peekPrecedence() {
+	for p.next.Type != token.T_SEMICOLON && p.next.Type != token.T_EOF /*&& precedence < p.peekPrecedence()*/ {
 		infix, ok := p.infixParsers[p.next.Type]
 		if !ok {
 			return leftExp, nil

@@ -93,8 +93,43 @@ func TestPrefixExpression(t *testing.T) {
 	}
 }
 
-func testInfixExpression(t *testing.T) {
-	// TODO
+func TestInfixExpression(t *testing.T) {
+	tests := []struct {
+		input string
+		left  any
+		op    string
+		right any
+	}{
+		{"1 + 2", float64(1), "+", float64(2)},
+		{"1 - 2", float64(1), "-", float64(2)},
+		{"1 * 2", float64(1), "*", float64(2)},
+		{"1 / 2", float64(1), "/", float64(2)},
+		{"1 > 2", float64(1), ">", float64(2)},
+		{"1 < 2", float64(1), "<", float64(2)},
+		{"1 = 2", float64(1), "=", float64(2)},
+		{"1 != 2", float64(1), "!=", float64(2)},
+		{"1 >= 2", float64(1), ">=", float64(2)},
+		{"1 <= 2", float64(1), "<=", float64(2)},
+		{"1 and 2", float64(1), "and", float64(2)},
+		{"1 or 2", float64(1), "or", float64(2)},
+		{"1 % 2", float64(1), "%", float64(2)},
+		{"1 && 2", float64(1), "&&", float64(2)},
+		{"1 || 2", float64(1), "||", float64(2)},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			_, AST := testRunParser(t, tt.input, 1, false)
+
+			exp, ok := AST.Statements[0].(ast.ExpressionStatement)
+			if !ok {
+				t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
+			}
+			if !testInfix(t, exp.Expression, tt.op, tt.left, tt.right) {
+				return
+			}
+		})
+	}
 }
 
 func testVarStatement(t testhelper.TH, stmt ast.Statement, name string, val any) bool {
@@ -154,9 +189,9 @@ func testNumberLiteral(t testhelper.TH, exp ast.Expression, want float64) bool {
 }
 
 func testInfix(t testhelper.TH, exp ast.Expression, operator string, left, right any) bool {
-	infix, ok := exp.(*ast.InfixExpression)
+	infix, ok := exp.(ast.InfixExpression)
 	if !ok {
-		t.Errorf("expression type want *ast.InfixExpression, got %T", exp)
+		t.Errorf("expression type want ast.InfixExpression, got %T", exp)
 		return false
 	}
 	if !testLiteral(t, infix.Left, left) {
