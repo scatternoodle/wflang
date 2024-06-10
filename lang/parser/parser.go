@@ -51,6 +51,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.prefixParsers[token.T_MINUS] = p.parsePrefixExpression
 	p.prefixParsers[token.T_BANG] = p.parsePrefixExpression
 	p.prefixParsers[token.T_STRING] = p.parseStringLiteral
+	p.prefixParsers[token.T_TRUE] = p.parseBooleanLiteral
+	p.prefixParsers[token.T_FALSE] = p.parseBooleanLiteral
 
 	p.infixParsers[token.T_MINUS] = p.parseInfixExpression
 	p.infixParsers[token.T_PLUS] = p.parseInfixExpression
@@ -328,4 +330,13 @@ func (p *Parser) parseBlockCommentStatement() ast.BlockCommentStatement {
 // parseStringLiteral returns an ast.StringLiteral at the current token. Never errors.
 func (p *Parser) parseStringLiteral() (ast.Expression, error) {
 	return ast.StringLiteral{Token: p.current}, nil
+}
+
+// parseBooleanLiteral returns an ast.BooleanLiteral at the current token. Never errors.
+func (p *Parser) parseBooleanLiteral() (ast.Expression, error) {
+	exp := ast.BooleanLiteral{
+		Token: p.current,
+		Value: p.current.Type == token.T_TRUE,
+	}
+	return exp, nil
 }

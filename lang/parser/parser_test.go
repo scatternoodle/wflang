@@ -217,6 +217,33 @@ func TestStringLiteral(t *testing.T) {
 	}
 }
 
+func TestBooleanLiteral(t *testing.T) {
+	tests := []struct {
+		input string
+		want  bool
+	}{
+		{"true", true},
+		{"True", true},
+		{"TRUE", true},
+		{"false", false},
+		{"False", false},
+		{"FALSE", false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			_, AST := testRunParser(t, tt.input, 1, false)
+			exp, ok := AST.Statements[0].(ast.ExpressionStatement)
+			if !ok {
+				t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
+			}
+			if !testLiteral(t, exp.Expression, tt.want) {
+				return
+			}
+		})
+	}
+}
+
 func testVarStatement(t testhelper.TH, stmt ast.Statement, name string, val any) bool {
 	if stmt.TokenLiteral() != "var" {
 		t.Errorf(`TokenLiteral(): have %s, want "var"`, stmt.TokenLiteral())
@@ -246,6 +273,8 @@ func testLiteral(t testhelper.TH, exp ast.Expression, want any) bool {
 		return testNumberLiteral(t, exp, v)
 	case string:
 		return testStringLiteral(t, exp, v)
+	case bool:
+		return testBooleanLiteral(t, exp, v)
 	}
 	t.Errorf("unhandled expression type %T", exp)
 	return false
@@ -284,6 +313,20 @@ func testNumberLiteral(t testhelper.TH, exp ast.Expression, want float64) bool {
 	}
 	if litNum != want {
 		t.Errorf("literal: have %f, want %f", litNum, want)
+		return false
+	}
+	return true
+}
+
+func testBooleanLiteral(t testhelper.TH, exp ast.Expression, want bool) bool {
+	bstmt, ok := exp.(ast.BooleanLiteral)
+	if !ok {
+		t.Errorf("expression type: have %T, want ast.BooleanLiteral", exp)
+		return false
+	}
+
+	if bstmt.Value != want {
+		t.Errorf("value: have %t, want %t", bstmt.Value, want)
 		return false
 	}
 	return true

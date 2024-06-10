@@ -232,3 +232,16 @@ func (s StringLiteral) String() string       { return `"` + s.Token.Literal + `"
 func (s StringLiteral) Pos() (start, end token.Pos) {
 	return s.Token.StartPos, s.Token.EndPos
 }
+
+// BooleanLiteral is an expression that represents a boolean literal.
+type BooleanLiteral struct {
+	Token token.Token
+	Value bool
+}
+
+func (b BooleanLiteral) ExpressionNode()      {}
+func (b BooleanLiteral) TokenLiteral() string { return b.Token.Literal }
+func (b BooleanLiteral) String() string       { return fmt.Sprint(b.Value) }
+func (b BooleanLiteral) Pos() (start, end token.Pos) {
+	return b.Token.StartPos, b.Token.EndPos
+}

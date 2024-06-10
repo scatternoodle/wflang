@@ -53,7 +53,7 @@ const (
 
 	// keywords / builtins
 
-	T_VAR                 Type = "var"
+	T_VAR                 Type = "var" // implemented - parseVarStatement
 	T_IF                  Type = "if"
 	T_OVER                Type = "over"
 	T_WHERE               Type = "where"
@@ -63,8 +63,8 @@ const (
 	T_IN                  Type = "in"
 	T_SET                 Type = "set"
 	T_NULL                Type = "null"
-	T_TRUE                Type = "true"
-	T_FALSE               Type = "false"
+	T_TRUE                Type = "true"  // implemented - parseBoolean
+	T_FALSE               Type = "false" // implemented - parseBoolean
 	T_MIN                 Type = "min"
 	T_MAX                 Type = "max"
 	T_SUM                 Type = "sum"
