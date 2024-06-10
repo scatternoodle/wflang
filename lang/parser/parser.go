@@ -26,6 +26,11 @@ type Parser struct {
 	trace         *trace
 }
 
+type (
+	prefixParser func() (ast.Expression, error)
+	infixParser  func(ast.Expression) (ast.Expression, error)
+)
+
 // New takes a lexer, creates a new Parser, and advances it into the first token
 // within the lexer.
 func New(l *lexer.Lexer) *Parser {
@@ -45,6 +50,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.prefixParsers[token.T_IDENT] = p.parseIdent
 	p.prefixParsers[token.T_MINUS] = p.parsePrefixExpression
 	p.prefixParsers[token.T_BANG] = p.parsePrefixExpression
+	p.prefixParsers[token.T_STRING] = p.parseStringLiteral
 
 	p.infixParsers[token.T_MINUS] = p.parseInfixExpression
 	p.infixParsers[token.T_PLUS] = p.parseInfixExpression
@@ -94,15 +100,15 @@ func (p *Parser) Trace() string {
 	return p.trace.String()
 }
 
-type (
-	prefixParser func() (ast.Expression, error)
-	infixParser  func(ast.Expression) (ast.Expression, error)
-)
-
 // advance moves the parser forward by one token.
 func (p *Parser) advance() {
 	p.current = p.next
 	p.next = p.l.NextToken()
+}
+
+// returns true if the string is a reserved language keyword.
+func isKeyword(s string) bool {
+	return token.LookupKeyword(s) != token.T_IDENT
 }
 
 // wantPeek checks if the current token is of the expected type. If not, returns
@@ -319,6 +325,7 @@ func (p *Parser) parseBlockCommentStatement() ast.BlockCommentStatement {
 	return ast.BlockCommentStatement{Token: p.current}
 }
 
-func isKeyword(s string) bool {
-	return token.LookupKeyword(s) != token.T_IDENT
+// parseStringLiteral returns an ast.StringLiteral at the current token. Never errors.
+func (p *Parser) parseStringLiteral() (ast.Expression, error) {
+	return ast.StringLiteral{Token: p.current}, nil
 }

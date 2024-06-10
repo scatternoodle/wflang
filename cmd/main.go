@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	s := `// hi there`
+	s := `"hey"`
 	l := lexer.New(s)
 	p := parser.New(l)
 	ast := p.Parse()

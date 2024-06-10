@@ -219,3 +219,16 @@ func (i InfixExpression) Pos() (start, end token.Pos) {
 	_, end = i.Right.Pos()
 	return start, end
 }
+
+// StringLiteral is an expression that represents a string literal. The string
+// itself is stored in the token literal.
+type StringLiteral struct {
+	Token token.Token
+}
+
+func (s StringLiteral) ExpressionNode()      {}
+func (s StringLiteral) TokenLiteral() string { return s.Token.Literal }
+func (s StringLiteral) String() string       { return `"` + s.Token.Literal + `"` }
+func (s StringLiteral) Pos() (start, end token.Pos) {
+	return s.Token.StartPos, s.Token.EndPos
+}

@@ -204,6 +204,19 @@ func TestParseBlockComment(t *testing.T) {
 	}
 }
 
+func TestStringLiteral(t *testing.T) {
+	input := `"hello"`
+	_, AST := testRunParser(t, input, 1, false)
+
+	exp, ok := AST.Statements[0].(ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
+	}
+	if !testLiteral(t, exp.Expression, "hello") {
+		return
+	}
+}
+
 func testVarStatement(t testhelper.TH, stmt ast.Statement, name string, val any) bool {
 	if stmt.TokenLiteral() != "var" {
 		t.Errorf(`TokenLiteral(): have %s, want "var"`, stmt.TokenLiteral())
@@ -231,9 +244,25 @@ func testLiteral(t testhelper.TH, exp ast.Expression, want any) bool {
 	switch v := want.(type) {
 	case float64:
 		return testNumberLiteral(t, exp, v)
+	case string:
+		return testStringLiteral(t, exp, v)
 	}
 	t.Errorf("unhandled expression type %T", exp)
 	return false
+}
+
+func testStringLiteral(t testhelper.TH, exp ast.Expression, want string) bool {
+	sStmt, ok := exp.(ast.StringLiteral)
+	if !ok {
+		t.Errorf("expression type: have %T, want ast.StringLiteral", exp)
+		return false
+	}
+
+	if sStmt.TokenLiteral() != want {
+		t.Errorf("literal: have %s, want %s", sStmt.TokenLiteral(), want)
+		return false
+	}
+	return true
 }
 
 func testNumberLiteral(t testhelper.TH, exp ast.Expression, want float64) bool {
