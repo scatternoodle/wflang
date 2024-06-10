@@ -139,3 +139,57 @@ func (n NumberLiteral) String() string       { return fmt.Sprint(n.Value) }
 func (n NumberLiteral) Pos() (start, end token.Pos) {
 	return n.Token.StartPos, n.Token.EndPos
 }
+
+// PrefixExpression is an expression prefixed by an operator. It stores both the operator
+// token and the Expression it prefixes.
+type PrefixExpression struct {
+	Token  token.Token
+	Prefix string
+	Right  Expression
+}
+
+func (p PrefixExpression) ExpressionNode()      {}
+func (p PrefixExpression) TokenLiteral() string { return p.Token.Literal }
+
+func (p PrefixExpression) String() string {
+	return fmt.Sprintf("(%s%s)", p.Prefix, p.Right.String())
+}
+
+// Pos returns the StartPos of the prefix token, and the EndPos of the Right expression.
+func (p PrefixExpression) Pos() (start, end token.Pos) {
+	start = p.Token.StartPos
+	if p.Right == nil {
+		end = start
+		return start, end
+	}
+	_, end = p.Right.Pos()
+	return start, end
+}
+
+// InfixExpression is an expression that contains an operator between two expressions.
+// It stores both the left and right expressions, as well as the operator token.
+type InfixExpression struct {
+	Token token.Token
+	Left  Expression
+	Infix string
+	Right Expression
+}
+
+func (i InfixExpression) ExpressionNode()      {}
+func (i InfixExpression) TokenLiteral() string { return i.Token.Literal }
+
+func (i InfixExpression) String() string {
+	return fmt.Sprintf("(%s %s %s)", i.Left.String(), i.Infix, i.Right.String())
+}
+
+// Pos returns the StartPos of the Left expression, and the EndPos of the Right expression.
+// If either left or right are nil, returns the start and end of the infix token.
+func (i InfixExpression) Pos() (start, end token.Pos) {
+	if i.Left == nil || i.Right == nil {
+		return i.Token.StartPos, i.Token.EndPos // best we can reasonably do - something has gone pretty wrong.
+	}
+
+	start, _ = i.Left.Pos()
+	_, end = i.Right.Pos()
+	return start, end
+}

@@ -41,9 +41,22 @@ func New(l *lexer.Lexer) *Parser {
 	p.advance()
 	p.advance()
 
-	// register parser functions
 	p.prefixParsers[token.T_NUM] = p.parseNumberLiteral
 	p.prefixParsers[token.T_IDENT] = p.parseIdent
+	p.prefixParsers[token.T_MINUS] = p.parsePrefixExpression
+	p.prefixParsers[token.T_BANG] = p.parsePrefixExpression
+
+	p.infixParsers[token.T_MINUS] = p.parseInfixExpression
+	p.infixParsers[token.T_PLUS] = p.parseInfixExpression
+	p.infixParsers[token.T_SLASH] = p.parseInfixExpression
+	p.infixParsers[token.T_ASTERISK] = p.parseInfixExpression
+	p.infixParsers[token.T_MODULO] = p.parseInfixExpression
+	p.infixParsers[token.T_GT] = p.parseInfixExpression
+	p.infixParsers[token.T_GTE] = p.parseInfixExpression
+	p.infixParsers[token.T_LT] = p.parseInfixExpression
+	p.infixParsers[token.T_LTE] = p.parseInfixExpression
+	p.infixParsers[token.T_EQ] = p.parseInfixExpression
+	p.infixParsers[token.T_NEQ] = p.parseInfixExpression
 
 	return p
 }
@@ -206,6 +219,47 @@ func (p *Parser) parseExpression(precedence int) (ast.Expression, error) {
 		}
 	}
 	return leftExp, nil
+}
+
+func (p *Parser) parsePrefixExpression() (ast.Expression, error) {
+	p.trace.trace("PrefixExpression")
+	defer p.trace.untrace("PrefixExpression")
+
+	exp := ast.PrefixExpression{
+		Token:  p.current,
+		Prefix: p.current.Literal,
+	}
+	p.advance()
+
+	right, err := p.parseExpression(p_LOWEST)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing right expression: %w", err)
+	}
+	exp.Right = right
+	return exp, nil
+}
+
+func (p *Parser) parseInfixExpression(left ast.Expression) (ast.Expression, error) {
+	p.trace.trace("InfixExpression")
+	defer p.trace.untrace("InfixExpression")
+
+	if left == nil {
+		return nil, newParseErr("left expression is nil", p.current)
+	}
+
+	exp := ast.InfixExpression{
+		Token: p.current,
+		Left:  left,
+		Infix: p.current.Literal,
+	}
+	p.advance()
+
+	right, err := p.parseExpression(p_LOWEST)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing right expresion: %w", err)
+	}
+	exp.Right = right
+	return exp, nil
 }
 
 // parseIdent attempts to resolve an Identifier expression.

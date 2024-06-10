@@ -9,9 +9,16 @@ import (
 	"github.com/scatternoodle/wflang/testhelper"
 )
 
+var testParseInput = `var x = 1;`
+
 func TestParse(t *testing.T) {
-	input := "var x = 1;"
-	_, _ = testRunParser(t, input, 1, false)
+	_, _ = testRunParser(t, testParseInput, 1, false)
+}
+
+func BenchmarkParse(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_, _ = testRunParser(b, testParseInput, 1, false)
+	}
 }
 
 func TestParseVarStatement(t *testing.T) {
@@ -51,14 +58,46 @@ func TestParseVarStatement(t *testing.T) {
 	}
 }
 
-func BenchmarkParse(b *testing.B) {
-	input := "var x = 1;"
-	for i := 0; i < b.N; i++ {
-		_, _ = testRunParser(b, input, 1, false)
+func TestPrefixExpression(t *testing.T) {
+	tests := []struct {
+		input string
+		op    string
+		want  any
+	}{
+		{"!2", "!", float64(2)},
+		{"-15.5", "-", float64(15.5)},
+		// {"!true;", "!", true}, // TODO - enable once bool parsing implemented.
+		// {"!false;", "!", false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			_, AST := testRunParser(t, tt.input, 1, false)
+
+			exp, ok := AST.Statements[0].(ast.ExpressionStatement)
+			if !ok {
+				t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
+			}
+			pre, ok := exp.Expression.(ast.PrefixExpression)
+			if !ok {
+				t.Fatalf("expression type: have %T, want ast.PrefixExpression", exp.Expression)
+			}
+
+			if pre.Prefix != tt.op {
+				t.Errorf("operator: have %s, want %s", pre.Prefix, tt.op)
+			}
+			if !testLiteral(t, pre.Right, tt.want) {
+				return
+			}
+		})
 	}
 }
 
-func testVarStatement(t testhelper.TestHelper, stmt ast.Statement, name string, val any) bool {
+func testInfixExpression(t *testing.T) {
+	// TODO
+}
+
+func testVarStatement(t testhelper.TH, stmt ast.Statement, name string, val any) bool {
 	if stmt.TokenLiteral() != "var" {
 		t.Errorf(`TokenLiteral(): have %s, want "var"`, stmt.TokenLiteral())
 		return false
@@ -76,13 +115,12 @@ func testVarStatement(t testhelper.TestHelper, stmt ast.Statement, name string, 
 	}
 
 	if !testLiteral(t, vstmt.Value, val) {
-		t.Errorf("value: have %v, want %v", vstmt.Value, val)
 		return false
 	}
 	return true
 }
 
-func testLiteral(t testhelper.TestHelper, exp ast.Expression, want any) bool {
+func testLiteral(t testhelper.TH, exp ast.Expression, want any) bool {
 	switch v := want.(type) {
 	case float64:
 		return testNumberLiteral(t, exp, v)
@@ -91,7 +129,7 @@ func testLiteral(t testhelper.TestHelper, exp ast.Expression, want any) bool {
 	return false
 }
 
-func testNumberLiteral(t testhelper.TestHelper, exp ast.Expression, want float64) bool {
+func testNumberLiteral(t testhelper.TH, exp ast.Expression, want float64) bool {
 	nstmt, ok := exp.(ast.NumberLiteral)
 	if !ok {
 		t.Errorf("expression type: have %T, want ast.NumberLiteral", exp)
@@ -115,7 +153,26 @@ func testNumberLiteral(t testhelper.TestHelper, exp ast.Expression, want float64
 	return true
 }
 
-func testRunParser(t testhelper.TestHelper, input string, wantLen int, errOk bool) (*Parser, *ast.AST) {
+func testInfix(t testhelper.TH, exp ast.Expression, operator string, left, right any) bool {
+	infix, ok := exp.(*ast.InfixExpression)
+	if !ok {
+		t.Errorf("expression type want *ast.InfixExpression, got %T", exp)
+		return false
+	}
+	if !testLiteral(t, infix.Left, left) {
+		return false
+	}
+	if infix.Infix != operator {
+		t.Errorf("operator want %s, got %s", operator, infix.Infix)
+		return false
+	}
+	if !testLiteral(t, infix.Right, right) {
+		return false
+	}
+	return true
+}
+
+func testRunParser(t testhelper.TH, input string, wantLen int, errOk bool) (*Parser, *ast.AST) {
 	l := lexer.New(input)
 	prg := New(l)
 	AST := prg.Parse()
@@ -139,7 +196,7 @@ func testRunParser(t testhelper.TestHelper, input string, wantLen int, errOk boo
 	return prg, AST
 }
 
-func checkParseErrors(t testhelper.TestHelper, p *Parser) {
+func checkParseErrors(t testhelper.TH, p *Parser) {
 	if len(p.errors) != 0 {
 		t.Errorf("parser has %d errors:", len(p.errors))
 		for _, err := range p.errors {
