@@ -124,6 +124,10 @@ func (p *Parser) parseStatement() (ast.Statement, error) {
 	switch p.current.Type {
 	case token.T_VAR:
 		return p.parseVarStatement()
+	case token.T_COMMENT_LINE:
+		return p.parseLineCommentStatement(), nil
+	case token.T_COMMENT_BLOCK:
+		return p.parseBlockCommentStatement(), nil
 	default:
 		return p.parseExpressionStatement()
 	}
@@ -297,6 +301,22 @@ func (p *Parser) parseNumberLiteral() (ast.Expression, error) {
 		return nil, newParseErr(msg, p.current)
 	}
 	return ast.NumberLiteral{Token: p.current, Value: val}, nil
+}
+
+// parseLineCommentStatement returns a LineCommentStatement with the current token.
+func (p *Parser) parseLineCommentStatement() ast.LineCommentStatement {
+	p.trace.trace("LineCommentStatement")
+	defer p.trace.untrace("LineCommentStatement")
+
+	return ast.LineCommentStatement{Token: p.current}
+}
+
+// parseBlockCommentStatement returns a BlockCommentStatement with the current token.
+func (p *Parser) parseBlockCommentStatement() ast.BlockCommentStatement {
+	p.trace.trace("BlockCommentStatement")
+	defer p.trace.untrace("BlockCommentStatement")
+
+	return ast.BlockCommentStatement{Token: p.current}
 }
 
 func isKeyword(s string) bool {

@@ -6,6 +6,7 @@ import (
 
 	"github.com/scatternoodle/wflang/lang/ast"
 	"github.com/scatternoodle/wflang/lang/lexer"
+	"github.com/scatternoodle/wflang/lang/token"
 	"github.com/scatternoodle/wflang/testhelper"
 )
 
@@ -129,6 +130,77 @@ func TestInfixExpression(t *testing.T) {
 				return
 			}
 		})
+	}
+}
+
+func TestParseLineComment(t *testing.T) {
+	input := `// this is a comment
+// and another
+var x = 1; // comment at end of line`
+
+	tests := []struct {
+		stmtIndex int
+		literal   string
+		start     token.Pos
+		end       token.Pos
+	}{
+		{0, "// this is a comment", token.Pos{Num: 0, Line: 0, Col: 0}, token.Pos{Num: 19, Line: 0, Col: 19}},
+		{1, "// and another", token.Pos{Num: 21, Line: 1, Col: 0}, token.Pos{Num: 34, Line: 1, Col: 13}},
+		{3, "// comment at end of line", token.Pos{Num: 47, Line: 2, Col: 11}, token.Pos{Num: 71, Line: 2, Col: 35}},
+	}
+
+	_, AST := testRunParser(t, input, 4, false)
+	for i, tt := range tests {
+		stmt := AST.Statements[tt.stmtIndex]
+
+		cStmt, ok := stmt.(ast.LineCommentStatement)
+		if !ok {
+			t.Fatalf("tests[%d] statement type: have %T, want ast.LineCommentStatement", i, stmt)
+		}
+		if cStmt.TokenLiteral() != tt.literal {
+			t.Fatalf("tests[%d] literal: have %s, want %s", i, stmt.TokenLiteral(), tt.literal)
+		}
+		if cStmt.Token.StartPos != tt.start {
+			t.Fatalf("tests[%d] start position: have %s, want %s", i, cStmt.Token.StartPos.String(), tt.start.String())
+		}
+		if cStmt.Token.EndPos != tt.end {
+			t.Fatalf("tests[%d] end position: have %s, want %s", i, cStmt.Token.EndPos.String(), tt.end.String())
+		}
+	}
+}
+
+func TestParseBlockComment(t *testing.T) {
+	input := `/* 1 */
+/* 2.1
+2.2 */`
+
+	tests := []struct {
+		stmtIndex int
+		literal   string
+		start     token.Pos
+		end       token.Pos
+	}{
+		{0, "/* 1 */", token.Pos{Num: 0, Line: 0, Col: 0}, token.Pos{Num: 6, Line: 0, Col: 6}},
+		{1, "/* 2.1\n2.2 */", token.Pos{Num: 8, Line: 1, Col: 0}, token.Pos{Num: 20, Line: 2, Col: 5}},
+	}
+
+	_, AST := testRunParser(t, input, 2, false)
+	for i, tt := range tests {
+		stmt := AST.Statements[tt.stmtIndex]
+
+		cStmt, ok := stmt.(ast.BlockCommentStatement)
+		if !ok {
+			t.Fatalf("tests[%d] statement type: have %T, want ast.BlockCommentStatement", i, stmt)
+		}
+		if cStmt.TokenLiteral() != tt.literal {
+			t.Fatalf("tests[%d] literal: have %s, want %s", i, stmt.TokenLiteral(), tt.literal)
+		}
+		if cStmt.Token.StartPos != tt.start {
+			t.Fatalf("tests[%d] start position: have %s, want %s", i, cStmt.Token.StartPos.String(), tt.start.String())
+		}
+		if cStmt.Token.EndPos != tt.end {
+			t.Fatalf("tests[%d] end position: have %s, want %s", i, cStmt.Token.EndPos.String(), tt.end.String())
+		}
 	}
 }
 

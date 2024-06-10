@@ -57,7 +57,7 @@ x AND y
 		{token.T_WHERE, "where"},                          // 19
 		{token.T_ORDER, "order"},                          // 20
 		{token.T_BY, "by"},                                // 21
-		{token.T_COMMENT_LINE, "// comment line\n"},       // 22
+		{token.T_COMMENT_LINE, "// comment line"},         // 22
 		{token.T_COMMENT_BLOCK, "/* comment/*\nblock */"}, // 23
 		{token.T_NEQ, "!="},                               // 24
 		{token.T_NUM, "1"},                                // 25

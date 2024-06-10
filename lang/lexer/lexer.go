@@ -69,9 +69,15 @@ func (l *Lexer) NextToken() token.Token {
 		if l.peek() == '/' {
 			lit := l.readLineComment()
 			tokn = newToken(l, token.T_COMMENT_LINE, lit, start)
+
 		} else if l.peek() == '*' {
 			lit := l.readBlockComment()
-			tokn = newToken(l, token.T_COMMENT_BLOCK, lit, start)
+			if lit == "" {
+				tokn = newToken(l, token.T_ILLEGAL, "", start)
+			} else {
+				tokn = newToken(l, token.T_COMMENT_BLOCK, lit, start)
+			}
+
 		} else {
 			tokn = newToken(l, token.T_SLASH, '/', start)
 		}
@@ -302,24 +308,25 @@ func (l *Lexer) readIdent() string {
 func (l *Lexer) readLineComment() string {
 	start := l.pos
 	for {
-		l.advance()
-		if l.ch == '\n' || l.ch == eof {
+		if l.peek() == '\n' || l.peek() == eof {
 			break
 		}
+		l.advance()
 	}
 	return l.input[start : l.pos+1]
 }
 
 // readBlockComment advances from a '/*' opening symbol until it reaches the closing
-// '*/' symbol or EOF. Returns the full comment string, including the opening and
-// closing symbols.
+// '*/' symbol. Returns the full comment string, including the opening and
+// closing symbols. If EOF encountered, returns an empty string (considered a failure).
 func (l *Lexer) readBlockComment() string {
 	start := l.pos
 	for {
-		l.advance()
-		if l.ch == eof {
-			break
+		if l.peek() == eof {
+			return "" // we may want to handle this more explicitly later
 		}
+
+		l.advance()
 		if l.ch == '*' {
 			if l.peek() == '/' {
 				break

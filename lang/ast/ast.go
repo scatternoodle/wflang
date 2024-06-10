@@ -113,6 +113,32 @@ func (v VarStatement) Pos() (start, end token.Pos) {
 	return v.Token.StartPos, end
 }
 
+// LineCommentStatement is a statement that represents a single line comment, where
+// the token literal is the comment itself (including the leading "//").
+type LineCommentStatement struct {
+	Token token.Token
+}
+
+func (l LineCommentStatement) StatementNode()       {}
+func (l LineCommentStatement) TokenLiteral() string { return l.Token.Literal }
+func (l LineCommentStatement) String() string       { return l.Token.Literal }
+func (l LineCommentStatement) Pos() (start, end token.Pos) {
+	return l.Token.StartPos, l.Token.EndPos
+}
+
+// BlockCommentStatement is a statement that represents a block comment, where the
+// token literal is the comment itself (including the leading "/*" and trailing "*/").
+type BlockCommentStatement struct {
+	Token token.Token
+}
+
+func (b BlockCommentStatement) StatementNode()       {}
+func (b BlockCommentStatement) TokenLiteral() string { return b.Token.Literal }
+func (b BlockCommentStatement) String() string       { return b.Token.Literal }
+func (b BlockCommentStatement) Pos() (start, end token.Pos) {
+	return b.Token.StartPos, b.Token.EndPos
+}
+
 // Ident is an expression that represents a variable name. It is used in
 // VarStatements to declare variables, and in other expressions to reference them.
 type Ident struct {
