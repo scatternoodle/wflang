@@ -24,6 +24,10 @@ block */
 1 = 2
 1 || 2
 x && y
+x or y
+x OR y
+x and y
+x AND y
 `
 	l := New(input)
 
@@ -65,6 +69,18 @@ x && y
 		{token.T_IDENT, "x"},                              // 31
 		{token.T_AND, "&&"},                               // 32
 		{token.T_IDENT, "y"},                              // 33
+		{token.T_IDENT, "x"},                              // 34
+		{token.T_OR, "or"},                                // 35
+		{token.T_IDENT, "y"},                              // 36
+		{token.T_IDENT, "x"},                              // 37
+		{token.T_OR, "OR"},                                // 38
+		{token.T_IDENT, "y"},                              // 39
+		{token.T_IDENT, "x"},                              // 40
+		{token.T_AND, "and"},                              // 41
+		{token.T_IDENT, "y"},                              // 42
+		{token.T_IDENT, "x"},                              // 43
+		{token.T_AND, "AND"},                              // 44
+		{token.T_IDENT, "y"},                              // 45
 		{token.T_EOF, ""},                                 // last
 	}
 
