@@ -135,11 +135,9 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	exp := ast.IfExpression{Token: p.current}
 
 	// if (...
-	if err := p.wantPeek(token.T_LPAREN); err != nil {
+	if err := p.wantLParen(); err != nil {
 		return nil, eWrap(err)
 	}
-	p.advance()
-
 	// ...ConditionStatement,
 	cnd, err := p.parseExpression(p_LOWEST)
 	if err != nil {
@@ -158,6 +156,10 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	}
 	exp.Consequence = cns
 
+	if err := p.wantComma(); err != nil {
+		return nil, eWrap(err)
+	}
+
 	// ...AlternativeStatement )
 	alt, err := p.parseExpression(p_LOWEST)
 	if err != nil {
@@ -165,7 +167,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	}
 	exp.Alternative = alt
 
-	if err := p.wantComma(); err != nil {
+	if err := p.wantRParen(); err != nil {
 		return nil, eWrap(err)
 	}
 

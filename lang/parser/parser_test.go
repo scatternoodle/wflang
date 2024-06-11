@@ -244,6 +244,25 @@ func TestBooleanLiteral(t *testing.T) {
 	}
 }
 
+func TestIfExpression(t *testing.T) {
+	input := `
+if( 5 > 4
+  , "foo"
+  , "bar" )`
+
+	_, AST := testRunParser(t, input, 1, false)
+
+	stmt, ok := AST.Statements[0].(ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
+	}
+	exp, ok := stmt.Expression.(ast.IfExpression)
+	if !ok {
+		t.Fatalf("expression type: have %T, want ast.IfExpression", stmt.Expression)
+	}
+	_ = exp
+}
+
 func testVarStatement(t testhelper.TH, stmt ast.Statement, name string, val any) bool {
 	if stmt.TokenLiteral() != "var" {
 		t.Errorf(`TokenLiteral(): have %s, want "var"`, stmt.TokenLiteral())
