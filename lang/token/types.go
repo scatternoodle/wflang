@@ -54,7 +54,7 @@ const (
 	// keywords / builtins
 
 	T_VAR                 Type = "var" // parser - parseVarStatement
-	T_IF                  Type = "if"
+	T_IF                  Type = "if"  // parser - parseIfExpression
 	T_OVER                Type = "over"
 	T_WHERE               Type = "where"
 	T_ORDER               Type = "order"

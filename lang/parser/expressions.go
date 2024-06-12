@@ -8,6 +8,10 @@ import (
 	"github.com/scatternoodle/wflang/lang/token"
 )
 
+func blankExpression(t token.Token) ast.Expression {
+	return ast.BlankExpression{Token: t}
+}
+
 // parseExpression, similarly to parseStatement, is mainly a triage function that
 // delegates to the appropriate parsing function based on the current token type.
 func (p *Parser) parseExpression(precedence int) (ast.Expression, error) {
@@ -124,6 +128,40 @@ func (p *Parser) parseBooleanLiteral() (ast.Expression, error) {
 	return exp, nil
 }
 
+// parsesBlockExpression advances through as many VarStatements as needed until
+// an expression is met, which must be the end of the Expression.
+//
+// There can optionally be an unlimited number of VarStatements, but aside from
+// that BlockExpression MUST contain ONE Expression, which MUST be at the END.
+func (p *Parser) parseBlockExpression() (ast.Expression, error) {
+	p.trace.trace("BlockExpression")
+	defer p.trace.untrace("BlockExpression")
+
+	blockExp := ast.BlockExpression{Token: p.current, Vars: []ast.VarStatement{}}
+	for {
+		if p.next.Type == token.T_EOF {
+			return nil, newParseErr("EOF reached before BlockStatement end", p.current)
+		}
+
+		if p.current.Type == token.T_VAR {
+			vStmt, err := p.parseVarStatement()
+			if err != nil {
+				return nil, fmt.Errorf("varstatment parse error: %w", err)
+			}
+			blockExp.Vars = append(blockExp.Vars, vStmt)
+			p.advance() // past the semicolon.
+			continue
+		}
+
+		exp, err := p.parseExpression(p_LOWEST)
+		if err != nil {
+			return nil, fmt.Errorf("value expression parse error: %w", err)
+		}
+		blockExp.Value = exp
+		return blockExp, nil
+	}
+}
+
 func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	p.trace.trace("IfExpression")
 	defer p.trace.untrace("IfExpression")
@@ -172,4 +210,34 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	}
 
 	return exp, nil
+}
+
+func (p *Parser) parseParenExpression() (ast.Expression, error) {
+	p.trace.trace("ParenExpression")
+	defer p.trace.untrace("ParenExpression")
+
+	eWrap := func(e error) error {
+		return fmt.Errorf("ParenExpression: %w", e)
+	}
+
+	parExp := ast.ParenExpression{Token: p.current}
+	if p.next.Type == token.T_RPAREN {
+		parExp.Inner = blankExpression(p.current)
+		parExp.RParen = p.next
+	}
+
+	p.advance()
+	inner, err := p.parseBlockExpression()
+	if err != nil {
+		return nil, eWrap(err)
+	}
+	parExp.Inner = inner
+
+	if err = p.wantPeek(token.T_RPAREN); err != nil {
+		return nil, eWrap(err)
+	}
+	p.advance()
+
+	parExp.RParen = p.current
+	return parExp, nil
 }

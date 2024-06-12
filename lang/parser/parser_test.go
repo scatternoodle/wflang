@@ -263,6 +263,60 @@ if( 5 > 4
 	_ = exp
 }
 
+func TestParenExpression(t *testing.T) {
+	input := `(
+	var x = "foo";
+	var y = "bar";
+	x + y
+)`
+	_, AST := testRunParser(t, input, 1, false)
+
+	expStmt, ok := AST.Statements[0].(ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
+	}
+
+	parStmt, ok := expStmt.Expression.(ast.ParenExpression)
+	if !ok {
+		t.Fatalf("expression type: have %T, want ast.ExpressionStatement", expStmt.Expression)
+	}
+
+	vars := []tVar{
+		{"x", "foo"},
+		{"y", "bar"},
+	}
+	if !testBlockExpression(t, parStmt.Inner, vars) {
+		return
+	}
+}
+
+type tVar struct {
+	name string
+	val  any
+}
+
+func testBlockExpression(t testhelper.TH, exp ast.Expression, vars []tVar) bool {
+	blockExp, ok := exp.(ast.BlockExpression)
+	if !ok {
+		t.Fatalf("expression type: have %T, want ast.BlockExpression", exp)
+		return false
+	}
+
+	if len(blockExp.Vars) != len(vars) {
+		t.Fatalf("exp.Vars length: have %d, want %d", len(blockExp.Vars), len(vars))
+		return false
+	}
+
+	for i, v := range vars {
+		have := blockExp.Vars[i]
+		if have.Name.Value != v.name {
+			t.Fatalf("Vars[%d].Name: have %s, want %s", i, have.Name.Value, v.name)
+			return false
+		}
+	}
+	return true
+}
+
 func testVarStatement(t testhelper.TH, stmt ast.Statement, name string, val any) bool {
 	if stmt.TokenLiteral() != "var" {
 		t.Errorf(`TokenLiteral(): have %s, want "var"`, stmt.TokenLiteral())

@@ -72,8 +72,8 @@ func (a *AST) Pos() (start, end token.Pos) {
 // most common type of statement in WFLang, and in fact it could be said that all
 // formulas, no matter how long and complex, are simply a single expression.
 type ExpressionStatement struct {
-	Token      token.Token // the first token of the expression
-	Expression Expression
+	token.Token // the first token of the expression
+	Expression  Expression
 }
 
 func (e ExpressionStatement) StatementNode()       {}
@@ -96,9 +96,9 @@ func (e ExpressionStatement) Pos() (start, end token.Pos) {
 // that consists of the token.T_VAR token, with an Identifier Expression containing
 // the name of the variable.
 type VarStatement struct {
-	Token token.Token // expected to be token.T_VAR type
-	Name  Ident
-	Value Expression
+	token.Token // expected to be token.T_VAR type
+	Name        Ident
+	Value       Expression
 }
 
 func (v VarStatement) StatementNode()       {}
@@ -116,7 +116,7 @@ func (v VarStatement) Pos() (start, end token.Pos) {
 // LineCommentStatement is a statement that represents a single line comment, where
 // the token literal is the comment itself (including the leading "//").
 type LineCommentStatement struct {
-	Token token.Token
+	token.Token
 }
 
 func (l LineCommentStatement) StatementNode()       {}
@@ -129,7 +129,7 @@ func (l LineCommentStatement) Pos() (start, end token.Pos) {
 // BlockCommentStatement is a statement that represents a block comment, where the
 // token literal is the comment itself (including the leading "/*" and trailing "*/").
 type BlockCommentStatement struct {
-	Token token.Token
+	token.Token
 }
 
 func (b BlockCommentStatement) StatementNode()       {}
@@ -142,7 +142,7 @@ func (b BlockCommentStatement) Pos() (start, end token.Pos) {
 // Ident is an expression that represents a variable name. It is used in
 // VarStatements to declare variables, and in other expressions to reference them.
 type Ident struct {
-	Token token.Token
+	token.Token
 	Value string
 }
 
@@ -155,7 +155,7 @@ func (i Ident) Pos() (start, end token.Pos) { return i.Token.StartPos, i.Token.E
 // is stored as a float64 but can also hold an integer type (WFLang has one number
 // type).
 type NumberLiteral struct {
-	Token token.Token
+	token.Token
 	Value float64
 }
 
@@ -195,7 +195,7 @@ func (p PrefixExpression) Pos() (start, end token.Pos) {
 // InfixExpression is an expression that contains an operator between two expressions.
 // It stores both the left and right expressions, as well as the operator token.
 type InfixExpression struct {
-	Token token.Token
+	token.Token
 	Left  Expression
 	Infix string
 	Right Expression
@@ -223,7 +223,7 @@ func (i InfixExpression) Pos() (start, end token.Pos) {
 // StringLiteral is an expression that represents a string literal. The string
 // itself is stored in the token literal.
 type StringLiteral struct {
-	Token token.Token
+	token.Token
 }
 
 func (s StringLiteral) ExpressionNode()      {}
@@ -235,7 +235,7 @@ func (s StringLiteral) Pos() (start, end token.Pos) {
 
 // BooleanLiteral is an expression that represents a boolean literal.
 type BooleanLiteral struct {
-	Token token.Token
+	token.Token
 	Value bool
 }
 
@@ -278,3 +278,51 @@ func (i IfExpression) Pos() (start, end token.Pos) {
 	_, end = i.Alternative.Pos()
 	return start, end
 }
+
+// BlockExpression is a group of 0-n number of VarStatements followed
+// by a single Expression. The VarStatements are optional but the Expression is
+// mandatory, there can only be one, and it must be the last member of the group.
+type BlockExpression struct {
+	token.Token
+	Vars  []VarStatement
+	Value Expression
+}
+
+func (b BlockExpression) ExpressionNode()      {}
+func (b BlockExpression) TokenLiteral() string { return b.Token.Literal }
+
+func (b BlockExpression) String() string {
+	var out strings.Builder
+	out.WriteString("( ")
+	for _, v := range b.Vars {
+		out.WriteString("\t" + v.String() + "\n")
+	}
+	out.WriteString(b.Value.String() + " )")
+	return out.String()
+}
+
+func (b BlockExpression) Pos() (start, end token.Pos) {
+	_, end = b.Value.Pos()
+	return b.StartPos, end
+}
+
+type ParenExpression struct {
+	token.Token
+	Inner  Expression
+	RParen token.Token
+}
+
+func (p ParenExpression) ExpressionNode()             {}
+func (p ParenExpression) TokenLiteral() string        { return p.Token.Literal }
+func (p ParenExpression) String() string              { return "(" + p.Inner.String() + ")" }
+func (p ParenExpression) Pos() (start, end token.Pos) { return p.Token.StartPos, p.RParen.EndPos }
+
+// BlankExpression is an empty expression. Token is usually the preceding token.
+type BlankExpression struct {
+	token.Token
+}
+
+func (b BlankExpression) ExpressionNode()             {}
+func (b BlankExpression) TokenLiteral() string        { return b.Token.Literal }
+func (b BlankExpression) String() string              { return "" }
+func (b BlankExpression) Pos() (start, end token.Pos) { return b.Token.StartPos, b.Token.EndPos }
