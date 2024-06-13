@@ -162,6 +162,13 @@ func (p *Parser) parseBlockExpression() (ast.Expression, error) {
 	}
 }
 
+// parseIfExpression - ifExpressions in WFLang look like this:
+//
+//	if( <Condition>
+//	  , <Consequence>
+//	  , <Alternative> )
+//
+// Condition, Consequence, and Alternative are BlockStatements.
 func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	p.trace.trace("IfExpression")
 	defer p.trace.untrace("IfExpression")
@@ -176,7 +183,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	if err := p.wantLParen(); err != nil {
 		return nil, eWrap(err)
 	}
-	// ...ConditionStatement,
+	// ...Condition,
 	cnd, err := p.parseBlockExpression()
 	if err != nil {
 		return nil, eWrap(err)
@@ -187,7 +194,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 		return nil, eWrap(err)
 	}
 
-	// ...ConsequenceStatement,
+	// ...Consequence,
 	cns, err := p.parseBlockExpression()
 	if err != nil {
 		return nil, eWrap(err)
@@ -198,7 +205,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 		return nil, eWrap(err)
 	}
 
-	// ...AlternativeStatement )
+	// ...Alternative )
 	alt, err := p.parseBlockExpression()
 	if err != nil {
 		return nil, eWrap(err)
