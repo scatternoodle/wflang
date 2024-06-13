@@ -177,7 +177,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 		return nil, eWrap(err)
 	}
 	// ...ConditionStatement,
-	cnd, err := p.parseExpression(p_LOWEST)
+	cnd, err := p.parseBlockExpression()
 	if err != nil {
 		return nil, eWrap(err)
 	}
@@ -188,7 +188,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	}
 
 	// ...ConsequenceStatement,
-	cns, err := p.parseExpression(p_LOWEST)
+	cns, err := p.parseBlockExpression()
 	if err != nil {
 		return nil, eWrap(err)
 	}
@@ -199,7 +199,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	}
 
 	// ...AlternativeStatement )
-	alt, err := p.parseExpression(p_LOWEST)
+	alt, err := p.parseBlockExpression()
 	if err != nil {
 		return nil, eWrap(err)
 	}

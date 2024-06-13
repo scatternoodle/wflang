@@ -260,6 +260,7 @@ if( 5 > 4
 	if !ok {
 		t.Fatalf("expression type: have %T, want ast.IfExpression", stmt.Expression)
 	}
+	// not stable enough to do much more yet - TODO.
 	_ = exp
 }
 
