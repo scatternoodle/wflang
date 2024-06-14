@@ -75,19 +75,16 @@ func TestPrefixExpression(t *testing.T) {
 		t.Run(tt.input, func(t *testing.T) {
 			_, AST := testRunParser(t, tt.input, 1, false)
 
-			exp, ok := AST.Statements[0].(ast.ExpressionStatement)
+			exp := testExpressionStatement(t, AST.Statements[0])
+			prefix, ok := exp.(ast.PrefixExpression)
 			if !ok {
-				t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
-			}
-			pre, ok := exp.Expression.(ast.PrefixExpression)
-			if !ok {
-				t.Fatalf("expression type: have %T, want ast.PrefixExpression", exp.Expression)
+				t.Fatalf("expression type: have %T, want ast.PrefixExpression", exp)
 			}
 
-			if pre.Prefix != tt.op {
-				t.Errorf("operator: have %s, want %s", pre.Prefix, tt.op)
+			if prefix.Prefix != tt.op {
+				t.Errorf("operator: have %s, want %s", prefix.Prefix, tt.op)
 			}
-			if !testLiteral(t, pre.Right, tt.want) {
+			if !testLiteral(t, prefix.Right, tt.want) {
 				return
 			}
 		})
@@ -122,11 +119,8 @@ func TestInfixExpression(t *testing.T) {
 		t.Run(tt.input, func(t *testing.T) {
 			_, AST := testRunParser(t, tt.input, 1, false)
 
-			exp, ok := AST.Statements[0].(ast.ExpressionStatement)
-			if !ok {
-				t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
-			}
-			if !testInfix(t, exp.Expression, tt.op, tt.left, tt.right) {
+			exp := testExpressionStatement(t, AST.Statements[0])
+			if !testInfix(t, exp, tt.op, tt.left, tt.right) {
 				return
 			}
 		})
@@ -208,11 +202,8 @@ func TestStringLiteral(t *testing.T) {
 	input := `"hello"`
 	_, AST := testRunParser(t, input, 1, false)
 
-	exp, ok := AST.Statements[0].(ast.ExpressionStatement)
-	if !ok {
-		t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
-	}
-	if !testLiteral(t, exp.Expression, "hello") {
+	exp := testExpressionStatement(t, AST.Statements[0])
+	if !testLiteral(t, exp, "hello") {
 		return
 	}
 }
@@ -233,11 +224,8 @@ func TestBooleanLiteral(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
 			_, AST := testRunParser(t, tt.input, 1, false)
-			exp, ok := AST.Statements[0].(ast.ExpressionStatement)
-			if !ok {
-				t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
-			}
-			if !testLiteral(t, exp.Expression, tt.want) {
+			exp := testExpressionStatement(t, AST.Statements[0])
+			if !testLiteral(t, exp, tt.want) {
 				return
 			}
 		})
@@ -252,16 +240,13 @@ if( 5 > 4
 
 	_, AST := testRunParser(t, input, 1, false)
 
-	stmt, ok := AST.Statements[0].(ast.ExpressionStatement)
+	exp := testExpressionStatement(t, AST.Statements[0])
+	ifExp, ok := exp.(ast.IfExpression)
 	if !ok {
-		t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
-	}
-	exp, ok := stmt.Expression.(ast.IfExpression)
-	if !ok {
-		t.Fatalf("expression type: have %T, want ast.IfExpression", stmt.Expression)
+		t.Fatalf("expression type: have %T, want ast.IfExpression", exp)
 	}
 	// not stable enough to do much more yet - TODO.
-	_ = exp
+	_ = ifExp
 }
 
 func TestParenExpression(t *testing.T) {
@@ -272,14 +257,11 @@ func TestParenExpression(t *testing.T) {
 )`
 	_, AST := testRunParser(t, input, 1, false)
 
-	expStmt, ok := AST.Statements[0].(ast.ExpressionStatement)
-	if !ok {
-		t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
-	}
+	exp := testExpressionStatement(t, AST.Statements[0])
 
-	parStmt, ok := expStmt.Expression.(ast.ParenExpression)
+	parStmt, ok := exp.(ast.ParenExpression)
 	if !ok {
-		t.Fatalf("expression type: have %T, want ast.ExpressionStatement", expStmt.Expression)
+		t.Fatalf("expression type: have %T, want ast.ExpressionStatement", exp)
 	}
 
 	vars := []tVar{
@@ -309,14 +291,11 @@ func TestMacroExpression(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			_, AST := testRunParser(t, tt.input, 1, false)
-			expStmt, ok := AST.Statements[0].(ast.ExpressionStatement)
-			if !ok {
-				t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
-			}
+			exp := testExpressionStatement(t, AST.Statements[0])
 
-			macro, ok := expStmt.Expression.(ast.MacroExpression)
+			macro, ok := exp.(ast.MacroExpression)
 			if !ok {
-				t.Fatalf("expression type: have %T, want ast.MacroExpression", expStmt.Expression)
+				t.Fatalf("expression type: have %T, want ast.MacroExpression", exp)
 			}
 			if macro.Name.String() != tt.ident {
 				t.Errorf("macro.Name: have %s, want %s", macro.Name.Literal, tt.ident)
@@ -498,4 +477,16 @@ func checkParseErrors(t testhelper.TH, p *Parser) {
 		}
 		t.FailNow()
 	}
+}
+
+func testExpressionStatement(t testhelper.TH, stmt ast.Statement) ast.Expression {
+	eStmt, ok := stmt.(ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("statement type: have %T, want ast.ExpressionStatement", stmt)
+	}
+	if eStmt.Expression == nil {
+		t.Fatal("expression is nil")
+	}
+
+	return eStmt.Expression
 }
