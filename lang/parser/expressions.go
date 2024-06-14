@@ -180,7 +180,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	exp := ast.IfExpression{Token: p.current}
 
 	// if (...
-	if err := p.wantLParen(); err != nil {
+	if err := p.passLParen(); err != nil {
 		return nil, eWrap(err)
 	}
 	// ...Condition,
@@ -190,7 +190,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	}
 	exp.Condition = cnd
 
-	if err := p.wantComma(); err != nil {
+	if err := p.passComma(); err != nil {
 		return nil, eWrap(err)
 	}
 
@@ -201,7 +201,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	}
 	exp.Consequence = cns
 
-	if err := p.wantComma(); err != nil {
+	if err := p.passComma(); err != nil {
 		return nil, eWrap(err)
 	}
 
@@ -212,7 +212,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	}
 	exp.Alternative = alt
 
-	if err := p.wantRParen(); err != nil {
+	if err := p.passRParen(); err != nil {
 		return nil, eWrap(err)
 	}
 
@@ -247,4 +247,63 @@ func (p *Parser) parseParenExpression() (ast.Expression, error) {
 
 	parExp.RParen = p.current
 	return parExp, nil
+}
+
+// parseMacroExpression - MacroExpressions in WFLang look like this:
+//
+//	$<IDENT>([]<MacroParam>)$
+//
+// TODO - check if you can also do a macro expression without parens - look at GO_LIVE_DATE as example.
+func (p *Parser) parseMacroExpression() (ast.Expression, error) {
+	p.trace.trace("MacroExpression")
+	p.trace.untrace("MacroExpression")
+
+	eWrap := func(e error) error {
+		return fmt.Errorf("parseMacroExpression: %s", e)
+	}
+
+	// $<IDENT>...
+	if err := p.wantPeek(token.T_IDENT); err != nil {
+		return nil, eWrap(err)
+	}
+	p.advance()
+
+	macro := ast.MacroExpression{Token: p.current}
+	name, err := p.parseIdent()
+	if err != nil {
+		return nil, eWrap(err)
+	}
+	macro.Name = name.(ast.Ident)
+
+	// ...([]<Expression>)$
+	if err = p.passLParen(); err != nil {
+		return nil, eWrap(err)
+	}
+
+	macro.Params = []ast.Expression{}
+	for {
+		param, err := p.parseExpression(p_LOWEST)
+		if err != nil {
+			return nil, eWrap(err)
+		}
+		macro.Params = append(macro.Params, param)
+
+		if p.next.Type != token.T_COMMA {
+			break
+		}
+		p.advance()
+		p.advance()
+	}
+
+	if err = p.wantPeek(token.T_RPAREN); err != nil {
+		return nil, eWrap(err)
+	}
+	p.advance()
+	if err = p.wantPeek(token.T_DOLLAR); err != nil {
+		return nil, eWrap(err)
+	}
+
+	p.advance()
+	macro.RDollar = p.current
+	return macro, nil
 }

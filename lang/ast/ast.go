@@ -326,3 +326,33 @@ func (b BlankExpression) ExpressionNode()             {}
 func (b BlankExpression) TokenLiteral() string        { return b.Token.Literal }
 func (b BlankExpression) String() string              { return "" }
 func (b BlankExpression) Pos() (start, end token.Pos) { return b.Token.StartPos, b.Token.EndPos }
+
+// MacroExpression brings the scope of a Macro into a formula. Macros are the
+// closest thing that WFLang has to user-defined functions.
+type MacroExpression struct {
+	token.Token
+	Name    Ident
+	Params  []Expression // TODO - check - how expressive are we allowed to be with Macro params?
+	RDollar token.Token
+}
+
+func (m MacroExpression) ExpressionNode()      {}
+func (m MacroExpression) TokenLiteral() string { return m.Token.Literal }
+
+func (m MacroExpression) String() string {
+	var out strings.Builder
+
+	out.WriteString("$" + m.Name.String() + "(")
+	for i, p := range m.Params {
+		out.WriteString(p.String())
+		if i < len(m.Params)-1 {
+			out.WriteString(", ")
+		}
+	}
+	out.WriteString(")$")
+	return out.String()
+}
+
+func (m MacroExpression) Pos() (start, end token.Pos) {
+	return m.Token.StartPos, m.RDollar.EndPos
+}

@@ -296,6 +296,45 @@ type tVar struct {
 	val  any
 }
 
+func TestMacroExpression(t *testing.T) {
+	tests := []struct {
+		name   string
+		input  string
+		ident  string
+		params []any
+	}{
+		{"good, just literal params", `$TEST(42, "foo", true)$`, "TEST", []any{42, "foo", true}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, AST := testRunParser(t, tt.input, 1, false)
+			expStmt, ok := AST.Statements[0].(ast.ExpressionStatement)
+			if !ok {
+				t.Fatalf("statement type: have %T, want ast.ExpressionStatement", AST.Statements[0])
+			}
+
+			macro, ok := expStmt.Expression.(ast.MacroExpression)
+			if !ok {
+				t.Fatalf("expression type: have %T, want ast.MacroExpression", expStmt.Expression)
+			}
+			if macro.Name.String() != tt.ident {
+				t.Errorf("macro.Name: have %s, want %s", macro.Name.Literal, tt.ident)
+			}
+			if len(macro.Params) != len(tt.params) {
+				t.Fatalf("macro.Params lenght: have %d, want %d", len(macro.Params), len(tt.params))
+			}
+
+			for i, param := range macro.Params {
+				if !testLiteral(t, param, tt.params[i]) {
+					t.Errorf("caught on macro.Params[%d]", i)
+					continue
+				}
+			}
+		})
+	}
+}
+
 func testBlockExpression(t testhelper.TH, exp ast.Expression, vars []tVar) bool {
 	blockExp, ok := exp.(ast.BlockExpression)
 	if !ok {
@@ -343,6 +382,8 @@ func testVarStatement(t testhelper.TH, stmt ast.Statement, name string, val any)
 
 func testLiteral(t testhelper.TH, exp ast.Expression, want any) bool {
 	switch v := want.(type) {
+	case int:
+		return testNumberLiteral(t, exp, float64(v))
 	case float64:
 		return testNumberLiteral(t, exp, v)
 	case string:

@@ -54,6 +54,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.prefixParsers[token.T_FALSE] = p.parseBooleanLiteral
 	p.prefixParsers[token.T_IF] = p.parseIfExpression
 	p.prefixParsers[token.T_LPAREN] = p.parseParenExpression
+	p.prefixParsers[token.T_DOLLAR] = p.parseMacroExpression
 
 	p.infixParsers[token.T_MINUS] = p.parseInfixExpression
 	p.infixParsers[token.T_PLUS] = p.parseInfixExpression
@@ -114,8 +115,8 @@ func isKeyword(s string) bool {
 	return token.LookupKeyword(s) != token.T_IDENT
 }
 
-// wantPeek checks if the current token is of the expected type. If not, returns
-// a ParseErr wrapping the current token.
+// wantPeek checks if the next token is of the expected type. If not, returns
+// a ParseErr wrapping the next token.
 func (p *Parser) wantPeek(want token.Type) error {
 	if p.next.Type != want {
 		msg := fmt.Sprintf("token type: have %s, want %s", p.next.Type, want)
@@ -125,9 +126,9 @@ func (p *Parser) wantPeek(want token.Type) error {
 	return nil
 }
 
-// wantComma returns error if next token is not a comma, or else returns nil and
+// passComma returns error if next token is not a comma, or else returns nil and
 // advances the parser twice, to the token after the comma.
-func (p *Parser) wantComma() error {
+func (p *Parser) passComma() error {
 	if err := p.wantPeek(token.T_COMMA); err != nil {
 		return err
 	}
@@ -138,7 +139,7 @@ func (p *Parser) wantComma() error {
 
 // mustLParen returns error if next token is not a left paren, or else returns nil and
 // advances the parser twice, to the token after the left paren.
-func (p *Parser) wantLParen() error {
+func (p *Parser) passLParen() error {
 	if err := p.wantPeek(token.T_LPAREN); err != nil {
 		return err
 	}
@@ -147,9 +148,9 @@ func (p *Parser) wantLParen() error {
 	return nil
 }
 
-// wantRParen returns error if next token is not a right paren, or else returns nil and
+// passRParen returns error if next token is not a right paren, or else returns nil and
 // advances the parser twice, to the token after the right paren.
-func (p *Parser) wantRParen() error {
+func (p *Parser) passRParen() error {
 	if err := p.wantPeek(token.T_RPAREN); err != nil {
 		return err
 	}
