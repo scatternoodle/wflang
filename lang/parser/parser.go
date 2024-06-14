@@ -126,32 +126,10 @@ func (p *Parser) wantPeek(want token.Type) error {
 	return nil
 }
 
-// passComma returns error if next token is not a comma, or else returns nil and
-// advances the parser twice, to the token after the comma.
-func (p *Parser) passComma() error {
-	if err := p.wantPeek(token.T_COMMA); err != nil {
-		return err
-	}
-	p.advance()
-	p.advance()
-	return nil
-}
-
-// mustLParen returns error if next token is not a left paren, or else returns nil and
-// advances the parser twice, to the token after the left paren.
-func (p *Parser) passLParen() error {
-	if err := p.wantPeek(token.T_LPAREN); err != nil {
-		return err
-	}
-	p.advance()
-	p.advance()
-	return nil
-}
-
-// passRParen returns error if next token is not a right paren, or else returns nil and
-// advances the parser twice, to the token after the right paren.
-func (p *Parser) passRParen() error {
-	if err := p.wantPeek(token.T_RPAREN); err != nil {
+// passIf returns error if the next token is not the wanted type, or else returns nil
+// and advances the parser twice.
+func (p *Parser) passIf(want token.Type) error {
+	if err := p.wantPeek(want); err != nil {
 		return err
 	}
 	p.advance()

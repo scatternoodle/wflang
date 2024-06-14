@@ -180,7 +180,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	exp := ast.IfExpression{Token: p.current}
 
 	// if (...
-	if err := p.passLParen(); err != nil {
+	if err := p.passIf(token.T_LPAREN); err != nil {
 		return nil, eWrap(err)
 	}
 	// ...Condition,
@@ -190,7 +190,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	}
 	exp.Condition = cnd
 
-	if err := p.passComma(); err != nil {
+	if err := p.passIf(token.T_COMMA); err != nil {
 		return nil, eWrap(err)
 	}
 
@@ -201,7 +201,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	}
 	exp.Consequence = cns
 
-	if err := p.passComma(); err != nil {
+	if err := p.passIf(token.T_COMMA); err != nil {
 		return nil, eWrap(err)
 	}
 
@@ -212,7 +212,7 @@ func (p *Parser) parseIfExpression() (ast.Expression, error) {
 	}
 	exp.Alternative = alt
 
-	if err := p.passRParen(); err != nil {
+	if err := p.passIf(token.T_RPAREN); err != nil {
 		return nil, eWrap(err)
 	}
 
@@ -276,7 +276,7 @@ func (p *Parser) parseMacroExpression() (ast.Expression, error) {
 	macro.Name = name.(ast.Ident)
 
 	// ...([]<Expression>)$
-	if err = p.passLParen(); err != nil {
+	if err = p.passIf(token.T_LPAREN); err != nil {
 		return nil, eWrap(err)
 	}
 
