@@ -82,7 +82,7 @@ func (p *Parser) parseInfixExpression(left ast.Expression) (ast.Expression, erro
 	return exp, nil
 }
 
-func (p *Parser) parseIdent() (ast.Expression, error) {
+func (p *Parser) parseIdentLiteral() (ast.Expression, error) {
 	p.trace.trace("Ident")
 	defer p.trace.untrace("Ident")
 
@@ -269,7 +269,7 @@ func (p *Parser) parseMacroExpression() (ast.Expression, error) {
 	p.advance()
 
 	macro := ast.MacroExpression{Token: p.current}
-	name, err := p.parseIdent()
+	name, err := p.parseIdentLiteral()
 	if err != nil {
 		return nil, eWrap(err)
 	}
@@ -306,4 +306,56 @@ func (p *Parser) parseMacroExpression() (ast.Expression, error) {
 	p.advance()
 	macro.RDollar = p.current
 	return macro, nil
+}
+
+// parseFunctionCall - function calls in WFLang always take the same structure:
+//
+//	Name<Ident>(Args[]<BlockExpression>)
+func (p *Parser) parseFunctionCall() (ast.Expression, error) {
+	p.trace.trace("FunctionCall")
+	p.trace.untrace("FunctionCall")
+
+	wrap := func(e error) error {
+		return fmt.Errorf("parseFunctionCall: %w", e)
+	}
+
+	funCall := ast.FunctionCall{Token: p.current}
+	name, err := p.parseIdentLiteral()
+	if err != nil {
+		return nil, wrap(err)
+	}
+	funCall.Name = name
+
+	if err := p.passIf(token.T_LPAREN); err != nil {
+		return nil, wrap(err)
+	}
+
+	funCall.Args = []ast.Expression{}
+	for {
+		arg, err := p.parseBlockExpression()
+		if err != nil {
+			return nil, wrap(err)
+		}
+		funCall.Args = append(funCall.Args, arg)
+
+		if p.next.Type != token.T_COMMA {
+			break
+		}
+		p.advance()
+		p.advance()
+	}
+
+	if err := p.wantPeek(token.T_RPAREN); err != nil {
+		return nil, wrap(err)
+	}
+	p.advance()
+	funCall.RParen = p.current
+	return funCall, nil
+}
+
+func (p *Parser) parseIdent() (ast.Expression, error) {
+	if p.next.Type == token.T_LPAREN {
+		return p.parseFunctionCall()
+	}
+	return p.parseIdentLiteral()
 }

@@ -356,3 +356,29 @@ func (m MacroExpression) String() string {
 func (m MacroExpression) Pos() (start, end token.Pos) {
 	return m.Token.StartPos, m.RDollar.EndPos
 }
+
+// FunctionCall - to the Parser, a function call is simply an Ident and an group of
+// arguments, all of which are BlockExpressions.
+type FunctionCall struct {
+	token.Token
+	Name   Expression
+	Args   []Expression
+	RParen token.Token
+}
+
+func (f FunctionCall) ExpressionNode()      {}
+func (f FunctionCall) TokenLiteral() string { return f.Token.Literal }
+
+func (f FunctionCall) String() string {
+	var out strings.Builder
+	out.WriteString(f.Name.String() + "(")
+	for _, arg := range f.Args {
+		out.WriteString(arg.String())
+	}
+	out.WriteString(")")
+	return out.String()
+}
+
+func (f FunctionCall) Pos() (start, end token.Pos) {
+	return f.Token.StartPos, f.RParen.EndPos
+}
