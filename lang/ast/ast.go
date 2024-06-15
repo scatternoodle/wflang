@@ -361,7 +361,7 @@ func (m MacroExpression) Pos() (start, end token.Pos) {
 // arguments, all of which are BlockExpressions.
 type FunctionCall struct {
 	token.Token
-	Name   Expression
+	Name   string
 	Args   []Expression
 	RParen token.Token
 }
@@ -371,7 +371,7 @@ func (f FunctionCall) TokenLiteral() string { return f.Token.Literal }
 
 func (f FunctionCall) String() string {
 	var out strings.Builder
-	out.WriteString(f.Name.String() + "(")
+	out.WriteString(f.Name + "(")
 	for _, arg := range f.Args {
 		out.WriteString(arg.String())
 	}

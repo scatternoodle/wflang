@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/scatternoodle/wflang/lang/ast"
+	"github.com/scatternoodle/wflang/lang/builtins"
 	"github.com/scatternoodle/wflang/lang/lexer"
 	"github.com/scatternoodle/wflang/lang/token"
 )
@@ -55,6 +56,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.prefixParsers[token.T_IF] = p.parseIfExpression
 	p.prefixParsers[token.T_LPAREN] = p.parseParenExpression
 	p.prefixParsers[token.T_DOLLAR] = p.parseMacroExpression
+	p.prefixParsers[token.T_BUILTIN] = p.parseFunctionCall
 
 	p.infixParsers[token.T_MINUS] = p.parseInfixExpression
 	p.infixParsers[token.T_PLUS] = p.parseInfixExpression
@@ -110,9 +112,11 @@ func (p *Parser) advance() {
 	p.next = p.l.NextToken()
 }
 
-// returns true if the string is a reserved language keyword.
-func isKeyword(s string) bool {
-	return token.LookupKeyword(s) != token.T_IDENT
+// isReserved returns true if string is a reserved language keyword.
+func isReserved(s string) bool {
+	_, isKeyword := lexer.Keyword(s)
+	_, isBuiltin := builtins.Builtins()[s]
+	return isKeyword || isBuiltin
 }
 
 // wantPeek checks if the next token is of the expected type. If not, returns

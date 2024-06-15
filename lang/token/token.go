@@ -2,7 +2,6 @@ package token
 
 import (
 	"fmt"
-	"strings"
 )
 
 // Token represents a word, or "semantic token" in WFLang.
@@ -21,15 +20,6 @@ type Type string
 // Types that may be used to build a Token literal.
 type Literal interface {
 	rune | byte | ~string
-}
-
-// LookupKeyword returns the Type of s if it is a keyword, or T_IDENT if not.
-func LookupKeyword(s string) Type {
-	s = strings.ToLower(s)
-	if t, ok := keywords()[s]; ok {
-		return t
-	}
-	return T_IDENT
 }
 
 // Pos represents the textual position of a token

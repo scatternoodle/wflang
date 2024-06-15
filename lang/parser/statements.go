@@ -57,7 +57,7 @@ func (p *Parser) parseVarStatement() (ast.VarStatement, error) {
 	}
 	p.advance()
 
-	name, err := p.parseIdentLiteral()
+	name, err := p.parseIdent()
 	if err != nil {
 		return ast.VarStatement{}, eWrap(err)
 	}

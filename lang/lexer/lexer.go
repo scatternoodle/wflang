@@ -4,6 +4,9 @@
 package lexer
 
 import (
+	"strings"
+
+	"github.com/scatternoodle/wflang/lang/builtins"
 	"github.com/scatternoodle/wflang/lang/token"
 	"github.com/scatternoodle/wflang/util"
 )
@@ -24,7 +27,7 @@ type Lexer struct {
 	ch    byte   // The current character
 	line  int    // The current line
 	lPos  int    // The position within the current line
-	lines []int  // Slice holding the lengths of all lines. Updated whenever lexer advances.
+	lines []int  // Slice holding the lengths of all lines. Updated whenever lexer advances
 }
 
 const eof byte = 0
@@ -164,7 +167,18 @@ func (l *Lexer) NextToken() token.Token {
 
 		if util.IsLetter(l.ch) {
 			lit := l.readIdent()
-			tType := token.LookupKeyword(lit)
+
+			var tType token.Type
+			kType, isKwd := Keyword(lit)
+			_, isBtn := builtins.Builtins()[lit]
+			if isKwd {
+				tType = kType
+			} else if isBtn {
+				tType = token.T_BUILTIN
+			} else {
+				tType = token.T_IDENT
+			}
+
 			tokn = newToken(l, tType, lit, start)
 			l.advance()
 			return tokn
@@ -345,4 +359,13 @@ func (l *Lexer) here() token.Pos {
 		Line: l.line,
 		Col:  l.lPos,
 	}
+}
+
+// Keyword returns the Type of s if it is a keyword, or T_IDENT if not.
+func Keyword(s string) (token.Type, bool) {
+	s = strings.ToLower(s)
+	if t, ok := keywords()[s]; ok {
+		return t, true
+	}
+	return token.T_IDENT, false
 }

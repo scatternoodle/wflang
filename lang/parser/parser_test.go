@@ -163,6 +163,33 @@ var x = 1; // comment at end of line`
 	}
 }
 
+func TestParseFunctionCall(t *testing.T) {
+	tests := []struct {
+		name   string
+		input  string
+		argLen int
+		err    bool
+	}{
+		{"min", "min(2, workedHours)", 2, false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, AST := testRunParser(t, tt.input, 1, tt.err)
+
+			exp := testExpressionStatement(t, AST.Statements[0])
+			fCall, ok := exp.(ast.FunctionCall)
+			if !ok {
+				t.Fatalf("expression type: have %T, want ast.FunctionCall", exp)
+			}
+
+			if len(fCall.Args) != tt.argLen {
+				t.Fatalf("have %d arguments, want %d", len(fCall.Args), tt.argLen)
+			}
+		})
+	}
+}
+
 func TestParseBlockComment(t *testing.T) {
 	input := `/* 1 */
 /* 2.1

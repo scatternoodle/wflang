@@ -82,7 +82,7 @@ func (p *Parser) parseInfixExpression(left ast.Expression) (ast.Expression, erro
 	return exp, nil
 }
 
-func (p *Parser) parseIdentLiteral() (ast.Expression, error) {
+func (p *Parser) parseIdent() (ast.Expression, error) {
 	p.trace.trace("Ident")
 	defer p.trace.untrace("Ident")
 
@@ -91,8 +91,8 @@ func (p *Parser) parseIdentLiteral() (ast.Expression, error) {
 	if val == "" {
 		return ast.Ident{}, newParseErr("blank ident string", p.current)
 	}
-	if isKeyword(val) {
-		msg := fmt.Sprintf("token %s is a reserved keyword, and cannot be used as an identifier", val)
+	if isReserved(val) {
+		msg := fmt.Sprintf("token %s is a reserved word, and cannot be used as an identifier", val)
 		return ast.Ident{}, newParseErr(msg, p.current)
 	}
 
@@ -269,7 +269,7 @@ func (p *Parser) parseMacroExpression() (ast.Expression, error) {
 	p.advance()
 
 	macro := ast.MacroExpression{Token: p.current}
-	name, err := p.parseIdentLiteral()
+	name, err := p.parseIdent()
 	if err != nil {
 		return nil, eWrap(err)
 	}
@@ -320,9 +320,10 @@ func (p *Parser) parseFunctionCall() (ast.Expression, error) {
 	}
 
 	funCall := ast.FunctionCall{Token: p.current}
-	name, err := p.parseIdentLiteral()
-	if err != nil {
-		return nil, wrap(err)
+
+	name := p.current.Literal
+	if name == "" {
+		return nil, wrap(newParseErr("name cannot be blank", p.current))
 	}
 	funCall.Name = name
 
@@ -351,11 +352,4 @@ func (p *Parser) parseFunctionCall() (ast.Expression, error) {
 	p.advance()
 	funCall.RParen = p.current
 	return funCall, nil
-}
-
-func (p *Parser) parseIdent() (ast.Expression, error) {
-	if p.next.Type == token.T_LPAREN {
-		return p.parseFunctionCall()
-	}
-	return p.parseIdentLiteral()
 }

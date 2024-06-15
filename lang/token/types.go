@@ -51,21 +51,23 @@ const (
 	T_DOLLAR      Type = "$"  // Dollas signs wrap Macros in WFLang.
 	T_DOUBLEQUOTE Type = "\"" // For string literals. Single quotes are not used.
 
-	// keywords / builtins
+	// keywords / builtins - TODO - Move the functions out of here, just actual keywords should remain.
 
-	T_VAR                 Type = "var" // parser - parseVarStatement
-	T_IF                  Type = "if"  // parser - parseIfExpression
-	T_OVER                Type = "over"
-	T_WHERE               Type = "where"
-	T_ORDER               Type = "order"
-	T_BY                  Type = "by"
-	T_ALIAS               Type = "alias"
-	T_IN                  Type = "in"
-	T_SET                 Type = "set"
-	T_NULL                Type = "null"
-	T_TRUE                Type = "true"  // parser - parseBoolean
-	T_FALSE               Type = "false" // parser - parseBoolean
-	T_MIN                 Type = "min"
+	T_BUILTIN Type = "builtin"
+
+	T_VAR   Type = "var" // parser - parseVarStatement
+	T_IF    Type = "if"  // parser - parseIfExpression
+	T_OVER  Type = "over"
+	T_WHERE Type = "where"
+	T_ORDER Type = "order"
+	T_BY    Type = "by"
+	T_ALIAS Type = "alias"
+	T_IN    Type = "in"
+	T_SET   Type = "set"
+	T_NULL  Type = "null"
+	T_TRUE  Type = "true"  // parser - parseBoolean
+	T_FALSE Type = "false" // parser - parseBoolean
+	// T_MIN                 Type = "min"
 	T_MAX                 Type = "max"
 	T_SUM                 Type = "sum"
 	T_SUMTIME             Type = "sumTime"
