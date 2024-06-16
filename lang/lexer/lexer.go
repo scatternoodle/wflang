@@ -309,7 +309,7 @@ func (l *Lexer) readNumber() string {
 func (l *Lexer) readIdent() string {
 	start := l.pos
 	for {
-		if !util.IsLetter(l.peek()) && !util.IsDigit(l.peek()) {
+		if !util.IsLetter(l.peek()) && !util.IsDigit(l.peek()) && l.peek() != '_' {
 			break
 		}
 		l.advance()
