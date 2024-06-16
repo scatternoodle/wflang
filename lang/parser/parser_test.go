@@ -139,10 +139,7 @@ var x = 1; // comment at end of line`
 	for i, tt := range tests {
 		stmt := AST.Statements[tt.stmtIndex]
 
-		cStmt, ok := stmt.(ast.LineCommentStatement)
-		if !ok {
-			t.Fatalf("tests[%d] statement type: have %T, want ast.LineCommentStatement", i, stmt)
-		}
+		cStmt := testhelp.AssertType[ast.LineCommentStatement](t, stmt)
 		if cStmt.TokenLiteral() != tt.literal {
 			t.Fatalf("tests[%d] literal: have %s, want %s", i, stmt.TokenLiteral(), tt.literal)
 		}
@@ -170,10 +167,7 @@ func TestParseFunctionCall(t *testing.T) {
 			_, AST := testRunParser(t, tt.input, 1, tt.err)
 
 			exp := testExpressionStatement(t, AST.Statements[0])
-			fCall, ok := exp.(ast.FunctionCall)
-			if !ok {
-				t.Fatalf("expression type: have %T, want ast.FunctionCall", exp)
-			}
+			fCall := testhelp.AssertType[ast.FunctionCall](t, exp)
 
 			if len(fCall.Args) != tt.argLen {
 				t.Fatalf("have %d arguments, want %d", len(fCall.Args), tt.argLen)
@@ -201,10 +195,7 @@ func TestParseBlockComment(t *testing.T) {
 	for i, tt := range tests {
 		stmt := AST.Statements[tt.stmtIndex]
 
-		cStmt, ok := stmt.(ast.BlockCommentStatement)
-		if !ok {
-			t.Fatalf("tests[%d] statement type: have %T, want ast.BlockCommentStatement", i, stmt)
-		}
+		cStmt := testhelp.AssertType[ast.BlockCommentStatement](t, stmt)
 		if cStmt.TokenLiteral() != tt.literal {
 			t.Fatalf("tests[%d] literal: have %s, want %s", i, stmt.TokenLiteral(), tt.literal)
 		}
@@ -260,11 +251,7 @@ func TestParenExpression(t *testing.T) {
 	_, AST := testRunParser(t, input, 1, false)
 
 	exp := testExpressionStatement(t, AST.Statements[0])
-
-	parStmt, ok := exp.(ast.ParenExpression)
-	if !ok {
-		t.Fatalf("expression type: have %T, want ast.ExpressionStatement", exp)
-	}
+	parStmt := testhelp.AssertType[ast.ParenExpression](t, exp)
 
 	vars := []tVar{
 		{"x", "foo"},
@@ -295,10 +282,7 @@ func TestMacroExpression(t *testing.T) {
 			_, AST := testRunParser(t, tt.input, 1, false)
 			exp := testExpressionStatement(t, AST.Statements[0])
 
-			macro, ok := exp.(ast.MacroExpression)
-			if !ok {
-				t.Fatalf("expression type: have %T, want ast.MacroExpression", exp)
-			}
+			macro := testhelp.AssertType[ast.MacroExpression](t, exp)
 			if macro.Name.String() != tt.ident {
 				t.Errorf("macro.Name: have %s, want %s", macro.Name.Literal, tt.ident)
 			}
@@ -321,10 +305,7 @@ func TestOverExpression(t *testing.T) {
 	_, AST := testRunParser(t, input, 1, false)
 
 	exp := testExpressionStatement(t, AST.Statements[0])
-	oExp, ok := exp.(ast.OverExpression)
-	if !ok {
-		t.Fatalf("expression type = %T, want ast.OverExpression", exp)
-	}
+	oExp := testhelp.AssertType[ast.OverExpression](t, exp)
 
 	if oExp.String() != input {
 		t.Fatalf("String() = %s, want %s", oExp.String(), input)
@@ -336,10 +317,7 @@ func TestWhereExpression(t *testing.T) {
 	_, AST := testRunParser(t, input, 1, false)
 
 	exp := testExpressionStatement(t, AST.Statements[0])
-	_, ok := exp.(ast.WhereExpression)
-	if !ok {
-		t.Fatalf("expression type = %T, want ast.WhereExpression", exp)
-	}
+	_ = testhelp.AssertType[ast.WhereExpression](t, exp)
 }
 
 func TestOrderByExpression(t *testing.T) {
@@ -363,11 +341,7 @@ order by hours desc`
 }
 
 func testOrderByExpression(t *testing.T, exp ast.Expression) bool {
-	obExp, ok := exp.(ast.OrderByExpression)
-	if !ok {
-		t.Fatalf("expression type = %T, want ast.OrderByExpression", exp)
-		return false
-	}
+	obExp := testhelp.AssertType[ast.OrderByExpression](t, exp)
 
 	if obExp.Asc != nil {
 		ascT := obExp.Asc.Type
@@ -380,11 +354,7 @@ func testOrderByExpression(t *testing.T, exp ast.Expression) bool {
 }
 
 func testBlockExpression(t testhelp.TH, exp ast.Expression, vars []tVar) bool {
-	blockExp, ok := exp.(ast.BlockExpression)
-	if !ok {
-		t.Fatalf("expression type: have %T, want ast.BlockExpression", exp)
-		return false
-	}
+	blockExp := testhelp.AssertType[ast.BlockExpression](t, exp)
 
 	if len(blockExp.Vars) != len(vars) {
 		t.Fatalf("exp.Vars length: have %d, want %d", len(blockExp.Vars), len(vars))
@@ -407,11 +377,7 @@ func testVarStatement(t testhelp.TH, stmt ast.Statement, name string, val any) b
 		return false
 	}
 
-	vstmt, ok := stmt.(ast.VarStatement)
-	if !ok {
-		t.Errorf("statement type: have %T, want ast.VarStatement", stmt)
-		return false
-	}
+	vstmt := testhelp.AssertType[ast.VarStatement](t, stmt)
 
 	if vstmt.Name.Value != name {
 		t.Errorf("name: have %s, want %s", vstmt.Name.Value, name)
@@ -440,12 +406,7 @@ func testLiteral(t testhelp.TH, exp ast.Expression, want any) bool {
 }
 
 func testStringLiteral(t testhelp.TH, exp ast.Expression, want string) bool {
-	sStmt, ok := exp.(ast.StringLiteral)
-	if !ok {
-		t.Errorf("expression type: have %T, want ast.StringLiteral", exp)
-		return false
-	}
-
+	sStmt := testhelp.AssertType[ast.StringLiteral](t, exp)
 	if sStmt.TokenLiteral() != want {
 		t.Errorf("literal: have %s, want %s", sStmt.TokenLiteral(), want)
 		return false
@@ -454,11 +415,7 @@ func testStringLiteral(t testhelp.TH, exp ast.Expression, want string) bool {
 }
 
 func testNumberLiteral(t testhelp.TH, exp ast.Expression, want float64) bool {
-	nstmt, ok := exp.(ast.NumberLiteral)
-	if !ok {
-		t.Errorf("expression type: have %T, want ast.NumberLiteral", exp)
-		return false
-	}
+	nstmt := testhelp.AssertType[ast.NumberLiteral](t, exp)
 
 	if nstmt.Value != want {
 		t.Errorf("value: have %f, want %f", nstmt.Value, want)
@@ -478,12 +435,7 @@ func testNumberLiteral(t testhelp.TH, exp ast.Expression, want float64) bool {
 }
 
 func testBooleanLiteral(t testhelp.TH, exp ast.Expression, want bool) bool {
-	bstmt, ok := exp.(ast.BooleanLiteral)
-	if !ok {
-		t.Errorf("expression type: have %T, want ast.BooleanLiteral", exp)
-		return false
-	}
-
+	bstmt := testhelp.AssertType[ast.BooleanLiteral](t, exp)
 	if bstmt.Value != want {
 		t.Errorf("value: have %t, want %t", bstmt.Value, want)
 		return false
@@ -492,11 +444,7 @@ func testBooleanLiteral(t testhelp.TH, exp ast.Expression, want bool) bool {
 }
 
 func testInfix(t testhelp.TH, exp ast.Expression, operator string, left, right any) bool {
-	infix, ok := exp.(ast.InfixExpression)
-	if !ok {
-		t.Errorf("expression type want ast.InfixExpression, got %T", exp)
-		return false
-	}
+	infix := testhelp.AssertType[ast.InfixExpression](t, exp)
 	if !testLiteral(t, infix.Left, left) {
 		return false
 	}
@@ -545,10 +493,7 @@ func checkParseErrors(t testhelp.TH, p *Parser) {
 }
 
 func testExpressionStatement(t testhelp.TH, stmt ast.Statement) ast.Expression {
-	eStmt, ok := stmt.(ast.ExpressionStatement)
-	if !ok {
-		t.Fatalf("statement type: have %T, want ast.ExpressionStatement", stmt)
-	}
+	eStmt := testhelp.AssertType[ast.ExpressionStatement](t, stmt)
 	if eStmt.Expression == nil {
 		t.Fatal("expression is nil")
 	}
