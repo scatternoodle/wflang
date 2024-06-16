@@ -33,7 +33,7 @@ func Run() error {
 
 		errs := prs.Errors()
 		if len(errs) > 0 {
-			fmt.Println("Parser encountered the following errors:")
+			fmt.Printf("Parser has %d errors:\n", len(errs))
 			for i, err := range errs {
 				fmt.Printf("\t[%d]: %s\n", i, err.Error())
 			}

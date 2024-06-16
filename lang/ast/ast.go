@@ -372,8 +372,11 @@ func (f FunctionCall) TokenLiteral() string { return f.Token.Literal }
 func (f FunctionCall) String() string {
 	var out strings.Builder
 	out.WriteString(f.Name + "(")
-	for _, arg := range f.Args {
+	for i, arg := range f.Args {
 		out.WriteString(arg.String())
+		if i == len(f.Args)-1 {
+			out.WriteString(",")
+		}
 	}
 	out.WriteString(")")
 	return out.String()
