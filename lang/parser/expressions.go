@@ -318,7 +318,7 @@ func (p *Parser) parseOverExpression() (ast.Expression, error) {
 
 // parseWhereExpression - looks like:
 //
-//	where Condition<Expression>
+//	where Condition<ast.Expression>
 func (p *Parser) parseWhereExpression() (ast.Expression, error) {
 	p.trace.trace("whereExpression")
 	defer p.trace.untrace("whereExpression")
@@ -333,4 +333,33 @@ func (p *Parser) parseWhereExpression() (ast.Expression, error) {
 	whereExp.Condition = cnd
 
 	return whereExp, nil
+}
+
+// parseOrderByExpression = looks like:
+//
+//	order by Expression<ast.Expression> [asc|desc]
+//
+// asc / desc is a single token, which is optional.
+func (p *Parser) parseOrderByExpression() (ast.Expression, error) {
+	p.trace.trace("OrderByExpression")
+	defer p.trace.untrace("OrderByExpression")
+	wrap := func(e error) error { return fmt.Errorf("parseOrderByExpression: %w", e) }
+
+	orderByExp := ast.OrderByExpression{Token: p.current}
+	if err := p.passIf(token.T_BY); err != nil {
+		return nil, wrap(err)
+	}
+
+	exp, err := p.parseExpression(p_LOWEST)
+	if err != nil {
+		return nil, wrap(err)
+	}
+	orderByExp.Expression = exp
+
+	if p.next.Type == token.T_ASC || p.next.Type == token.T_DESC {
+		p.advance()
+		asc := p.current
+		orderByExp.Asc = &asc
+	}
+	return orderByExp, nil
 }

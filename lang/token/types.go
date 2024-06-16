@@ -57,13 +57,16 @@ const (
 
 	T_VAR   Type = "var"
 	T_OVER  Type = "over"
-	T_WHERE Type = "where" // TODO
-	T_ORDER Type = "order" // TODO
-	T_BY    Type = "by"    // TODO
+	T_WHERE Type = "where"
+	T_ORDER Type = "order" // used in "order by" expressions
+	T_BY    Type = "by"    // used in "order by" expressions
+	T_ASC   Type = "asc"   // used in "order by" expressions
+	T_DESC  Type = "desc"  // used in "order by" expressions
 	T_ALIAS Type = "alias" // TODO
 	T_IN    Type = "in"    // TODO
 	T_SET   Type = "set"   // TODO
 	T_NULL  Type = "null"  // TODO
 	T_TRUE  Type = "true"  // parser - parseBoolean
 	T_FALSE Type = "false" // parser - parseBoolean
+
 )

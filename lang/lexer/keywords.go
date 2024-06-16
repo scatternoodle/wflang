@@ -35,5 +35,7 @@ func keywords() map[string]token.Type {
 		"by":    token.T_BY,
 		"in":    token.T_IN,
 		"set":   token.T_SET,
+		"asc":   token.T_ASC,
+		"desc":  token.T_DESC,
 	}
 }

@@ -58,6 +58,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.prefixParsers[token.T_BUILTIN] = p.parseFunctionCall
 	p.prefixParsers[token.T_OVER] = p.parseOverExpression
 	p.prefixParsers[token.T_WHERE] = p.parseWhereExpression
+	p.prefixParsers[token.T_ORDER] = p.parseOrderByExpression
 
 	p.infixParsers[token.T_MINUS] = p.parseInfixExpression
 	p.infixParsers[token.T_PLUS] = p.parseInfixExpression

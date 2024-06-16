@@ -167,10 +167,10 @@ func (l *Lexer) NextToken() token.Token {
 
 		if util.IsLetter(l.ch) {
 			lit := l.readIdent()
-
+			litLwr := strings.ToLower(lit)
 			var tType token.Type
-			kType, isKwd := Keyword(lit)
-			_, isBtn := builtins.Builtins()[lit]
+			kType, isKwd := Keyword(litLwr)
+			_, isBtn := builtins.Builtins()[litLwr]
 			if isKwd {
 				tType = kType
 			} else if isBtn {

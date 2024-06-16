@@ -388,3 +388,36 @@ func (w WhereExpression) Pos() (start, end token.Pos) {
 	_, end = w.Condition.Pos()
 	return start, end
 }
+
+// OrderByExpression - used in some summary functions to order results.
+type OrderByExpression struct {
+	token.Token
+	Expression
+	Asc *token.Token // the keyword "asc" or "desc". This is optional, hence the pointer.
+}
+
+func (o OrderByExpression) ExpressionNode()      {}
+func (o OrderByExpression) TokenLiteral() string { return o.Token.Literal }
+
+func (o OrderByExpression) String() string {
+	return "order by " + o.Expression.String() + o.Ascending()
+}
+
+func (o OrderByExpression) Pos() (start, end token.Pos) {
+	start = o.Token.StartPos
+	if o.Asc != nil {
+		end = o.Asc.EndPos
+	} else {
+		_, end = o.Expression.Pos()
+	}
+	return start, end
+}
+
+// Ascending returns the literal of the OrderByExpression's "asc/desc" clause, or
+// empty string if not present.
+func (o OrderByExpression) Ascending() string {
+	if o.Asc != nil {
+		return o.Asc.Literal
+	}
+	return ""
+}

@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"fmt"
 	"strconv"
 	"testing"
 
@@ -348,6 +349,43 @@ func TestWhereExpression(t *testing.T) {
 	if !ok {
 		t.Fatalf("expression type = %T, want ast.WhereExpression", exp)
 	}
+}
+
+func TestOrderByExpression(t *testing.T) {
+	input := `
+order by 1
+order by pay_code asc
+order by hours desc`
+
+	_, AST := testRunParser(t, input, 3, false)
+
+	for i, stmt := range AST.Statements {
+		t.Run(fmt.Sprint(i), func(t *testing.T) {
+
+			exp := testExpressionStatement(t, stmt)
+			if !testOrderByExpression(t, exp) {
+				return
+			}
+		})
+	}
+
+}
+
+func testOrderByExpression(t *testing.T, exp ast.Expression) bool {
+	obExp, ok := exp.(ast.OrderByExpression)
+	if !ok {
+		t.Fatalf("expression type = %T, want ast.OrderByExpression", exp)
+		return false
+	}
+
+	if obExp.Asc != nil {
+		ascT := obExp.Asc.Type
+		if ascT != token.T_ASC && ascT != token.T_DESC {
+			t.Fatalf("Asc token type = %s, want one of [token.T_ASC, token.T_DESC]", ascT)
+			return false
+		}
+	}
+	return true
 }
 
 func testBlockExpression(t testhelper.TH, exp ast.Expression, vars []tVar) bool {
