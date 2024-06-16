@@ -36,12 +36,12 @@ func keywords() map[string]token.Type {
 		"in":    token.T_IN,
 		"set":   token.T_SET,
 
-		// --- builtins...
+		// --- builtins... shouldn't be here, they're moving on out to builtins package.
 		// "if": token.T_IF, // if is actually implemented as a global function, not a keyword
 
 		// ...math
 		// "min":        token.T_MIN,
-		"max":        token.T_MAX,
+		// "max":        token.T_MAX,
 		"round":      token.T_ROUND,
 		"roundup":    token.T_ROUNDUP,
 		"rounddown":  token.T_ROUNDDOWN,

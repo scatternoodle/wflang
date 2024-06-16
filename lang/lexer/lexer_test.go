@@ -28,6 +28,8 @@ x or y
 x OR y
 x and y
 x AND y
+min
+max
 `
 	l := New(input)
 
@@ -81,6 +83,8 @@ x AND y
 		{token.T_IDENT, "x"},                              // 43
 		{token.T_AND, "AND"},                              // 44
 		{token.T_IDENT, "y"},                              // 45
+		{token.T_BUILTIN, "min"},                          // 46
+		{token.T_BUILTIN, "max"},                          // 47
 		{token.T_EOF, ""},                                 // last
 	}
 
