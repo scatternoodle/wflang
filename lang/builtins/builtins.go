@@ -12,5 +12,8 @@ func Builtins() map[string]Builtin {
 		// maths
 		"min": {"min"},
 		"max": {"max"},
+
+		// summary functions
+		"sum": {"sum"},
 	}
 }

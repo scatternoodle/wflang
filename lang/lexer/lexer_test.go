@@ -30,6 +30,7 @@ x and y
 x AND y
 min
 max
+sum
 `
 	l := New(input)
 
@@ -85,6 +86,7 @@ max
 		{token.T_IDENT, "y"},                              // 45
 		{token.T_BUILTIN, "min"},                          // 46
 		{token.T_BUILTIN, "max"},                          // 47
+		{token.T_BUILTIN, "sum"},                          // 48
 		{token.T_EOF, ""},                                 // last
 	}
 

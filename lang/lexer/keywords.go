@@ -69,7 +69,7 @@ func keywords() map[string]token.Type {
 
 		// ...general summary
 		"count": token.T_COUNT,
-		"sum":   token.T_SUM,
+		// "sum":   token.T_SUM,
 
 		// ...exception summary
 		"countexception":   token.T_CNTEXCEPT,
