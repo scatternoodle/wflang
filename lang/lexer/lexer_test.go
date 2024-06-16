@@ -8,101 +8,60 @@ import (
 )
 
 func TestNextToken(t *testing.T) {
-	input := `
-= + - ! * / % > >= < <=
-"hello world"
-42
-45.5
-Aardvark
-var
-Var
-if over where order by
-// comment line
-/* comment/*
-block */
-!=
-1 = 2
-1 || 2
-x && y
-x or y
-x OR y
-x and y
-x AND y
-min
-max
-sum
-sumTime
-sumSchedule
-`
-	l := New(input)
-
 	tests := []struct {
-		wantType    token.Type
-		wantLiteral string
+		input string
+		want  token.Type
 	}{
-		{token.T_EQ, "="},                                 // 0
-		{token.T_PLUS, "+"},                               // 1
-		{token.T_MINUS, "-"},                              // 2
-		{token.T_BANG, "!"},                               // 3
-		{token.T_ASTERISK, "*"},                           // 4
-		{token.T_SLASH, "/"},                              // 5
-		{token.T_MODULO, "%"},                             // 6
-		{token.T_GT, ">"},                                 // 7
-		{token.T_GTE, ">="},                               // 8
-		{token.T_LT, "<"},                                 // 9
-		{token.T_LTE, "<="},                               // 10
-		{token.T_STRING, "hello world"},                   // 11
-		{token.T_NUM, "42"},                               // 12
-		{token.T_NUM, "45.5"},                             // 13
-		{token.T_IDENT, "Aardvark"},                       // 14
-		{token.T_VAR, "var"},                              // 15
-		{token.T_VAR, "Var"},                              // 16
-		{token.T_BUILTIN, "if"},                           // 17
-		{token.T_OVER, "over"},                            // 18
-		{token.T_WHERE, "where"},                          // 19
-		{token.T_ORDER, "order"},                          // 20
-		{token.T_BY, "by"},                                // 21
-		{token.T_COMMENT_LINE, "// comment line"},         // 22
-		{token.T_COMMENT_BLOCK, "/* comment/*\nblock */"}, // 23
-		{token.T_NEQ, "!="},                               // 24
-		{token.T_NUM, "1"},                                // 25
-		{token.T_EQ, "="},                                 // 26
-		{token.T_NUM, "2"},                                // 27
-		{token.T_NUM, "1"},                                // 28
-		{token.T_OR, "||"},                                // 29
-		{token.T_NUM, "2"},                                // 30
-		{token.T_IDENT, "x"},                              // 31
-		{token.T_AND, "&&"},                               // 32
-		{token.T_IDENT, "y"},                              // 33
-		{token.T_IDENT, "x"},                              // 34
-		{token.T_OR, "or"},                                // 35
-		{token.T_IDENT, "y"},                              // 36
-		{token.T_IDENT, "x"},                              // 37
-		{token.T_OR, "OR"},                                // 38
-		{token.T_IDENT, "y"},                              // 39
-		{token.T_IDENT, "x"},                              // 40
-		{token.T_AND, "and"},                              // 41
-		{token.T_IDENT, "y"},                              // 42
-		{token.T_IDENT, "x"},                              // 43
-		{token.T_AND, "AND"},                              // 44
-		{token.T_IDENT, "y"},                              // 45
-		{token.T_BUILTIN, "min"},                          // 46
-		{token.T_BUILTIN, "max"},                          // 47
-		{token.T_BUILTIN, "sum"},                          // 48
-		{token.T_BUILTIN, "sumTime"},                      // 49
-		{token.T_BUILTIN, "sumSchedule"},                  // 50
-		{token.T_EOF, ""},                                 // last
+		// keywords / operators / literals
+		{`=`, token.T_EQ},
+		{`+`, token.T_PLUS},
+		{`-`, token.T_MINUS},
+		{`!`, token.T_BANG},
+		{`*`, token.T_ASTERISK},
+		{`/`, token.T_SLASH},
+		{`%`, token.T_MODULO},
+		{`>`, token.T_GT},
+		{`>=`, token.T_GTE},
+		{`<`, token.T_LT},
+		{`<=`, token.T_LTE},
+		{`!=`, token.T_NEQ},
+		{`||`, token.T_OR},
+		{`&&`, token.T_AND},
+		{`or`, token.T_OR},
+		{`OR`, token.T_OR},
+		{`and`, token.T_AND},
+		{`AND`, token.T_AND},
+		{`"hello world"`, token.T_STRING},
+		{`42`, token.T_NUM},
+		{`45.5`, token.T_NUM},
+		{`Aardvark`, token.T_IDENT},
+		{`var`, token.T_VAR},
+		{`Var`, token.T_VAR},
+		{`over`, token.T_OVER},
+		{`where`, token.T_WHERE},
+		{`order`, token.T_ORDER},
+		{`by`, token.T_BY},
+		{`// comment line`, token.T_COMMENT_LINE},
+		{`/* comment/*\nblock */`, token.T_COMMENT_BLOCK},
+
+		// builtins
+		{`if`, token.T_BUILTIN},
+		{`min`, token.T_BUILTIN},
+		{`max`, token.T_BUILTIN},
+		{`sum`, token.T_BUILTIN},
+		{`sumTime`, token.T_BUILTIN},
+		{`sumSchedule`, token.T_BUILTIN},
 	}
 
-	for i, tt := range tests {
-		tk := l.NextToken()
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			l := New(tt.input)
+			tk := l.NextToken()
 
-		if tk.Type != tt.wantType {
-			t.Errorf("tests[%d] type = %s, want %s", i, tk.Type, tt.wantType)
-		}
-		if tk.Literal != tt.wantLiteral {
-			t.Errorf("tests[%d] literal = %s, want %s", i, tk.Literal, tt.wantLiteral)
-		}
+			if tk.Type != tt.want {
+				t.Errorf("type = %s, want %s", tk.Type, tt.want)
+			}
+		})
 	}
 }
 
