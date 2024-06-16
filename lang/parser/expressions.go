@@ -199,7 +199,7 @@ func (p *Parser) parseParenExpression() (ast.Expression, error) {
 // TODO - check if you can also do a macro expression without parens - look at GO_LIVE_DATE as example.
 func (p *Parser) parseMacroExpression() (ast.Expression, error) {
 	p.trace.trace("MacroExpression")
-	p.trace.untrace("MacroExpression")
+	defer p.trace.untrace("MacroExpression")
 
 	eWrap := func(e error) error {
 		return fmt.Errorf("parseMacroExpression: %s", e)
@@ -256,7 +256,7 @@ func (p *Parser) parseMacroExpression() (ast.Expression, error) {
 //	Name<Ident>(Args[]<BlockExpression>)
 func (p *Parser) parseFunctionCall() (ast.Expression, error) {
 	p.trace.trace("FunctionCall")
-	p.trace.untrace("FunctionCall")
+	defer p.trace.untrace("FunctionCall")
 
 	wrap := func(e error) error {
 		return fmt.Errorf("parseFunctionCall: %w", e)
@@ -295,4 +295,23 @@ func (p *Parser) parseFunctionCall() (ast.Expression, error) {
 	p.advance()
 	funCall.RParen = p.current
 	return funCall, nil
+}
+
+// parseOverExpression - looks like:
+//
+//	over context<expression>
+func (p *Parser) parseOverExpression() (ast.Expression, error) {
+	p.trace.trace("OverExpression")
+	defer p.trace.untrace("OverExpression")
+
+	overExp := ast.OverExpression{Token: p.current}
+	p.advance()
+
+	ctx, err := p.parseExpression(p_LOWEST)
+	if err != nil {
+		return nil, fmt.Errorf("paseOverExpression: %w", err)
+	}
+	overExp.Context = ctx
+
+	return overExp, nil
 }

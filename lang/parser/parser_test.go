@@ -324,6 +324,21 @@ func TestMacroExpression(t *testing.T) {
 	}
 }
 
+func TestOverExpression(t *testing.T) {
+	input := `over day`
+	_, AST := testRunParser(t, input, 1, false)
+
+	exp := testExpressionStatement(t, AST.Statements[0])
+	oExp, ok := exp.(ast.OverExpression)
+	if !ok {
+		t.Fatalf("expression type = %T, want ast.OverExpression", exp)
+	}
+
+	if oExp.String() != input {
+		t.Fatalf("String() = %s, want %s", oExp.String(), input)
+	}
+}
+
 func testBlockExpression(t testhelper.TH, exp ast.Expression, vars []tVar) bool {
 	blockExp, ok := exp.(ast.BlockExpression)
 	if !ok {

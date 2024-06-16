@@ -55,15 +55,15 @@ const (
 
 	T_BUILTIN Type = "builtin"
 
-	T_VAR   Type = "var" // parser - parseVarStatement
-	T_OVER  Type = "over"
-	T_WHERE Type = "where"
-	T_ORDER Type = "order"
-	T_BY    Type = "by"
-	T_ALIAS Type = "alias"
-	T_IN    Type = "in"
-	T_SET   Type = "set"
-	T_NULL  Type = "null"
+	T_VAR   Type = "var"   // parser - parseVarStatement
+	T_OVER  Type = "over"  // TODO
+	T_WHERE Type = "where" // TODO
+	T_ORDER Type = "order" // TODO
+	T_BY    Type = "by"    // TODO
+	T_ALIAS Type = "alias" // TODO
+	T_IN    Type = "in"    // TODO
+	T_SET   Type = "set"   // TODO
+	T_NULL  Type = "null"  // TODO
 	T_TRUE  Type = "true"  // parser - parseBoolean
 	T_FALSE Type = "false" // parser - parseBoolean
 )
