@@ -31,6 +31,7 @@ x AND y
 min
 max
 sum
+sumTime
 `
 	l := New(input)
 
@@ -87,6 +88,7 @@ sum
 		{token.T_BUILTIN, "min"},                          // 46
 		{token.T_BUILTIN, "max"},                          // 47
 		{token.T_BUILTIN, "sum"},                          // 48
+		{token.T_BUILTIN, "sumTime"},                      // 49
 		{token.T_EOF, ""},                                 // last
 	}
 

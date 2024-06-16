@@ -48,7 +48,7 @@ func keywords() map[string]token.Type {
 		"roundtoint": token.T_ROUNDTOINT,
 
 		// ...time summary
-		"sumtime":   token.T_SUMTIME,
+		// "sumtime":   token.T_SUMTIME,
 		"counttime": token.T_CNTTIME,
 		"mintime":   token.T_MINTIME,
 		"maxtime":   token.T_MAXTIME,

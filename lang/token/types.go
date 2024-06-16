@@ -73,7 +73,7 @@ const (
 
 	// T_MAX                 Type = "max"
 	// T_SUM                 Type = "sum"
-	T_SUMTIME             Type = "sumTime"
+	// T_SUMTIME             Type = "sumTime"
 	T_SUMSCHED            Type = "sumSchedule"
 	T_COUNT               Type = "count"
 	T_CNTTIME             Type = "countTime"
