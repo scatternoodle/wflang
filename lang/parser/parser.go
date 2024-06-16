@@ -53,7 +53,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.prefixParsers[token.T_STRING] = p.parseStringLiteral
 	p.prefixParsers[token.T_TRUE] = p.parseBooleanLiteral
 	p.prefixParsers[token.T_FALSE] = p.parseBooleanLiteral
-	p.prefixParsers[token.T_IF] = p.parseIfExpression
 	p.prefixParsers[token.T_LPAREN] = p.parseParenExpression
 	p.prefixParsers[token.T_DOLLAR] = p.parseMacroExpression
 	p.prefixParsers[token.T_BUILTIN] = p.parseFunctionCall

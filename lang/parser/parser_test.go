@@ -259,23 +259,6 @@ func TestBooleanLiteral(t *testing.T) {
 	}
 }
 
-func TestIfExpression(t *testing.T) {
-	input := `
-if( 5 > 4
-  , "foo"
-  , "bar" )`
-
-	_, AST := testRunParser(t, input, 1, false)
-
-	exp := testExpressionStatement(t, AST.Statements[0])
-	ifExp, ok := exp.(ast.IfExpression)
-	if !ok {
-		t.Fatalf("expression type: have %T, want ast.IfExpression", exp)
-	}
-	// not stable enough to do much more yet - TODO.
-	_ = ifExp
-}
-
 func TestParenExpression(t *testing.T) {
 	input := `(
 	var x = "foo";

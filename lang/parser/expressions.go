@@ -162,63 +162,6 @@ func (p *Parser) parseBlockExpression() (ast.Expression, error) {
 	}
 }
 
-// parseIfExpression - ifExpressions in WFLang look like this:
-//
-//	if( <Condition>
-//	  , <Consequence>
-//	  , <Alternative> )
-//
-// Condition, Consequence, and Alternative are BlockStatements.
-func (p *Parser) parseIfExpression() (ast.Expression, error) {
-	p.trace.trace("IfExpression")
-	defer p.trace.untrace("IfExpression")
-
-	eWrap := func(e error) error {
-		return fmt.Errorf("error parsing IfExpression: %w", e)
-	}
-
-	exp := ast.IfExpression{Token: p.current}
-
-	// if (...
-	if err := p.passIf(token.T_LPAREN); err != nil {
-		return nil, eWrap(err)
-	}
-	// ...Condition,
-	cnd, err := p.parseBlockExpression()
-	if err != nil {
-		return nil, eWrap(err)
-	}
-	exp.Condition = cnd
-
-	if err := p.passIf(token.T_COMMA); err != nil {
-		return nil, eWrap(err)
-	}
-
-	// ...Consequence,
-	cns, err := p.parseBlockExpression()
-	if err != nil {
-		return nil, eWrap(err)
-	}
-	exp.Consequence = cns
-
-	if err := p.passIf(token.T_COMMA); err != nil {
-		return nil, eWrap(err)
-	}
-
-	// ...Alternative )
-	alt, err := p.parseBlockExpression()
-	if err != nil {
-		return nil, eWrap(err)
-	}
-	exp.Alternative = alt
-
-	if err := p.passIf(token.T_RPAREN); err != nil {
-		return nil, eWrap(err)
-	}
-
-	return exp, nil
-}
-
 func (p *Parser) parseParenExpression() (ast.Expression, error) {
 	p.trace.trace("ParenExpression")
 	defer p.trace.untrace("ParenExpression")

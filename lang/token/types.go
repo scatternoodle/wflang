@@ -55,8 +55,8 @@ const (
 
 	T_BUILTIN Type = "builtin"
 
-	T_VAR   Type = "var" // parser - parseVarStatement
-	T_IF    Type = "if"  // parser - parseIfExpression
+	T_VAR Type = "var" // parser - parseVarStatement
+	// T_IF    Type = "if"  // parser - parseIfExpression
 	T_OVER  Type = "over"
 	T_WHERE Type = "where"
 	T_ORDER Type = "order"

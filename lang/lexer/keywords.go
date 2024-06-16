@@ -37,7 +37,7 @@ func keywords() map[string]token.Type {
 		"set":   token.T_SET,
 
 		// --- builtins...
-		"if": token.T_IF, // if is actually implemented as a global function, not a keyword
+		// "if": token.T_IF, // if is actually implemented as a global function, not a keyword
 
 		// ...math
 		// "min":        token.T_MIN,

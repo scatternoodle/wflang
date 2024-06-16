@@ -246,39 +246,6 @@ func (b BooleanLiteral) Pos() (start, end token.Pos) {
 	return b.Token.StartPos, b.Token.EndPos
 }
 
-// IfExpression comprises a three-subexpression structure::
-//
-//	if( <condition>
-//	  , <consequence>
-//	  , <alternative> )
-//
-// All three expressions are mandatory.
-type IfExpression struct {
-	Token       token.Token
-	Condition   Expression
-	Consequence Expression
-	Alternative Expression
-}
-
-func (i IfExpression) ExpressionNode()      {}
-func (i IfExpression) TokenLiteral() string { return i.Token.Literal }
-
-func (i IfExpression) String() string {
-	var out strings.Builder
-	out.WriteString("if( ")
-	out.WriteString(i.Condition.String() + ", ")
-	out.WriteString(i.Consequence.String() + ", ")
-	out.WriteString(i.Alternative.String() + " )")
-	return out.String()
-}
-
-// Pos returns the StartPos of the if token, and the EndPos of the Alternative expression.
-func (i IfExpression) Pos() (start, end token.Pos) {
-	start = i.Token.StartPos
-	_, end = i.Alternative.Pos()
-	return start, end
-}
-
 // BlockExpression is a group of 0-n number of VarStatements followed
 // by a single Expression. The VarStatements are optional but the Expression is
 // mandatory, there can only be one, and it must be the last member of the group.
