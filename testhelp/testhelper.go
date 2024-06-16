@@ -1,4 +1,4 @@
-package testhelper
+package testhelp
 
 type TH interface {
 	Errorf(format string, args ...any)

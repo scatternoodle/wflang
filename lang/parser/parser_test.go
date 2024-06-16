@@ -8,7 +8,7 @@ import (
 	"github.com/scatternoodle/wflang/lang/ast"
 	"github.com/scatternoodle/wflang/lang/lexer"
 	"github.com/scatternoodle/wflang/lang/token"
-	testhelp "github.com/scatternoodle/wflang/testhelper"
+	testhelp "github.com/scatternoodle/wflang/testhelp"
 )
 
 var testParseInput = `var x = 1;`
