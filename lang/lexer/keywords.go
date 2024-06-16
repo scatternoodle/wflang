@@ -55,7 +55,7 @@ func keywords() map[string]token.Type {
 		"avgtime":   token.T_AVGTIME,
 
 		// ...schedule summary
-		"sumschedule":     token.T_SUMSCHED,
+		// "sumschedule":     token.T_SUMSCHED,
 		"minschedule":     token.T_MINSCHED,
 		"maxschedule":     token.T_MAXSCHED,
 		"averageschedule": token.T_AVGSCHED,

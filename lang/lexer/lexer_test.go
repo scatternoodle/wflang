@@ -32,6 +32,7 @@ min
 max
 sum
 sumTime
+sumSchedule
 `
 	l := New(input)
 
@@ -89,6 +90,7 @@ sumTime
 		{token.T_BUILTIN, "max"},                          // 47
 		{token.T_BUILTIN, "sum"},                          // 48
 		{token.T_BUILTIN, "sumTime"},                      // 49
+		{token.T_BUILTIN, "sumSchedule"},                  // 50
 		{token.T_EOF, ""},                                 // last
 	}
 

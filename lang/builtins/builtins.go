@@ -17,5 +17,7 @@ func Builtins() map[string]Builtin {
 		"sum": {"sum"},
 
 		"sumTime": {"sumTime"},
+
+		"sumSchedule": {"sumSchedule"},
 	}
 }
