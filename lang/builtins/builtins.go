@@ -14,10 +14,15 @@ func Builtins() map[string]Builtin {
 		"max": {"max"},
 
 		// summary functions
-		"sum": {"sum"},
+		"sum":   {"sum"},
+		"count": {"count"},
 
-		"sumTime": {"sumTime"},
+		"sumTime":   {"sumTime"},
+		"countTime": {"countTime"},
 
-		"sumSchedule": {"sumSchedule"},
+		"sumSchedule":   {"sumSchedule"},
+		"countSchedule": {"countSchedule"},
+
+		"countException": {"countException"},
 	}
 }

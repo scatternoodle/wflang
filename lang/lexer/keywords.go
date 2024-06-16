@@ -49,17 +49,17 @@ func keywords() map[string]token.Type {
 
 		// ...time summary
 		// "sumtime":   token.T_SUMTIME,
-		"counttime": token.T_CNTTIME,
-		"mintime":   token.T_MINTIME,
-		"maxtime":   token.T_MAXTIME,
-		"avgtime":   token.T_AVGTIME,
+		// "counttime": token.T_CNTTIME,
+		"mintime": token.T_MINTIME,
+		"maxtime": token.T_MAXTIME,
+		"avgtime": token.T_AVGTIME,
 
 		// ...schedule summary
 		// "sumschedule":     token.T_SUMSCHED,
 		"minschedule":     token.T_MINSCHED,
 		"maxschedule":     token.T_MAXSCHED,
 		"averageschedule": token.T_AVGSCHED,
-		"countschedule":   token.T_CNTSCHED,
+		// "countschedule":   token.T_CNTSCHED,
 
 		// ...swipe location functions
 		"swipe_in_latitude_in_range":   token.T_SWIPEINLATINRANGE,
@@ -68,11 +68,11 @@ func keywords() map[string]token.Type {
 		"swipe_out_longitude_in_range": token.T_SWIPEOUTLONGINRANGE,
 
 		// ...general summary
-		"count": token.T_COUNT,
+		// "count": token.T_COUNT,
 		// "sum":   token.T_SUM,
 
 		// ...exception summary
-		"countexception":   token.T_CNTEXCEPT,
+		// "countexception":   token.T_CNTEXCEPT,
 		"sumexception":     token.T_SUMEXCEPT,
 		"minexception":     token.T_MINEXCEPT,
 		"maxexception":     token.T_MAXEXCEPT,

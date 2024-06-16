@@ -2,6 +2,7 @@ package lexer
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/scatternoodle/wflang/lang/token"
@@ -44,13 +45,26 @@ func TestNextToken(t *testing.T) {
 		{`// comment line`, token.T_COMMENT_LINE},
 		{`/* comment/*\nblock */`, token.T_COMMENT_BLOCK},
 
-		// builtins
+		// builtins...
+		// ...math
 		{`if`, token.T_BUILTIN},
 		{`min`, token.T_BUILTIN},
 		{`max`, token.T_BUILTIN},
+
+		// ...general summary
 		{`sum`, token.T_BUILTIN},
+		{`count`, token.T_BUILTIN},
+
+		// ...time summary
+		{`countTime`, token.T_BUILTIN},
 		{`sumTime`, token.T_BUILTIN},
+
+		// ...schedule summary
 		{`sumSchedule`, token.T_BUILTIN},
+		{`countSchedule`, token.T_BUILTIN},
+
+		// ...exceptions
+		{`countException`, token.T_BUILTIN},
 	}
 
 	for _, tt := range tests {
@@ -60,6 +74,35 @@ func TestNextToken(t *testing.T) {
 
 			if tk.Type != tt.want {
 				t.Errorf("type = %s, want %s", tk.Type, tt.want)
+			}
+		})
+	}
+}
+
+func TestBuiltins(t *testing.T) {
+	tests := []string{
+		"if",
+		"min",
+		"max",
+		"sum",
+		"count",
+		"sumTime",
+		"countTime",
+		"sumSchedule",
+		"countSchedule",
+		"countException",
+	}
+
+	for _, tt := range tests {
+		t.Run(tt, func(t *testing.T) {
+			l := New(tt)
+			tk := l.NextToken()
+
+			if tk.Type != token.T_BUILTIN {
+				t.Fatalf("type = %s, want %s", tk.Type, token.T_BUILTIN)
+			}
+			if !strings.EqualFold(tk.Literal, tt) {
+				t.Fatalf("literal = %s, want %s", tk.Literal, tt)
 			}
 		})
 	}
