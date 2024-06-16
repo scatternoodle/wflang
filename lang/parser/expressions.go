@@ -299,7 +299,7 @@ func (p *Parser) parseFunctionCall() (ast.Expression, error) {
 
 // parseOverExpression - looks like:
 //
-//	over context<expression>
+//	over Context<Expression>
 func (p *Parser) parseOverExpression() (ast.Expression, error) {
 	p.trace.trace("OverExpression")
 	defer p.trace.untrace("OverExpression")
@@ -314,4 +314,23 @@ func (p *Parser) parseOverExpression() (ast.Expression, error) {
 	overExp.Context = ctx
 
 	return overExp, nil
+}
+
+// parseWhereExpression - looks like:
+//
+//	where Condition<Expression>
+func (p *Parser) parseWhereExpression() (ast.Expression, error) {
+	p.trace.trace("whereExpression")
+	defer p.trace.untrace("whereExpression")
+
+	whereExp := ast.WhereExpression{Token: p.current}
+	p.advance()
+
+	cnd, err := p.parseExpression(p_LOWEST)
+	if err != nil {
+		return nil, fmt.Errorf("paseOverExpression: %w", err)
+	}
+	whereExp.Condition = cnd
+
+	return whereExp, nil
 }

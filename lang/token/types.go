@@ -55,8 +55,8 @@ const (
 
 	T_BUILTIN Type = "builtin"
 
-	T_VAR   Type = "var"   // parser - parseVarStatement
-	T_OVER  Type = "over"  // TODO
+	T_VAR   Type = "var"
+	T_OVER  Type = "over"
 	T_WHERE Type = "where" // TODO
 	T_ORDER Type = "order" // TODO
 	T_BY    Type = "by"    // TODO

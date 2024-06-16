@@ -339,6 +339,17 @@ func TestOverExpression(t *testing.T) {
 	}
 }
 
+func TestWhereExpression(t *testing.T) {
+	input := `where x > y`
+	_, AST := testRunParser(t, input, 1, false)
+
+	exp := testExpressionStatement(t, AST.Statements[0])
+	_, ok := exp.(ast.WhereExpression)
+	if !ok {
+		t.Fatalf("expression type = %T, want ast.WhereExpression", exp)
+	}
+}
+
 func testBlockExpression(t testhelper.TH, exp ast.Expression, vars []tVar) bool {
 	blockExp, ok := exp.(ast.BlockExpression)
 	if !ok {

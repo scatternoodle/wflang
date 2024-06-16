@@ -364,12 +364,27 @@ type OverExpression struct {
 func (o OverExpression) ExpressionNode()      {}
 func (o OverExpression) TokenLiteral() string { return o.Token.Literal }
 
-func (o OverExpression) String() string {
-	return "over " + o.Context.String()
-}
+func (o OverExpression) String() string { return "over " + o.Context.String() }
 
 func (o OverExpression) Pos() (start, end token.Pos) {
 	start = o.Token.StartPos
 	_, end = o.Context.Pos()
+	return start, end
+}
+
+// WhereExpression - pretty much what it sounds like, very like SQL WHERE and occurs
+// mostly in summary functions.
+type WhereExpression struct {
+	token.Token
+	Condition Expression
+}
+
+func (w WhereExpression) ExpressionNode()      {}
+func (w WhereExpression) TokenLiteral() string { return w.Token.Literal }
+func (w WhereExpression) String() string       { return "where " + w.Condition.String() }
+
+func (w WhereExpression) Pos() (start, end token.Pos) {
+	start = w.Token.StartPos
+	_, end = w.Condition.Pos()
 	return start, end
 }
