@@ -8,19 +8,13 @@ import (
 	"github.com/scatternoodle/wflang/lang/ast"
 	"github.com/scatternoodle/wflang/lang/lexer"
 	"github.com/scatternoodle/wflang/lang/token"
-	"github.com/scatternoodle/wflang/testhelper"
+	testhelp "github.com/scatternoodle/wflang/testhelper"
 )
 
 var testParseInput = `var x = 1;`
 
 func TestParse(t *testing.T) {
 	_, _ = testRunParser(t, testParseInput, 1, false)
-}
-
-func BenchmarkParse(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		_, _ = testRunParser(b, testParseInput, 1, false)
-	}
 }
 
 func TestParseVarStatement(t *testing.T) {
@@ -77,10 +71,7 @@ func TestPrefixExpression(t *testing.T) {
 			_, AST := testRunParser(t, tt.input, 1, false)
 
 			exp := testExpressionStatement(t, AST.Statements[0])
-			prefix, ok := exp.(ast.PrefixExpression)
-			if !ok {
-				t.Fatalf("expression type: have %T, want ast.PrefixExpression", exp)
-			}
+			prefix := testhelp.AssertType[ast.PrefixExpression](t, exp)
 
 			if prefix.Prefix != tt.op {
 				t.Errorf("operator: have %s, want %s", prefix.Prefix, tt.op)
@@ -388,7 +379,7 @@ func testOrderByExpression(t *testing.T, exp ast.Expression) bool {
 	return true
 }
 
-func testBlockExpression(t testhelper.TH, exp ast.Expression, vars []tVar) bool {
+func testBlockExpression(t testhelp.TH, exp ast.Expression, vars []tVar) bool {
 	blockExp, ok := exp.(ast.BlockExpression)
 	if !ok {
 		t.Fatalf("expression type: have %T, want ast.BlockExpression", exp)
@@ -410,7 +401,7 @@ func testBlockExpression(t testhelper.TH, exp ast.Expression, vars []tVar) bool 
 	return true
 }
 
-func testVarStatement(t testhelper.TH, stmt ast.Statement, name string, val any) bool {
+func testVarStatement(t testhelp.TH, stmt ast.Statement, name string, val any) bool {
 	if stmt.TokenLiteral() != "var" {
 		t.Errorf(`TokenLiteral(): have %s, want "var"`, stmt.TokenLiteral())
 		return false
@@ -433,7 +424,7 @@ func testVarStatement(t testhelper.TH, stmt ast.Statement, name string, val any)
 	return true
 }
 
-func testLiteral(t testhelper.TH, exp ast.Expression, want any) bool {
+func testLiteral(t testhelp.TH, exp ast.Expression, want any) bool {
 	switch v := want.(type) {
 	case int:
 		return testNumberLiteral(t, exp, float64(v))
@@ -448,7 +439,7 @@ func testLiteral(t testhelper.TH, exp ast.Expression, want any) bool {
 	return false
 }
 
-func testStringLiteral(t testhelper.TH, exp ast.Expression, want string) bool {
+func testStringLiteral(t testhelp.TH, exp ast.Expression, want string) bool {
 	sStmt, ok := exp.(ast.StringLiteral)
 	if !ok {
 		t.Errorf("expression type: have %T, want ast.StringLiteral", exp)
@@ -462,7 +453,7 @@ func testStringLiteral(t testhelper.TH, exp ast.Expression, want string) bool {
 	return true
 }
 
-func testNumberLiteral(t testhelper.TH, exp ast.Expression, want float64) bool {
+func testNumberLiteral(t testhelp.TH, exp ast.Expression, want float64) bool {
 	nstmt, ok := exp.(ast.NumberLiteral)
 	if !ok {
 		t.Errorf("expression type: have %T, want ast.NumberLiteral", exp)
@@ -486,7 +477,7 @@ func testNumberLiteral(t testhelper.TH, exp ast.Expression, want float64) bool {
 	return true
 }
 
-func testBooleanLiteral(t testhelper.TH, exp ast.Expression, want bool) bool {
+func testBooleanLiteral(t testhelp.TH, exp ast.Expression, want bool) bool {
 	bstmt, ok := exp.(ast.BooleanLiteral)
 	if !ok {
 		t.Errorf("expression type: have %T, want ast.BooleanLiteral", exp)
@@ -500,7 +491,7 @@ func testBooleanLiteral(t testhelper.TH, exp ast.Expression, want bool) bool {
 	return true
 }
 
-func testInfix(t testhelper.TH, exp ast.Expression, operator string, left, right any) bool {
+func testInfix(t testhelp.TH, exp ast.Expression, operator string, left, right any) bool {
 	infix, ok := exp.(ast.InfixExpression)
 	if !ok {
 		t.Errorf("expression type want ast.InfixExpression, got %T", exp)
@@ -519,7 +510,7 @@ func testInfix(t testhelper.TH, exp ast.Expression, operator string, left, right
 	return true
 }
 
-func testRunParser(t testhelper.TH, input string, wantLen int, errOk bool) (*Parser, *ast.AST) {
+func testRunParser(t testhelp.TH, input string, wantLen int, errOk bool) (*Parser, *ast.AST) {
 	l := lexer.New(input)
 	prg := New(l)
 	AST := prg.Parse()
@@ -543,7 +534,7 @@ func testRunParser(t testhelper.TH, input string, wantLen int, errOk bool) (*Par
 	return prg, AST
 }
 
-func checkParseErrors(t testhelper.TH, p *Parser) {
+func checkParseErrors(t testhelp.TH, p *Parser) {
 	if len(p.errors) != 0 {
 		t.Errorf("parser has %d errors:", len(p.errors))
 		for _, err := range p.errors {
@@ -553,7 +544,7 @@ func checkParseErrors(t testhelper.TH, p *Parser) {
 	}
 }
 
-func testExpressionStatement(t testhelper.TH, stmt ast.Statement) ast.Expression {
+func testExpressionStatement(t testhelp.TH, stmt ast.Statement) ast.Expression {
 	eStmt, ok := stmt.(ast.ExpressionStatement)
 	if !ok {
 		t.Fatalf("statement type: have %T, want ast.ExpressionStatement", stmt)
