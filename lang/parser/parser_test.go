@@ -341,22 +341,47 @@ order by hours desc`
 }
 
 func TestParseInExpression(t *testing.T) {
-	tests := []struct {
-		name  string
-		input string
-	}{
-		{"in set", `PAY_CODE in set BAMUK_GEN_COUNTS_AS_WORKED`},
-		{"in list", `PAY_CODE in ["WORKED", "OVERTIME", "ON_CALL"]`},
-	}
+	// tests := []struct {
+	// 	name  string
+	// 	input string
+	// }{
+	// 	{"in set", `PAY_CODE in set BAMUK_GEN_COUNTS_AS_WORKED`},
+	// 	{"in list", `PAY_CODE in ["WORKED", "OVERTIME", "ON_CALL"]`},
+	// }
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			_, AST := testRunParser(t, tt.input, 1, false)
+	t.Run("in set", func(t *testing.T) {
+		input := `PAY_CODE in set BAMUK_GEN_COUNTS_AS_WORKED`
 
-			exp := testExpressionStatement(t, AST.Statements[0])
-			_ = testhelp.AssertType[ast.InExpression](t, exp)
-		})
-	}
+		_, AST := testRunParser(t, input, 1, false)
+		exp := testExpressionStatement(t, AST.Statements[0])
+		inExp := testhelp.AssertType[ast.InExpression](t, exp)
+		list := testhelp.AssertType[ast.SetExpression](t, inExp.List)
+
+		want := "BAMUK_GEN_COUNTS_AS_WORKED"
+		if list.Name.Value != want {
+			t.Fatalf("name = %s, want %s", list.Name.Value, want)
+		}
+	})
+
+	t.Run("in list", func(t *testing.T) {
+		input := `PAY_CODE in ["WORKED", "OVERTIME", "ON_CALL"]`
+
+		_, AST := testRunParser(t, input, 1, false)
+		exp := testExpressionStatement(t, AST.Statements[0])
+		inExp := testhelp.AssertType[ast.InExpression](t, exp)
+		list := testhelp.AssertType[ast.ListLiteral](t, inExp.List)
+
+		want := []string{"WORKED", "OVERTIME", "ON_CALL"}
+		if len(list.Strings) != len(want) {
+			t.Fatalf("len(list) = %d, want %d", len(list.Strings), len(want))
+		}
+
+		for i, str := range list.Strings {
+			if !testStringLiteral(t, str, want[i]) {
+				return
+			}
+		}
+	})
 }
 
 func testOrderByExpression(t *testing.T, exp ast.Expression) bool {
