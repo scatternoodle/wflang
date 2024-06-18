@@ -463,7 +463,10 @@ func (p *Parser) parseInExpression(left ast.Expression) (ast.Expression, error) 
 		return nil, wrap(newParseErr("left expression is nil", p.current))
 	}
 
-	inExpression := ast.InExpression{Token: p.current}
+	inExpression := ast.InExpression{
+		Token: p.current,
+		Left:  left,
+	}
 	var list ast.Expression
 	var err error
 

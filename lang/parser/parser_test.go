@@ -347,11 +347,17 @@ func TestParseInExpression(t *testing.T) {
 		_, AST := testRunParser(t, input, 1, false)
 		exp := testExpressionStatement(t, AST.Statements[0])
 		inExp := testhelp.AssertType[ast.InExpression](t, exp)
+		left := testhelp.AssertType[ast.Ident](t, inExp.Left)
 		list := testhelp.AssertType[ast.SetExpression](t, inExp.List)
 
-		want := "BAMUK_GEN_COUNTS_AS_WORKED"
-		if list.Name.Value != want {
-			t.Fatalf("name = %s, want %s", list.Name.Value, want)
+		wantLeft := "PAY_CODE"
+		if left.Value != wantLeft {
+			t.Fatalf("left value = %s, want %s", left.Value, wantLeft)
+		}
+
+		wantSet := "BAMUK_GEN_COUNTS_AS_WORKED"
+		if list.Name.Value != wantSet {
+			t.Fatalf("name = %s, want %s", list.Name.Value, wantSet)
 		}
 	})
 
@@ -361,7 +367,13 @@ func TestParseInExpression(t *testing.T) {
 		_, AST := testRunParser(t, input, 1, false)
 		exp := testExpressionStatement(t, AST.Statements[0])
 		inExp := testhelp.AssertType[ast.InExpression](t, exp)
+		left := testhelp.AssertType[ast.Ident](t, inExp.Left)
 		list := testhelp.AssertType[ast.ListLiteral](t, inExp.List)
+
+		wantLeft := "PAY_CODE"
+		if left.Value != wantLeft {
+			t.Fatalf("left value = %s, want %s", left.Value, wantLeft)
+		}
 
 		want := []string{"WORKED", "OVERTIME", "ON_CALL"}
 		if len(list.Strings) != len(want) {

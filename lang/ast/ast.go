@@ -444,6 +444,7 @@ func (a AliasExpression) Pos() (start, end token.Pos) {
 // a SetExpression referencing a policy set Ident.
 type InExpression struct {
 	token.Token
+	Left Expression
 	List Expression
 }
 
