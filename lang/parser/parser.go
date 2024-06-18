@@ -73,6 +73,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.infixParsers[token.T_NEQ] = p.parseInfixExpression
 	p.infixParsers[token.T_AND] = p.parseInfixExpression
 	p.infixParsers[token.T_OR] = p.parseInfixExpression
+	p.infixParsers[token.T_IN] = p.parseInExpression
 
 	return p
 }

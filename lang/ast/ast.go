@@ -438,3 +438,62 @@ func (a AliasExpression) Pos() (start, end token.Pos) {
 	_, end = a.Alias.Pos()
 	return start, end
 }
+
+// InExpression - a very limited in expression that can check if certain items are
+// in a list represented by either an array of string literals (ListLiteral) or
+// a SetExpression referencing a policy set Ident.
+type InExpression struct {
+	token.Token
+	List Expression
+}
+
+func (i InExpression) ExpressionNode()      {}
+func (i InExpression) TokenLiteral() string { return i.Token.Literal }
+func (i InExpression) String() string       { return "in " + i.List.String() }
+
+func (i InExpression) Pos() (start, end token.Pos) {
+	start = i.Token.StartPos
+	_, end = i.List.Pos()
+	return start, end
+}
+
+// ListLiteral is a list of string literals, used exclusively for InExpressions.
+type ListLiteral struct {
+	token.Token
+	Strings  []StringLiteral
+	RBracket token.Token
+}
+
+func (l ListLiteral) ExpressionNode()             {}
+func (l ListLiteral) TokenLiteral() string        { return l.Token.Literal }
+func (l ListLiteral) Pos() (start, end token.Pos) { return l.Token.StartPos, l.RBracket.EndPos }
+
+func (l ListLiteral) String() string {
+	var out strings.Builder
+	out.WriteByte('[')
+
+	for i, str := range l.Strings {
+		out.WriteString(str.String())
+		if i >= len(l.Strings)-1 {
+			out.WriteString(", ")
+		}
+	}
+
+	out.WriteByte(']')
+	return out.String()
+}
+
+// SetExpression is a reference to a policy set Ident, used exclusively for InExpressions.
+type SetExpression struct {
+	token.Token
+	Name Ident
+}
+
+func (s SetExpression) ExpressionNode()      {}
+func (s SetExpression) TokenLiteral() string { return s.Token.Literal }
+func (s SetExpression) String() string       { return "set " + s.Name.String() }
+func (s SetExpression) Pos() (start, end token.Pos) {
+	start = s.Token.StartPos
+	_, end = s.Name.Pos()
+	return start, end
+}

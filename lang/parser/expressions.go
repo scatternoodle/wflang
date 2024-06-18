@@ -385,3 +385,103 @@ func (p *Parser) parseAliasExpression() (ast.Expression, error) {
 	aliasExp.Alias = ident.(ast.Ident)
 	return aliasExp, nil
 }
+
+// parseSetExpression - looks like:
+//
+//	set <Ident>
+func (p *Parser) parseSetExpression() (ast.Expression, error) {
+	p.trace.trace("SetExpression")
+	defer p.trace.untrace("SetExpression")
+	wrap := func(e error) error { return fmt.Errorf("parseSetExpression: %w", e) }
+
+	setExp := ast.SetExpression{Token: p.current}
+	if err := p.wantPeek(token.T_IDENT); err != nil {
+		return nil, wrap(err)
+	}
+
+	p.advance()
+	name, err := p.parseIdent()
+	if err != nil {
+		return nil, wrap(err)
+	}
+	setExp.Name = name.(ast.Ident)
+	return setExp, nil
+}
+
+// parseListLiteral - looks like:
+// [ <StringLiteral>, <StringLiteral>, ... ]
+//
+// the list can also be empty as just "[]"
+func (p *Parser) parseListLiteral() (ast.Expression, error) {
+	p.trace.trace("ListLiteral")
+	defer p.trace.untrace("ListLiteral")
+	wrap := func(e error) error { return fmt.Errorf("parseListLiteral: %w", e) }
+
+	if p.next.Type != token.T_STRING && p.next.Type != token.T_RBRACKET {
+		msg := fmt.Sprintf("next token type: have %s, want %s or %s", p.next.Type, token.T_STRING, token.T_RBRACKET)
+		return nil, wrap(newParseErr(msg, p.next))
+	}
+
+	listLit := ast.ListLiteral{
+		Token:   p.current,
+		Strings: []ast.StringLiteral{},
+	}
+
+	for p.next.Type == token.T_STRING {
+		p.advance()
+
+		str, err := p.parseStringLiteral()
+		if err != nil {
+			return nil, wrap(err)
+		}
+		listLit.Strings = append(listLit.Strings, str.(ast.StringLiteral))
+
+		if p.next.Type != token.T_COMMA {
+			break
+		}
+		p.advance()
+	}
+
+	if err := p.wantPeek(token.T_RBRACKET); err != nil {
+		return nil, wrap(err)
+	}
+
+	p.advance()
+	listLit.RBracket = p.current
+	return listLit, nil
+}
+
+// parseInExpression - looks like:
+//
+//	left<Expression> in <ListLiteral> | <SetExpression>
+func (p *Parser) parseInExpression(left ast.Expression) (ast.Expression, error) {
+	p.trace.trace("InExpression")
+	defer p.trace.untrace("InExpression")
+	wrap := func(e error) error { return fmt.Errorf("parseInExpression: %w", e) }
+
+	if left == nil {
+		return nil, wrap(newParseErr("left expression is nil", p.current))
+	}
+
+	inExpression := ast.InExpression{Token: p.current}
+	var list ast.Expression
+	var err error
+
+	if p.next.Type == token.T_LBRACKET {
+		p.advance()
+		list, err = p.parseListLiteral()
+
+	} else if p.next.Type == token.T_SET {
+		p.advance()
+		list, err = p.parseSetExpression()
+
+	} else {
+		msg := fmt.Sprintf("next token type: have %s, want %s or %s", p.next.Type, token.T_LBRACKET, token.T_SET)
+		err = newParseErr(msg, p.next)
+	}
+	if err != nil {
+		return nil, wrap(err)
+	}
+	inExpression.List = list
+	return inExpression, nil
+}

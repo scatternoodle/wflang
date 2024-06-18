@@ -340,6 +340,25 @@ order by hours desc`
 
 }
 
+func TestParseInExpression(t *testing.T) {
+	tests := []struct {
+		name  string
+		input string
+	}{
+		{"in set", `PAY_CODE in set BAMUK_GEN_COUNTS_AS_WORKED`},
+		{"in list", `PAY_CODE in ["WORKED", "OVERTIME", "ON_CALL"]`},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, AST := testRunParser(t, tt.input, 1, false)
+
+			exp := testExpressionStatement(t, AST.Statements[0])
+			_ = testhelp.AssertType[ast.InExpression](t, exp)
+		})
+	}
+}
+
 func testOrderByExpression(t *testing.T, exp ast.Expression) bool {
 	obExp := testhelp.AssertType[ast.OrderByExpression](t, exp)
 

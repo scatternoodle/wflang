@@ -62,9 +62,9 @@ const (
 	T_BY    Type = "by"    // used in "order by" expressions
 	T_ASC   Type = "asc"   // used in "order by" expressions
 	T_DESC  Type = "desc"  // used in "order by" expressions
-	T_ALIAS Type = "alias" // TODO
-	T_IN    Type = "in"    // TODO
-	T_SET   Type = "set"   // TODO
+	T_ALIAS Type = "alias"
+	T_IN    Type = "in"    // TODO - needs a prefixparser because this is a boolean expression in its own right.
+	T_SET   Type = "set"   // TODO - goes with "in"
 	T_NULL  Type = "null"  // TODO
 	T_TRUE  Type = "true"  // parser - parseBoolean
 	T_FALSE Type = "false" // parser - parseBoolean
