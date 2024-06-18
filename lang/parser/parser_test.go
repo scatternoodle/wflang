@@ -341,14 +341,6 @@ order by hours desc`
 }
 
 func TestParseInExpression(t *testing.T) {
-	// tests := []struct {
-	// 	name  string
-	// 	input string
-	// }{
-	// 	{"in set", `PAY_CODE in set BAMUK_GEN_COUNTS_AS_WORKED`},
-	// 	{"in list", `PAY_CODE in ["WORKED", "OVERTIME", "ON_CALL"]`},
-	// }
-
 	t.Run("in set", func(t *testing.T) {
 		input := `PAY_CODE in set BAMUK_GEN_COUNTS_AS_WORKED`
 
