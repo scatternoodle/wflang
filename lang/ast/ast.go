@@ -421,3 +421,20 @@ func (o OrderByExpression) Ascending() string {
 	}
 	return ""
 }
+
+// AliasExpression - used in summary functions to assign a name to the iteration
+// context of the function.
+type AliasExpression struct {
+	token.Token
+	Alias Ident
+}
+
+func (a AliasExpression) ExpressionNode()      {}
+func (a AliasExpression) TokenLiteral() string { return a.Token.Literal }
+func (a AliasExpression) String() string       { return "alias " + a.Alias.String() }
+
+func (a AliasExpression) Pos() (start, end token.Pos) {
+	start = a.Token.StartPos
+	_, end = a.Alias.Pos()
+	return start, end
+}

@@ -363,3 +363,25 @@ func (p *Parser) parseOrderByExpression() (ast.Expression, error) {
 	}
 	return orderByExp, nil
 }
+
+// parseAliasExpression - looks like:
+//
+//	alias <Ident>
+func (p *Parser) parseAliasExpression() (ast.Expression, error) {
+	p.trace.trace("AliasExpression")
+	defer p.trace.untrace("AliasExpression")
+	wrap := func(e error) error { return fmt.Errorf("parseAliasExpression: %w", e) }
+
+	aliasExp := ast.AliasExpression{Token: p.current}
+	if err := p.wantPeek(token.T_IDENT); err != nil {
+		return nil, wrap(err)
+	}
+	p.advance()
+
+	ident, err := p.parseIdent()
+	if err != nil {
+		return nil, wrap(err)
+	}
+	aliasExp.Alias = ident.(ast.Ident)
+	return aliasExp, nil
+}

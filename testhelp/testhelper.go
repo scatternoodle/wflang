@@ -1,5 +1,7 @@
 package testhelp
 
+// TH allows us to share helper functions between *testing.T and other testing objects
+// such as *testing.B
 type TH interface {
 	Errorf(format string, args ...any)
 	Fatalf(format string, args ...any)
