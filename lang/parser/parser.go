@@ -21,7 +21,6 @@ type Parser struct {
 	next          token.Token
 	prefixParsers map[token.Type]prefixParser
 	infixParsers  map[token.Type]infixParser
-	precedenceMap map[token.Type]int
 	errors        []error
 	trace         *trace
 }
@@ -38,7 +37,6 @@ func New(l *lexer.Lexer) *Parser {
 		l:             l,
 		prefixParsers: map[token.Type]prefixParser{},
 		infixParsers:  map[token.Type]infixParser{},
-		precedenceMap: precedenceMap(),
 		errors:        []error{},
 		trace:         &trace{0, &strings.Builder{}},
 	}

@@ -30,7 +30,7 @@ func (p *Parser) parseExpressionStatement() (ast.ExpressionStatement, error) {
 	defer p.trace.untrace("ExpressionStatement")
 
 	stmt := ast.ExpressionStatement{Token: p.current}
-	exp, err := p.parseExpression(p_LOWEST)
+	exp, err := p.parseExpression()
 	if err != nil {
 		err = fmt.Errorf("error parsing expression: %w", err)
 		return ast.ExpressionStatement{}, err
@@ -71,7 +71,7 @@ func (p *Parser) parseVarStatement() (ast.VarStatement, error) {
 	p.advance()
 
 	// ...[Expression]
-	exp, err := p.parseExpression(p_LOWEST)
+	exp, err := p.parseExpression()
 	if err != nil {
 		return ast.VarStatement{}, eWrap(err)
 	}

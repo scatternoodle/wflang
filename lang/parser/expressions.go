@@ -14,7 +14,7 @@ func blankExpression(t token.Token) ast.Expression {
 
 // parseExpression, similarly to parseStatement, is mainly a triage function that
 // delegates to the appropriate parsing function based on the current token type.
-func (p *Parser) parseExpression(precedence int) (ast.Expression, error) {
+func (p *Parser) parseExpression() (ast.Expression, error) {
 	prefix, ok := p.prefixParsers[p.current.Type]
 	if !ok {
 		errMsg := fmt.Sprintf("no prefix parser mapped for token type %s", p.current.Type)
@@ -51,7 +51,7 @@ func (p *Parser) parsePrefixExpression() (ast.Expression, error) {
 	}
 	p.advance()
 
-	right, err := p.parseExpression(p_LOWEST)
+	right, err := p.parseExpression()
 	if err != nil {
 		return nil, fmt.Errorf("error parsing right expression: %w", err)
 	}
@@ -74,7 +74,7 @@ func (p *Parser) parseInfixExpression(left ast.Expression) (ast.Expression, erro
 	}
 	p.advance()
 
-	right, err := p.parseExpression(p_LOWEST)
+	right, err := p.parseExpression()
 	if err != nil {
 		return nil, fmt.Errorf("error parsing right expresion: %w", err)
 	}
@@ -153,7 +153,7 @@ func (p *Parser) parseBlockExpression() (ast.Expression, error) {
 			continue
 		}
 
-		exp, err := p.parseExpression(p_LOWEST)
+		exp, err := p.parseExpression()
 		if err != nil {
 			return nil, fmt.Errorf("value expression parse error: %w", err)
 		}
@@ -225,7 +225,7 @@ func (p *Parser) parseMacroExpression() (ast.Expression, error) {
 
 	macro.Params = []ast.Expression{}
 	for {
-		param, err := p.parseExpression(p_LOWEST)
+		param, err := p.parseExpression()
 		if err != nil {
 			return nil, eWrap(err)
 		}
@@ -307,7 +307,7 @@ func (p *Parser) parseOverExpression() (ast.Expression, error) {
 	overExp := ast.OverExpression{Token: p.current}
 	p.advance()
 
-	ctx, err := p.parseExpression(p_LOWEST)
+	ctx, err := p.parseExpression()
 	if err != nil {
 		return nil, fmt.Errorf("paseOverExpression: %w", err)
 	}
@@ -326,7 +326,7 @@ func (p *Parser) parseWhereExpression() (ast.Expression, error) {
 	whereExp := ast.WhereExpression{Token: p.current}
 	p.advance()
 
-	cnd, err := p.parseExpression(p_LOWEST)
+	cnd, err := p.parseExpression()
 	if err != nil {
 		return nil, fmt.Errorf("paseOverExpression: %w", err)
 	}
@@ -350,7 +350,7 @@ func (p *Parser) parseOrderByExpression() (ast.Expression, error) {
 		return nil, wrap(err)
 	}
 
-	exp, err := p.parseExpression(p_LOWEST)
+	exp, err := p.parseExpression()
 	if err != nil {
 		return nil, wrap(err)
 	}
