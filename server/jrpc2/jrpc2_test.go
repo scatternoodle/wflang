@@ -23,6 +23,24 @@ func TestDecodeMessage(t *testing.T) {
 				err:     false,
 			},
 		},
+		{
+			name: "bad incorrect content length",
+			msg:  []byte("Content-Length: 30\r\n\r\n{\"method\": \"put\", \"test\": \"hi\"}"),
+			want: wantT{
+				method:  "",
+				content: "",
+				err:     true,
+			},
+		},
+		{
+			name: "bad missing header",
+			msg:  []byte("Content-Length: 31\r\n\r\n{\"AAAHH!\": \"put\", \"test\": \"hi\"}"),
+			want: wantT{
+				method:  "",
+				content: "",
+				err:     true,
+			},
+		},
 	}
 
 	for _, tt := range tests {
@@ -31,6 +49,9 @@ func TestDecodeMessage(t *testing.T) {
 
 			if err != nil && !tt.want.err {
 				t.Fatalf("unexpected error: %+v", err)
+			}
+			if err != nil && tt.want.err {
+				return // no need to test outputs
 			}
 			if err == nil && tt.want.err {
 				t.Fatal("err = nil, want err")

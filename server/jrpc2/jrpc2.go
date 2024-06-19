@@ -112,6 +112,9 @@ func DecodeMessage(msg []byte) (method string, content []byte, err error) {
 	if err := json.Unmarshal(content, &mthStrct); err != nil {
 		return "", nil, fmt.Errorf("error reading method: %w", err)
 	}
+	if mthStrct.Method == "" {
+		return "", nil, errors.New("missing method field")
+	}
 	return mthStrct.Method, content, nil
 }
 
