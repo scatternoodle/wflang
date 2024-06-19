@@ -2,6 +2,20 @@ package jrpc2
 
 import "testing"
 
+func TestEncodeMessage(t *testing.T) {
+	input := NewNotification("put")
+
+	msg, err := EncodeMessage(input)
+	if err != nil {
+		t.Fatalf("unexpected error: %+v", err)
+	}
+
+	want := "Content-Length: 32\r\n\r\n{\"jsonrpc\":\"2.0\",\"method\":\"put\"}"
+	if msg != want {
+		t.Errorf("msg = %s, want %s", msg, want)
+	}
+}
+
 func TestDecodeMessage(t *testing.T) {
 	type wantT struct {
 		method  string
