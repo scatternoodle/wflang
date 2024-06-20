@@ -1,0 +1,76 @@
+{
+  "sumTime": {
+    "prefix": ["sumt", "st", "sumTime"],
+    "body": [
+      "sumTime( over ${1|day,week,period|} alias ${2|x,sliceX,y,sliceY|} )",
+      "       , ${2}.${3:return}",
+      "       , where ${2}.{4:condition} )"
+    ],
+    "description": "sumTime statement"
+  },
+  "sumSchedule": {
+    "prefix": ["sums", "ss", "sumSchedule"],
+    "body": [
+      "sumSchedule( over ${1|day,week,period|} alias ${2|x,schedX,y,schedY|} )",
+      "           , ${2}.${3:return}",
+      "           , where ${2}.{4:condition} )"
+    ],
+    "description": "sumSchedule statement"
+  },
+  "countTime": {
+    "prefix": ["countt", "ct", "countTime"],
+    "body": [
+      "countTime( over ${1|day,week,period|} alias ${2|x,sliceX,y,sliceY|} )",
+      "         , where ${2}.${3:condition} )"
+    ],
+    "description": "countTime statement"
+  },
+  "countSchedule": {
+    "prefix": ["counts", "cs", "countSchedule"],
+    "body": [
+      "countSchedule( over ${1|day,week,period|} alias ${2|x,schedX,y,schedY|} )",
+      "             , where ${2}.${3:condition} )"
+    ],
+    "description": "countSchedule statement"
+  },
+  "findFirstTime": {
+    "prefix": ["ft", "findt", "findFirstTime"],
+    "body": [
+      "findFirstTime( over ${1:range} alias ${2|x,sliceX,y,sliceY|}",
+      "             , where ${2}.${3:condition}",
+      "             , order by ${2}.${4} ${5|asc,desc|} )"
+    ],
+    "description": "findFirstTime statement"
+  },
+  "findFirstSchedule": {
+    "prefix": ["fs", "finds", "findFirstSchedule"],
+    "body": [
+      "findFirstSchedule( over ${1:range} alias ${2|x,schedX,y,schedY|}",
+      "                 , where ${2}.${3:condition}",
+      "                 , order by ${2}.${4} ${5|asc,desc|} )"
+    ],
+    "description": "findFirstSchedule statement"
+  },
+  "getHoliday": {
+    "prefix": ["gh", "getHoliday"],
+    "body": ["getHoliday(${1:set}, ${2|day,period.end|})"],
+    "description": "getHoliday statement"
+  },
+  "count": {
+    "prefix": ["count"],
+    "body": [
+      "count( by ${1|day,week|} over ${2:range} alias ${3|dayX,weekX,dayY,weekY|}",
+      "     , where ${4:condition} )"
+    ],
+    "description": "count statement"
+  },
+  "sum": {
+    "prefix": ["sum"],
+    "body": [
+      "sum( by ${1|day,week|} over ${2:range} alias ${3|dayX,weekX,dayY,weekY|}",
+      "   , ${4:return}",
+      "   , where ${5:condition} )"
+    ],
+    "description": "sum statement"
+  }
+}

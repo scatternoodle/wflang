@@ -9,6 +9,7 @@ wflsrv
 *.so
 *.dylib
 out
+/editors/vscode/extension/server/bin/*
 
 # Test binary, built with `go test -c`
 *.test
@@ -17,23 +18,22 @@ out
 *.out
 
 # Dependency directories (remove the comment below to include it)
-# vendor/
+vendor/
 
 # Go workspace file
 go.work
 
 # node / vscode ignores
-dist
-node_modules
-.vscode-test/
-*.vsix
-vscode/out
-vscode/dist
-vscode/node_modules
-vscode/.vscode-test/
-vscode/*.vsix
+editors/vscode/extension/.vscode-test/
+editors/vscode/extension/*.vsix
+editors/vscode/extension/out
+editors/vscode/extension/dist
+editors/vscode/extension/node_modules
+editors/vscode/extension/.vscode-test/
+editors/vscode/extension/*.vsix
+editors/vscode/extension/tmp/
 
-# local / temp files
-vscode/server/logs/*
+# local / temp / files
+/editors/vscode/extension/server/logs/*
 .local/*
 tmp/
