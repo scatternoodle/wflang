@@ -1,0 +1,2 @@
+get logging to file working
+initial vscode extension boilerplate

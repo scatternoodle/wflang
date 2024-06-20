@@ -33,8 +33,7 @@ vscode/node_modules
 vscode/.vscode-test/
 vscode/*.vsix
 
-# log / temp files
+# local / temp files
 vscode/server/logs/*
-
-nextjob.txt
-#
+.local/*
+tmp/
