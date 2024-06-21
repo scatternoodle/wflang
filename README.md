@@ -1,2 +1,2 @@
 # wflang
-A Language Server Implementation and VSCode Extension for WFlang
+A Language Server and VSCode Extension for the WFlang DSL
