@@ -10,12 +10,6 @@ import (
 	"github.com/scatternoodle/wflang/server"
 )
 
-// func main() {
-// 	if err := repl.Run(); err != nil {
-// 		log.Fatal(err)
-// 	}
-// }
-
 func main() {
 	if len(os.Args) < 2 {
 		panic("missing arg: logfile path")
@@ -25,7 +19,7 @@ func main() {
 
 	slog.Info("Language Server started.")
 
-	srv := &server.Server{}
+	srv := server.New()
 	srv.ListenAndServe(os.Stdin, os.Stdout)
 }
 

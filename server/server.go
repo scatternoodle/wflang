@@ -11,6 +11,12 @@ import (
 	"github.com/scatternoodle/wflang/lsp"
 )
 
+func New() *Server {
+	return &Server{
+		initialized: false
+	}
+}
+
 type Server struct {
 	initialized bool
 }
