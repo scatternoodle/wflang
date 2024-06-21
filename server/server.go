@@ -13,7 +13,7 @@ import (
 
 func New() *Server {
 	return &Server{
-		initialized: false
+		initialized: false,
 	}
 }
 
@@ -71,4 +71,15 @@ func respond(w io.Writer, v any) error {
 		return fmt.Errorf("write error: %w", err)
 	}
 	return nil
+}
+
+func respondError(w io.Writer, v lsp.Error) {
+	response, err := jrpc2.EncodeMessage(v)
+	if err != nil {
+		panic(fmt.Errorf("encode error response: %w", err))
+	}
+	if _, err = w.Write([]byte(response)); err != nil {
+		panic(fmt.Errorf("write error response: %w", err))
+	}
+
 }
