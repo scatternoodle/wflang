@@ -1,1 +1,2 @@
-LSP - initialize
+define initializeRequest and response types
+write initialize function

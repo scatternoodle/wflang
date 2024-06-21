@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -10,6 +11,7 @@ import (
 	"path"
 
 	"github.com/scatternoodle/wflang/server/jrpc2"
+	"github.com/scatternoodle/wflang/server/lsp"
 )
 
 // func main() {
@@ -23,8 +25,6 @@ func main() {
 		panic("missing arg: logfile path")
 	}
 	logPath := os.Args[1]
-
-	fmt.Println("started, setting up logging")
 	setupLogging(logPath, slog.LevelDebug)
 
 	slog.Info("Language Server started.")
@@ -39,6 +39,7 @@ func listenAndServe(r io.Reader, w io.Writer) {
 	for scanner.Scan() {
 		handleMessage(w, scanner.Bytes())
 	}
+	slog.Info("Server stopped listening")
 }
 
 func handleMessage(w io.Writer, msg []byte) {
@@ -47,8 +48,39 @@ func handleMessage(w io.Writer, msg []byte) {
 		slog.Error("Unable to decode", "error", err, "method", method, "message", msg)
 		return
 	}
+	slog.Info("Recieved", "method", method)
+	slog.Debug(fmt.Sprintf("content: %s", string(content)))
 
-	slog.Info("Recieved", "method", method, "content", content)
+	switch method {
+	case lsp.MethodInitialize:
+		var initReq lsp.InitializeRequest
+		if err := json.Unmarshal(content, &initReq); err != nil {
+			slog.Error("can't marshal request", "error", err)
+			return
+		}
+		if initReq.ID == nil {
+			slog.Error("request ID is nil")
+			return
+		}
+
+		if err = sendResponse(w, lsp.Initialize(initReq.ID)); err != nil {
+			slog.Error("response failed", "error", err)
+			return
+		}
+		slog.Info("InitializeResponse sent")
+	}
+
+}
+
+func sendResponse(w io.Writer, v any) error {
+	response, err := jrpc2.EncodeMessage(v)
+	if err != nil {
+		return fmt.Errorf("encoding error: %w", err)
+	}
+	if _, err = w.Write([]byte(response)); err != nil {
+		return fmt.Errorf("write error: %w", err)
+	}
+	return nil
 }
 
 func setupLogging(logPath string, level slog.Level) {
@@ -56,11 +88,9 @@ func setupLogging(logPath string, level slog.Level) {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
 	logPath = path.Clean(logPath)
-	fmt.Printf("Clean path: %s", logPath)
 	logFile, err := os.OpenFile(logPath, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0666)
 
 	if err == os.ErrNotExist { // That's OK, we'll just create it.
-		fmt.Println("logfile does not yet exist, creating...")
 		logFile, err = os.Create(logPath)
 		if err != nil {
 			panic(fmt.Errorf("error creating new logfile: %w", err))
