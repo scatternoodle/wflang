@@ -2,7 +2,7 @@ package lsp
 
 // https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#lifeCycleMessages
 
-import "github.com/scatternoodle/wflang/server/jrpc2"
+import "github.com/scatternoodle/wflang/jrpc2"
 
 func Initialize(id *int) InitializeResponse {
 	return InitializeResponse{

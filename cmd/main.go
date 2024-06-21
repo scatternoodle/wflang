@@ -1,17 +1,13 @@
 package main
 
 import (
-	"bufio"
-	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"log/slog"
 	"os"
 	"path"
 
-	"github.com/scatternoodle/wflang/server/jrpc2"
-	"github.com/scatternoodle/wflang/server/lsp"
+	"github.com/scatternoodle/wflang/server"
 )
 
 // func main() {
@@ -28,59 +24,9 @@ func main() {
 	setupLogging(logPath, slog.LevelDebug)
 
 	slog.Info("Language Server started.")
-	listenAndServe(os.Stdin, os.Stdout)
-}
 
-func listenAndServe(r io.Reader, w io.Writer) {
-	slog.Info("Scanning for messages...")
-	scanner := bufio.NewScanner(r)
-	scanner.Split(jrpc2.Split)
-
-	for scanner.Scan() {
-		handleMessage(w, scanner.Bytes())
-	}
-	slog.Info("Server stopped listening")
-}
-
-func handleMessage(w io.Writer, msg []byte) {
-	method, content, err := jrpc2.DecodeMessage(msg)
-	if err != nil {
-		slog.Error("Unable to decode", "error", err, "method", method, "message", msg)
-		return
-	}
-	slog.Info("Recieved", "method", method)
-	slog.Debug(fmt.Sprintf("content: %s", string(content)))
-
-	switch method {
-	case lsp.MethodInitialize:
-		var initReq lsp.InitializeRequest
-		if err := json.Unmarshal(content, &initReq); err != nil {
-			slog.Error("can't marshal request", "error", err)
-			return
-		}
-		if initReq.ID == nil {
-			slog.Error("request ID is nil")
-			return
-		}
-
-		if err = sendResponse(w, lsp.Initialize(initReq.ID)); err != nil {
-			slog.Error("response failed", "error", err)
-			return
-		}
-		slog.Info("InitializeResponse sent")
-	}
-
-}
-
-func sendResponse(w io.Writer, v any) error {
-	response, err := jrpc2.EncodeMessage(v)
-	if err != nil {
-		return fmt.Errorf("encoding error: %w", err)
-	}
-	if _, err = w.Write([]byte(response)); err != nil {
-		return fmt.Errorf("write error: %w", err)
-	}
-	return nil
+	srv := &server.Server{}
+	srv.ListenAndServe(os.Stdin, os.Stdout)
 }
 
 func setupLogging(logPath string, level slog.Level) {
