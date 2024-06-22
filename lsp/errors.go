@@ -6,10 +6,3 @@ const (
 	ERRCODE_REQUEST_FAILED         int32 = -32803
 	ERRCODE_SERVER_CANCELLED       int32 = -32802
 )
-
-type Error interface {
-	error
-	Code() int32
-	Message() string
-	Data() any
-}

@@ -1,9 +1,11 @@
 implement proper initialized state, with error if other request received before initializedNotification.
 
-implement trace logging (I think we're going to need an abstraction over slog)
+make the server send back semantic tokens
 
 When I have enough message handlers implemented, I think we could make a handlerfunc type for them. How many is enough?
 I think I'll know when I know, but I suspect more than 3 is sensible, because I'm less experienced an so my predictions
 won't be accurate.
 
 do we need to think about making our server handle requests and responses concurrently (most probably)
+
+implement trace logging (I think we're going to need an abstraction over slog)

@@ -1,5 +1,6 @@
 package lsp
 
 const (
-	MethodInitialize = "initialize"
+	MethodInitialize  = "initialize"
+	MethodInitialized = "initialized"
 )

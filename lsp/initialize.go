@@ -4,7 +4,7 @@ package lsp
 
 import "github.com/scatternoodle/wflang/jrpc2"
 
-func Initialize(id *int) InitializeResponse {
+func Initialize(id *int32) InitializeResponse {
 	return InitializeResponse{
 		Response: jrpc2.NewResponse(id, nil),
 		Result: InitializeResult{

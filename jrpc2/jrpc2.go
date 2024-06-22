@@ -20,20 +20,20 @@ const (
 
 type Request struct {
 	JRPC   string `json:"jsonrpc"`
-	ID     *int   `json:"id,omitempty"`
+	ID     *int32 `json:"id,omitempty"`
 	Method string `json:"method"`
 }
 
 // NewRequest returns a JRPC2 request object with the given ID and method. To omit
 // ID, pass nil for the ID argument. The JSONRPC version field is automatically set
 // to "2.0".
-func NewRequest(id *int, method string) Request {
+func NewRequest(id *int32, method string) Request {
 	return Request{JRPC: version, ID: id, Method: method}
 }
 
 type Response struct {
 	JRPC  string         `json:"jsonrpc"`
-	ID    *int           `json:"id,omitempty"`
+	ID    *int32         `json:"id"`
 	Error *ResponseError `json:"error,omitempty"`
 	// Result: defined in enveloping types
 }
@@ -41,14 +41,14 @@ type Response struct {
 // NewResponse returns a JRPC2 response object with the given ID and error. To omit
 // ID or ResponseError, pass nil for the respective argument. The JSONRPC version
 // field is automatically set to "2.0".
-func NewResponse(id *int, respErr *ResponseError) Response {
+func NewResponse(id *int32, respErr *ResponseError) Response {
 	return Response{JRPC: version, ID: id, Error: respErr}
 }
 
 type ResponseError struct {
-	Code    int    `json:"code"`
+	Code    int32  `json:"code"`
 	Message string `json:"message"`
-	Data    any    `json:"data,omitempty"`
+	Data    any    `json:"data"`
 }
 
 const (

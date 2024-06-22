@@ -41,6 +41,11 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 	slog.Info("Recieved", "method", method)
 	slog.Debug(fmt.Sprintf("content: %s", string(content)))
 
+	if !srv.initialized && method != lsp.MethodInitialize && method != lsp.MethodInitialized {
+		id := getRequestID(content)
+		respondError(w, id, lsp.ERRCODE_SERVER_NOT_INITIALIZED, "server not yet initialized", nil)
+	}
+
 	switch method {
 	case lsp.MethodInitialize:
 		var initReq lsp.InitializeRequest
@@ -53,33 +58,43 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 			return
 		}
 
-		if err = respond(w, lsp.Initialize(initReq.ID)); err != nil {
-			slog.Error("response failed", "error", err)
-			return
-		}
+		respond(w, lsp.Initialize(initReq.ID))
 		slog.Info("InitializeResponse sent")
+
+	case lsp.MethodInitialized:
+		srv.initialized = true
 	}
 
 }
 
-func respond(w io.Writer, v any) error {
+func respond(w io.Writer, v any) {
 	response, err := jrpc2.EncodeMessage(v)
 	if err != nil {
-		return fmt.Errorf("encoding error: %w", err)
+		panic(fmt.Errorf("encoding error: %w", err))
 	}
 	if _, err = w.Write([]byte(response)); err != nil {
-		return fmt.Errorf("write error: %w", err)
+		panic(fmt.Errorf("write error: %w", err))
 	}
-	return nil
 }
 
-func respondError(w io.Writer, v lsp.Error) {
-	response, err := jrpc2.EncodeMessage(v)
-	if err != nil {
-		panic(fmt.Errorf("encode error response: %w", err))
+func respondError(w io.Writer, id *int32, code int32, msg string, dat any) {
+	rErr := jrpc2.ResponseError{
+		Code:    code,
+		Message: msg,
+		Data:    dat,
 	}
-	if _, err = w.Write([]byte(response)); err != nil {
-		panic(fmt.Errorf("write error response: %w", err))
-	}
+	v := jrpc2.NewResponse(id, &rErr)
+	respond(w, v)
+}
 
+// getRequestID returns the Request ID from a content byte slice. Returns null if
+// unable to resolve the Request ID.
+func getRequestID(b []byte) *int32 {
+	var idObj struct {
+		ID *int32 `json:"id,omitempty"` // We want to be pretty permissive here as we can just return null if we can't find
+	} // the ID.
+	if err := json.Unmarshal(b, &idObj); err != nil {
+		return nil
+	}
+	return idObj.ID
 }
