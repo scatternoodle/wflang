@@ -11,14 +11,49 @@ import (
 	"github.com/scatternoodle/wflang/lsp"
 )
 
-func New() *Server {
+func New(name, version *string) *Server {
 	return &Server{
-		initialized: false,
+		name:         name,
+		version:      version,
+		initialized:  false,
+		capabilities: serverCapabilities(),
 	}
 }
 
 type Server struct {
-	initialized bool
+	name         *string
+	version      *string
+	initialized  bool
+	capabilities lsp.ServerCapabilities
+}
+
+func serverCapabilities() lsp.ServerCapabilities {
+	cap := lsp.ServerCapabilities{}
+
+	cap.SemanticTokensProvider = semanticTokensProvider()
+
+	return cap
+}
+
+func (srv *Server) initialize(id *int32) lsp.InitializeResponse {
+	var srvInfo *lsp.AppInfo
+	if srv.name == nil {
+		srvInfo = nil
+	} else {
+		ver := ""
+		if srv.version != nil {
+			ver = *srv.version
+		}
+		srvInfo = &lsp.AppInfo{Name: *srv.name, Version: ver}
+	}
+
+	return lsp.InitializeResponse{
+		Response: jrpc2.NewResponse(id, nil),
+		Result: lsp.InitializeResult{
+			Capabilities: srv.capabilities,
+			ServerInfo:   srvInfo,
+		},
+	}
 }
 
 func (srv *Server) ListenAndServe(r io.Reader, w io.Writer) {
@@ -58,7 +93,7 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 			return
 		}
 
-		respond(w, lsp.Initialize(initReq.ID))
+		respond(w, srv.initialize(initReq.ID))
 		slog.Info("InitializeResponse sent")
 
 	case lsp.MethodInitialized:
@@ -70,10 +105,10 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 func respond(w io.Writer, v any) {
 	response, err := jrpc2.EncodeMessage(v)
 	if err != nil {
-		panic(fmt.Errorf("encoding error: %w", err))
+		panic(fmt.Errorf("response failed during encoding: %w", err))
 	}
 	if _, err = w.Write([]byte(response)); err != nil {
-		panic(fmt.Errorf("write error: %w", err))
+		panic(fmt.Errorf("response failed during write: %w", err))
 	}
 }
 

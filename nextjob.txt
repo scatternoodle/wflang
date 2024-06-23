@@ -1,5 +1,3 @@
-implement proper initialized state, with error if other request received before initializedNotification.
-
 make the server send back semantic tokens
 
 When I have enough message handlers implemented, I think we could make a handlerfunc type for them. How many is enough?

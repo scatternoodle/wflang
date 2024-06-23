@@ -4,15 +4,6 @@ package lsp
 
 import "github.com/scatternoodle/wflang/jrpc2"
 
-func Initialize(id *int32) InitializeResponse {
-	return InitializeResponse{
-		Response: jrpc2.NewResponse(id, nil),
-		Result: InitializeResult{
-			Capabilities: ServerCapabilities{},
-		},
-	}
-}
-
 // InitializeRequest is always the first request sent by the client.
 type InitializeRequest struct {
 	jrpc2.Request

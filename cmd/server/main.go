@@ -19,7 +19,7 @@ func main() {
 
 	slog.Info("Language Server started.")
 
-	srv := server.New()
+	srv := server.New(nil, nil)
 	srv.ListenAndServe(os.Stdin, os.Stdout)
 }
 
