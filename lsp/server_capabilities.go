@@ -1,15 +1,17 @@
 package lsp
 
-func serverCababilities() ServerCapabilities {
-	return ServerCapabilities{
-
-		SemanticTokensProvider: SemanticTokensOptions{},
-	}
-}
-
 type ServerCapabilities struct {
+	TextDocumentSync       TextDocumentSyncKind  `json:"textDocumentSync,omitempty"`
 	SemanticTokensProvider SemanticTokensOptions `json:"semanticTokensProvider,omitempty"`
 }
+
+type TextDocumentSyncKind int
+
+const (
+	SyncNone TextDocumentSyncKind = iota
+	SyncFull
+	SyncIncremental
+)
 
 type SemanticTokensOptions struct {
 	Legend TokenTypesLegend `json:"legend"`

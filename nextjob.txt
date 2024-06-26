@@ -1,4 +1,4 @@
-get your dev env up and running on new os install - you don't have any of the node / vscode stuff.
+have added textdocumentsync to server capabilities but am not receiving document update notifications, for some reason.
 
 make the server send back semantic tokens
 

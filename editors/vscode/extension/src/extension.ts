@@ -34,7 +34,6 @@ const serverOptions: ServerOptions = {
 };
 
 export function activate(context: ExtensionContext) {
-  console.log("wflang extension activated");
   client = new LanguageClient("wflsrv", serverOptions, clientOptions);
   client.start();
 }

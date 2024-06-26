@@ -30,6 +30,7 @@ type Server struct {
 func serverCapabilities() lsp.ServerCapabilities {
 	cap := lsp.ServerCapabilities{}
 
+	cap.TextDocumentSync = lsp.SyncFull
 	cap.SemanticTokensProvider = semanticTokensProvider()
 
 	return cap
@@ -73,12 +74,13 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 		slog.Error("Unable to decode", "error", err, "method", method, "message", msg)
 		return
 	}
-	slog.Info("Recieved", "method", method)
+
+	requestId := getRequestID(content)
+	slog.Info("Recieved", "method", method, "id", requestId)
 	slog.Debug(fmt.Sprintf("content: %s", string(content)))
 
 	if !srv.initialized && method != lsp.MethodInitialize && method != lsp.MethodInitialized {
-		id := getRequestID(content)
-		respondError(w, id, lsp.ERRCODE_SERVER_NOT_INITIALIZED, "server not yet initialized", nil)
+		respondError(w, requestId, lsp.ERRCODE_SERVER_NOT_INITIALIZED, "server not yet initialized", nil)
 	}
 
 	switch method {
@@ -98,6 +100,9 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 
 	case lsp.MethodInitialized:
 		srv.initialized = true
+
+	default:
+		slog.Warn("method not handled", "method", method, "id", requestId)
 	}
 
 }
@@ -110,6 +115,7 @@ func respond(w io.Writer, v any) {
 	if _, err = w.Write([]byte(response)); err != nil {
 		panic(fmt.Errorf("response failed during write: %w", err))
 	}
+	slog.Debug("wrote response", "content", response)
 }
 
 func respondError(w io.Writer, id *int32, code int32, msg string, dat any) {
