@@ -1,3 +1,5 @@
+get your dev env up and running on new os install - you don't have any of the node / vscode stuff.
+
 make the server send back semantic tokens
 
 When I have enough message handlers implemented, I think we could make a handlerfunc type for them. How many is enough?
