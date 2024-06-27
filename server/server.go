@@ -31,7 +31,7 @@ func serverCapabilities() lsp.ServerCapabilities {
 	cap := lsp.ServerCapabilities{}
 
 	cap.TextDocumentSync = lsp.SyncFull
-	cap.SemanticTokensProvider = semanticTokensProvider()
+	// cap.SemanticTokensProvider = semanticTokensProvider()
 
 	return cap
 }
