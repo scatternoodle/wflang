@@ -28,12 +28,9 @@ type Server struct {
 }
 
 func serverCapabilities() lsp.ServerCapabilities {
-	cap := lsp.ServerCapabilities{}
-
-	cap.TextDocumentSync = lsp.SyncFull
-	// cap.SemanticTokensProvider = semanticTokensProvider()
-
-	return cap
+	return lsp.ServerCapabilities{
+		TextDocumentSync: lsp.SyncFull,
+	}
 }
 
 func (srv *Server) initialize(id *int32) lsp.InitializeResponse {

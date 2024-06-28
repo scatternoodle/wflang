@@ -9,15 +9,17 @@ import {
 
 const serverPath = "editors/vscode/extension/server/bin/wflang";
 const logPath = "editors/vscode/extension/server/logs/server.log";
-const selector = { scheme: "file", language: "plaintext" }; // TODO - change to wflang once implemented
+const selector = { pattern: "**/*.wflang", scheme: "file", language: "wflang" }; // TODO - change to wflang once implemented
 
 let client: LanguageClient;
 
+const outputChannel = window.createOutputChannel("wflang");
 const clientOptions: LanguageClientOptions = {
   documentSelector: [selector],
   synchronize: {
     fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
   },
+  traceOutputChannel: outputChannel,
 };
 
 const serverOptions: ServerOptions = {
