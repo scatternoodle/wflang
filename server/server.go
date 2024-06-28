@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"os"
 
 	"github.com/scatternoodle/wflang/jrpc2"
 	"github.com/scatternoodle/wflang/lsp"
@@ -23,13 +24,17 @@ func New(name, version *string) *Server {
 type Server struct {
 	name         *string
 	version      *string
-	initialized  bool
 	capabilities lsp.ServerCapabilities
+
+	// lifecycle state
+	initialized bool // before this is set true, we only accept requests with initialize method
+	exiting     bool // set after an shutdown request is received, awaiting exit request
 }
 
 func serverCapabilities() lsp.ServerCapabilities {
 	return lsp.ServerCapabilities{
-		TextDocumentSync: lsp.SyncFull,
+		TextDocumentSync:       lsp.SyncFull,
+		SemanticTokensProvider: semanticTokensProvider(),
 	}
 }
 
@@ -78,6 +83,12 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 
 	if !srv.initialized && method != lsp.MethodInitialize && method != lsp.MethodInitialized {
 		respondError(w, requestId, lsp.ERRCODE_SERVER_NOT_INITIALIZED, "server not yet initialized", nil)
+		return
+	}
+
+	if srv.exiting && method != lsp.MethodShutdown && method != lsp.MethodExit {
+		respondError(w, requestId, jrpc2.ERRCODE_INVALID_REQUEST, "server is shutting down, expects 'exit' method", nil)
+		return
 	}
 
 	switch method {
@@ -98,8 +109,27 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 	case lsp.MethodInitialized:
 		srv.initialized = true
 
+	case lsp.MethodShutdown:
+		srv.exiting = true
+		resp := struct {
+			jrpc2.Response
+			Result any `json:"result"`
+		}{
+			Response: jrpc2.NewResponse(requestId, nil),
+			Result:   nil,
+		}
+		respond(w, &resp)
+
+	case lsp.MethodExit:
+		errCode := 0
+		if !srv.exiting {
+			errCode = 1
+		}
+		slog.Info("Server exiting", "code", errCode)
+		os.Exit(errCode)
+
 	default:
-		slog.Warn("method not handled", "method", method, "id", requestId)
+		slog.Warn("Unhandled method", "method", method, "id", requestId)
 	}
 
 }
