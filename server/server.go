@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/scatternoodle/wflang/jrpc2"
+	"github.com/scatternoodle/wflang/lang/ast"
 	"github.com/scatternoodle/wflang/lsp"
 )
 
@@ -18,6 +19,7 @@ func New(name, version *string) *Server {
 		version:      version,
 		initialized:  false,
 		capabilities: serverCapabilities(),
+		ast:          nil,
 	}
 }
 
@@ -25,10 +27,9 @@ type Server struct {
 	name         *string
 	version      *string
 	capabilities lsp.ServerCapabilities
-
-	// lifecycle state
-	initialized bool // before this is set true, we only accept requests with initialize method
-	exiting     bool // set after an shutdown request is received, awaiting exit request
+	initialized  bool // before this is set true, we only accept requests with initialize method
+	exiting      bool // set after an shutdown request is received, awaiting exit request
+	ast          *ast.AST
 }
 
 func serverCapabilities() lsp.ServerCapabilities {

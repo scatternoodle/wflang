@@ -1,6 +1,9 @@
 package server
 
-import "github.com/scatternoodle/wflang/lsp"
+import (
+	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/lsp"
+)
 
 func semanticTokensProvider() lsp.SemanticTokensOptions {
 	opt := lsp.SemanticTokensOptions{
@@ -126,5 +129,108 @@ func semanticTokenModifiers() []string {
 		// "modification",
 		// "documentation",
 		// "defaultLibrary",
+	}
+}
+
+// typeFromToken gets the server token type from the lexer token type given. If
+// not mapped to an LSP Semantic Token, returns -1 and does not error (some lexer
+// tokens don't have a Semantic Token in the LSP, and don't need one).
+func typeFromToken(t token.Type) semanticTokenType {
+	switch t {
+	case token.T_EOF:
+		return -1
+	case token.T_IDENT:
+		return semIndexVar
+	case token.T_NUM:
+		return semIndexNum
+	case token.T_STRING:
+		return semIndexString
+	case token.T_COMMENT_LINE:
+		return semIndexComment
+	case token.T_COMMENT_BLOCK:
+		return semIndexComment
+	case token.T_EQ:
+		return semIndexOperator
+	case token.T_PLUS:
+		return semIndexOperator
+	case token.T_MINUS:
+		return semIndexOperator
+	case token.T_BANG:
+		return semIndexOperator
+	case token.T_NEQ:
+		return semIndexOperator
+	case token.T_ASTERISK:
+		return semIndexOperator
+	case token.T_SLASH:
+		return semIndexOperator
+	case token.T_MODULO:
+		return semIndexOperator
+	case token.T_LT:
+		return semIndexOperator
+	case token.T_GT:
+		return semIndexOperator
+	case token.T_LTE:
+		return semIndexOperator
+	case token.T_GTE:
+		return semIndexOperator
+	case token.T_AND:
+		return semIndexOperator
+	case token.T_OR:
+		return semIndexOperator
+	case token.T_COMMA:
+		return -1
+	case token.T_SEMICOLON:
+		return -1
+	case token.T_COLON:
+		return -1
+	case token.T_LPAREN:
+		return -1
+	case token.T_RPAREN:
+		return -1
+	case token.T_LBRACE:
+		return -1
+	case token.T_RBRACE:
+		return -1
+	case token.T_LBRACKET:
+		return -1
+	case token.T_RBRACKET:
+		return -1
+	case token.T_PERIOD:
+		return -1
+	case token.T_DOLLAR:
+		return -1
+	case token.T_DOUBLEQUOTE:
+		return -1
+	case token.T_BUILTIN:
+		return semIndexFunc
+	case token.T_VAR:
+		return semIndexKeyword
+	case token.T_OVER:
+		return semIndexKeyword
+	case token.T_WHERE:
+		return semIndexKeyword
+	case token.T_ORDER:
+		return semIndexKeyword
+	case token.T_BY:
+		return semIndexKeyword
+	case token.T_ASC:
+		return semIndexKeyword
+	case token.T_DESC:
+		return semIndexKeyword
+	case token.T_ALIAS:
+		return semIndexKeyword
+	case token.T_IN:
+		return semIndexKeyword
+	case token.T_SET:
+		return semIndexKeyword
+	case token.T_NULL:
+		return semIndexKeyword
+	case token.T_TRUE:
+		return semIndexKeyword
+	case token.T_FALSE:
+		return semIndexKeyword
+
+	default:
+		return -1
 	}
 }
