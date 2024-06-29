@@ -32,31 +32,85 @@ const (
 	semTokenOperator   string = "operator"
 )
 
+const (
+	semIndexType semanticTokenType = iota
+	semIndexClass
+	semIndexParam
+	semIndexVar
+	semIndexProperty
+	semIndexEnumMember
+	semIndexFunc
+	semIndexMethod
+	semIndexMacro
+	semIndexKeyword
+	semIndexComment
+	semIndexString
+	semIndexNum
+	semIndexOperator
+)
+
+type semanticTokenType int32
+
+func (s semanticTokenType) String() string {
+	switch s {
+	case semIndexType:
+		return semTokenType
+	case semIndexClass:
+		return semTokenClass
+	case semIndexParam:
+		return semTokenParam
+	case semIndexVar:
+		return semTokenVar
+	case semIndexProperty:
+		return semTokenProperty
+	case semIndexEnumMember:
+		return semTokenEnumMember
+	case semIndexFunc:
+		return semTokenFunc
+	case semIndexMethod:
+		return semTokenMethod
+	case semIndexMacro:
+		return semTokenMacro
+	case semIndexKeyword:
+		return semTokenKeyword
+	case semIndexComment:
+		return semTokenComment
+	case semIndexString:
+		return semTokenString
+	case semIndexNum:
+		return semTokenNum
+	case semIndexOperator:
+		return semTokenOperator
+	default:
+		return ""
+	}
+}
+
 func semanticTokenTypes() []string {
 	return []string{
-		// "namespace",
 		semTokenType,
 		semTokenClass,
-		// "enum",
-		// "interface",
-		// "struct",
-		// "typeParameter",
 		semTokenParam,
 		semTokenVar,
 		semTokenProperty,
 		semTokenEnumMember,
-		// "event",
 		semTokenFunc,
 		semTokenMethod,
 		semTokenMacro,
 		semTokenKeyword,
-		// "modifier",
 		semTokenComment,
 		semTokenString,
 		semTokenNum,
-		// "regexp",
 		semTokenOperator,
+		// "namespace",
+		// "enum",
+		// "interface",
+		// "struct",
+		// "typeParameter",
 		// "decorator",
+		// "event",
+		// "modifier",
+		// "regexp",
 	}
 }
 
