@@ -95,11 +95,11 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 	case lsp.MethodInitialize:
 		var initReq lsp.InitializeRequest
 		if err := json.Unmarshal(content, &initReq); err != nil {
-			slog.Error("can't marshal request", "error", err)
+			slog.Error("Can't marshal request", "error", err)
 			return
 		}
 		if initReq.ID == nil {
-			slog.Error("request ID is nil")
+			slog.Error("Request ID is nil")
 			return
 		}
 
@@ -108,6 +108,19 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 
 	case lsp.MethodInitialized:
 		srv.initialized = true
+
+	case lsp.MethodSemanticTokensFull:
+		var req lsp.SemanticTokensFullRequest
+		if err := json.Unmarshal(content, &req); err != nil {
+			slog.Error("Can't marshall request", "error", err)
+			return
+		}
+		if req.ID == nil {
+			slog.Error("Request ID is nil")
+			return
+		}
+
+		slog.Debug("Parsed semantic tokens request", "object", req)
 
 	case lsp.MethodShutdown:
 		srv.exiting = true
