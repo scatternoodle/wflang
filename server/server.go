@@ -79,7 +79,7 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 
 	requestId := getRequestID(content)
 	slog.Info("Recieved", "method", method, "id", requestId)
-	slog.Debug(fmt.Sprintf("content: %s", string(content)))
+	slog.Debug(fmt.Sprintf("Content=%s", string(content)))
 
 	if !srv.initialized && method != lsp.MethodInitialize && method != lsp.MethodInitialized {
 		respondError(w, requestId, lsp.ERRCODE_SERVER_NOT_INITIALIZED, "server not yet initialized", nil)
@@ -110,7 +110,7 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 		srv.initialized = true
 
 	case lsp.MethodSemanticTokensFull:
-		var req lsp.SemanticTokensFullRequest
+		var req lsp.RequestSemanticTokensFull
 		if err := json.Unmarshal(content, &req); err != nil {
 			slog.Error("Can't marshall request", "error", err)
 			return
@@ -152,10 +152,10 @@ func respond(w io.Writer, v any) {
 	if err != nil {
 		panic(fmt.Errorf("response failed during encoding: %w", err))
 	}
-	if _, err = w.Write([]byte(response)); err != nil {
+	if _, err = w.Write(response); err != nil {
 		panic(fmt.Errorf("response failed during write: %w", err))
 	}
-	slog.Debug("wrote response", "content", response)
+	slog.Debug(fmt.Sprintf("Wrote content=%s", string(response)))
 }
 
 func respondError(w io.Writer, id *int32, code int32, msg string, dat any) {

@@ -73,14 +73,20 @@ func NewNotification(method string) Notification {
 
 // EncodeMessage takes an interface, marshals it to JSON and wraps it in a message
 // string that conforms to JRPC2 spec.
-func EncodeMessage(v any) (string, error) {
+func EncodeMessage(v any) ([]byte, error) {
 	msg, err := json.Marshal(v)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	msgStr := "Content-Length: " + fmt.Sprint(len(msg)) + contentSeparator + string(msg)
-	return msgStr, nil
+	// msgStr := "Content-Length: " + fmt.Sprint(len(msg)) + contentSeparator + string(msg)
+	// return msgStr, nil
+	var out bytes.Buffer
+	out.WriteString(fmt.Sprintf("Content-Length: %d%s", len(msg), contentSeparator))
+	if _, err := out.Write(msg); err != nil {
+		return nil, err
+	}
+	return out.Bytes(), nil
 }
 
 // DecodeMessage takes a byte slice containing a JRPC2 message and extracts the

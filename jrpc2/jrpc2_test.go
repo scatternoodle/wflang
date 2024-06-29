@@ -1,6 +1,9 @@
 package jrpc2
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestEncodeMessage(t *testing.T) {
 	input := NewNotification("put")
@@ -10,8 +13,8 @@ func TestEncodeMessage(t *testing.T) {
 		t.Fatalf("unexpected error: %+v", err)
 	}
 
-	want := "Content-Length: 32\r\n\r\n{\"jsonrpc\":\"2.0\",\"method\":\"put\"}"
-	if msg != want {
+	want := []byte("Content-Length: 32\r\n\r\n{\"jsonrpc\":\"2.0\",\"method\":\"put\"}")
+	if !reflect.DeepEqual(msg, want) {
 		t.Errorf("msg = %s, want %s", msg, want)
 	}
 }
