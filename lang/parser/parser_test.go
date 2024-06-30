@@ -508,13 +508,13 @@ func testInfix(t testhelp.TH, exp ast.Expression, operator string, left, right a
 
 func testRunParser(t testhelp.TH, input string, wantLen int, errOk bool) (*Parser, *ast.AST) {
 	l := lexer.New(input)
-	prg := New(l)
-	AST := prg.Parse()
+	prs := New(l)
+	AST := prs.ast
 
 	if !errOk {
-		checkParseErrors(t, prg)
+		checkParseErrors(t, prs)
 	} else {
-		return prg, AST
+		return prs, AST
 	}
 
 	if AST == nil {
@@ -527,7 +527,7 @@ func testRunParser(t testhelp.TH, input string, wantLen int, errOk bool) (*Parse
 	if len(AST.Statements) != wantLen {
 		t.Fatalf("AST statements length have %d, want %d", len(AST.Statements), wantLen)
 	}
-	return prg, AST
+	return prs, AST
 }
 
 func checkParseErrors(t testhelp.TH, p *Parser) {

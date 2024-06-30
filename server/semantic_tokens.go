@@ -5,6 +5,32 @@ import (
 	"github.com/scatternoodle/wflang/lsp"
 )
 
+// encodeToken encodes a Semantic Token according to the LSP specification. The
+// token is represented by 5 integers:
+//
+//	{ line, startChar, length, tokenType, tokenModifiers }
+//
+// Token modifier indices are repesented by bit flags in the final integer, e.g. value
+// 3 means tokenModifiers[0] and tokenModifiers[1]
+func encodeToken(tk token.Token) (token [5]lsp.Uint, found bool) {
+	out := [5]lsp.Uint{}
+	tkType, ok := typeFromToken(tk.Type)
+	if !ok {
+		return out, false
+	}
+	out[3] = lsp.Uint(tkType)
+
+	out[0] = lsp.Uint(tk.StartPos.Line)
+	out[1] = lsp.Uint(tk.StartPos.Col)
+	out[2] = lsp.Uint(tk.Len)
+
+	// we'll implement modifier encoding if/when needed - we aren't using any
+	// modifiers for now.
+	out[4] = 0
+
+	return out, true
+}
+
 func semanticTokensProvider() lsp.SemanticTokensOptions {
 	opt := lsp.SemanticTokensOptions{
 		Legend: lsp.TokenTypesLegend{
@@ -52,7 +78,7 @@ const (
 	semIndexOperator
 )
 
-type semanticTokenType int32
+type semanticTokenType lsp.Uint
 
 func (s semanticTokenType) String() string {
 	switch s {
@@ -132,105 +158,104 @@ func semanticTokenModifiers() []string {
 	}
 }
 
-// typeFromToken gets the server token type from the lexer token type given. If
-// not mapped to an LSP Semantic Token, returns -1 and does not error (some lexer
-// tokens don't have a Semantic Token in the LSP, and don't need one).
-func typeFromToken(t token.Type) semanticTokenType {
+// typeFromToken gets the server token type from the lexer token type given, or 0
+// and false if not found.
+func typeFromToken(t token.Type) (tType semanticTokenType, found bool) {
 	switch t {
 	case token.T_EOF:
-		return -1
+		return semIndexVar, true
 	case token.T_IDENT:
-		return semIndexVar
+		return semIndexVar, true
 	case token.T_NUM:
-		return semIndexNum
+		return semIndexNum, true
 	case token.T_STRING:
-		return semIndexString
+		return semIndexString, true
 	case token.T_COMMENT_LINE:
-		return semIndexComment
+		return semIndexComment, true
 	case token.T_COMMENT_BLOCK:
-		return semIndexComment
+		return semIndexComment, true
 	case token.T_EQ:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_PLUS:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_MINUS:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_BANG:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_NEQ:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_ASTERISK:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_SLASH:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_MODULO:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_LT:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_GT:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_LTE:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_GTE:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_AND:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_OR:
-		return semIndexOperator
+		return semIndexOperator, true
 	case token.T_COMMA:
-		return -1
+		return 0, false
 	case token.T_SEMICOLON:
-		return -1
+		return 0, false
 	case token.T_COLON:
-		return -1
+		return 0, false
 	case token.T_LPAREN:
-		return -1
+		return 0, false
 	case token.T_RPAREN:
-		return -1
+		return 0, false
 	case token.T_LBRACE:
-		return -1
+		return 0, false
 	case token.T_RBRACE:
-		return -1
+		return 0, false
 	case token.T_LBRACKET:
-		return -1
+		return 0, false
 	case token.T_RBRACKET:
-		return -1
+		return 0, false
 	case token.T_PERIOD:
-		return -1
+		return 0, false
 	case token.T_DOLLAR:
-		return -1
+		return 0, false
 	case token.T_DOUBLEQUOTE:
-		return -1
+		return 0, false
 	case token.T_BUILTIN:
-		return semIndexFunc
+		return semIndexFunc, true
 	case token.T_VAR:
-		return semIndexKeyword
+		return semIndexKeyword, true
 	case token.T_OVER:
-		return semIndexKeyword
+		return semIndexKeyword, true
 	case token.T_WHERE:
-		return semIndexKeyword
+		return semIndexKeyword, true
 	case token.T_ORDER:
-		return semIndexKeyword
+		return semIndexKeyword, true
 	case token.T_BY:
-		return semIndexKeyword
+		return semIndexKeyword, true
 	case token.T_ASC:
-		return semIndexKeyword
+		return semIndexKeyword, true
 	case token.T_DESC:
-		return semIndexKeyword
+		return semIndexKeyword, true
 	case token.T_ALIAS:
-		return semIndexKeyword
+		return semIndexKeyword, true
 	case token.T_IN:
-		return semIndexKeyword
+		return semIndexKeyword, true
 	case token.T_SET:
-		return semIndexKeyword
+		return semIndexKeyword, true
 	case token.T_NULL:
-		return semIndexKeyword
+		return semIndexKeyword, true
 	case token.T_TRUE:
-		return semIndexKeyword
+		return semIndexKeyword, true
 	case token.T_FALSE:
-		return semIndexKeyword
+		return semIndexKeyword, true
 
 	default:
-		return -1
+		return 0, false
 	}
 }

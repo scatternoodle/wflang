@@ -1,0 +1,21 @@
+package server
+
+import (
+	"log/slog"
+
+	"github.com/scatternoodle/wflang/lang/lexer"
+	"github.com/scatternoodle/wflang/lang/parser"
+	"github.com/scatternoodle/wflang/lsp"
+)
+
+func (srv *Server) updateDocument(doc lsp.TextDocumentItem) {
+	srv.parser = parser.New(lexer.New(doc.Text))
+
+	slog.Info("Document AST generated",
+		"version", doc.Version,
+		"uri", doc.URI,
+		"number of tokens", len(srv.parser.Tokens()),
+		"errors", len(srv.parser.Errors()),
+		// "tokens", srv.parser.Tokens(),
+	)
+}

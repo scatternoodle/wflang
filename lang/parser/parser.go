@@ -21,6 +21,8 @@ type Parser struct {
 	next          token.Token
 	prefixParsers map[token.Type]prefixParser
 	infixParsers  map[token.Type]infixParser
+	tokens        []token.Token
+	ast           *ast.AST
 	errors        []error
 	trace         *trace
 }
@@ -73,12 +75,16 @@ func New(l *lexer.Lexer) *Parser {
 	p.infixParsers[token.T_OR] = p.parseInfixExpression
 	p.infixParsers[token.T_IN] = p.parseInExpression
 
+	p.ast = p.parse()
 	return p
 }
 
-// Parse begins the static analysis process, producing an AST from the token stream
+func (p *Parser) Errors() []error       { return p.errors }
+func (p *Parser) Tokens() []token.Token { return p.tokens }
+
+// parse begins the static analysis process, producing an AST from the token stream
 // created by the lexer.
-func (p *Parser) Parse() *ast.AST {
+func (p *Parser) parse() *ast.AST {
 	p.trace.trace("AST")
 	defer p.trace.untrace("AST")
 
@@ -99,10 +105,6 @@ func (p *Parser) Parse() *ast.AST {
 	return AST
 }
 
-func (p *Parser) Errors() []error {
-	return p.errors
-}
-
 func (p *Parser) Trace() string {
 	return p.trace.String()
 }
@@ -110,6 +112,7 @@ func (p *Parser) Trace() string {
 // advance moves the parser forward by one token.
 func (p *Parser) advance() {
 	p.current = p.next
+	p.tokens = append(p.tokens, p.current)
 	p.next = p.l.NextToken()
 }
 

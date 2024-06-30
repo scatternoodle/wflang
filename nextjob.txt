@@ -1,4 +1,8 @@
-make the server send back semantic tokens
+make the server send back semantic tokens:
+- store last lexer/parser statements / tokens in server object
+    uh oh, I don't think we actually store all of our tokens... we might need to just have a simple array of those in the AST.
+- encode semantic tokens
+- respond with semantic tokens
 
 When I have enough message handlers implemented, I think we could make a handlerfunc type for them. How many is enough?
 I think I'll know when I know, but I suspect more than 3 is sensible, because I'm less experienced an so my predictions

@@ -9,7 +9,7 @@ import (
 	"os"
 
 	"github.com/scatternoodle/wflang/jrpc2"
-	"github.com/scatternoodle/wflang/lang/ast"
+	"github.com/scatternoodle/wflang/lang/parser"
 	"github.com/scatternoodle/wflang/lsp"
 )
 
@@ -19,7 +19,7 @@ func New(name, version *string) *Server {
 		version:      version,
 		initialized:  false,
 		capabilities: serverCapabilities(),
-		ast:          nil,
+		parser:       nil,
 	}
 }
 
@@ -29,7 +29,7 @@ type Server struct {
 	capabilities lsp.ServerCapabilities
 	initialized  bool // before this is set true, we only accept requests with initialize method
 	exiting      bool // set after an shutdown request is received, awaiting exit request
-	ast          *ast.AST
+	parser       *parser.Parser
 }
 
 func serverCapabilities() lsp.ServerCapabilities {
@@ -109,6 +109,14 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 
 	case lsp.MethodInitialized:
 		srv.initialized = true
+
+	case lsp.MethodDocDidOpen:
+		var req lsp.NotificationDidOpen
+		if err := json.Unmarshal(content, &req); err != nil {
+			slog.Error("Can't marshal request", "error", err)
+			return
+		}
+		srv.updateDocument(req.Params.TextDocument)
 
 	case lsp.MethodSemanticTokensFull:
 		var req lsp.RequestSemanticTokensFull
