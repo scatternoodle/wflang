@@ -31,13 +31,6 @@
         "configuration": "./language-configuration.json"
       }
     ],
-    "grammars": [
-      {
-        "language": "wflang",
-        "scopeName": "source.wflang",
-        "path": "./syntaxes/wflang.tmLanguage.json"
-      }
-    ],
     "snippets": [
       {
         "language": "wflang",

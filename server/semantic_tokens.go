@@ -1,9 +1,32 @@
 package server
 
 import (
+	"fmt"
+	"log/slog"
+
 	"github.com/scatternoodle/wflang/lang/token"
 	"github.com/scatternoodle/wflang/lsp"
 )
+
+func (srv *Server) getSemanticTokens() []lsp.Uint {
+	slog.Info("Encoding semantic tokens...")
+	pTokens := srv.parser.Tokens()
+	sTokens := make([]lsp.Uint, 0, len(pTokens)*5)
+
+	for i := range len(pTokens) {
+		slog.Debug("encoding token", "i", i, "token", pTokens[i])
+		encoded, ok := encodeToken(pTokens[i])
+		if !ok {
+			slog.Debug("unable to encode", "token", pTokens[i])
+			continue
+		}
+		sTokens = append(sTokens, encoded...)
+		slog.Debug("sTokens is now", "sTokens", sTokens)
+	}
+
+	slog.Info(fmt.Sprintf("Successfully encoded %d semantic tokens", len(sTokens)/5))
+	return sTokens
+}
 
 // encodeToken encodes a Semantic Token according to the LSP specification. The
 // token is represented by 5 integers:
@@ -12,15 +35,15 @@ import (
 //
 // Token modifier indices are repesented by bit flags in the final integer, e.g. value
 // 3 means tokenModifiers[0] and tokenModifiers[1]
-func encodeToken(tk token.Token) (token [5]lsp.Uint, found bool) {
-	out := [5]lsp.Uint{}
+func encodeToken(tk token.Token) (token []lsp.Uint, found bool) {
+	out := make([]lsp.Uint, 5)
 	tkType, ok := typeFromToken(tk.Type)
 	if !ok {
 		return out, false
 	}
 	out[3] = lsp.Uint(tkType)
 
-	out[0] = lsp.Uint(tk.StartPos.Line)
+	out[0] = lsp.Uint(tk.StartPos.Line + 1) // I think vscode lines start at 1, not 0
 	out[1] = lsp.Uint(tk.StartPos.Col)
 	out[2] = lsp.Uint(tk.Len)
 
@@ -28,6 +51,7 @@ func encodeToken(tk token.Token) (token [5]lsp.Uint, found bool) {
 	// modifiers for now.
 	out[4] = 0
 
+	slog.Debug("encoded", "out", out)
 	return out, true
 }
 

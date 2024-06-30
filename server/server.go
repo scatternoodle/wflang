@@ -129,7 +129,13 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 			return
 		}
 
-		slog.Debug("Parsed semantic tokens request", "object", req)
+		resp := lsp.ResponseSemanticTokensFull{
+			Response: jrpc2.NewResponse(requestId, nil),
+			Result: lsp.SemanticTokens{
+				Data: srv.getSemanticTokens(),
+			},
+		}
+		respond(w, &resp)
 
 	case lsp.MethodShutdown:
 		srv.exiting = true
