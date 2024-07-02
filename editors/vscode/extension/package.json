@@ -14,7 +14,8 @@
   "main": "./out/extension.js",
   "configurationDefaults": {
     "wflang": {
-      "editor.semanticHighlighting.enabled": true
+      "editor.semanticHighlighting.enabled": true,
+      "augmentsSyntaxTokens": false
     }
   },
   "contributes": {
@@ -29,6 +30,13 @@
           ".wflang"
         ],
         "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "wflang",
+        "scopeName": "source.wflang",
+        "path": "./syntaxes/wflang.tmLanguage.json"
       }
     ],
     "snippets": [

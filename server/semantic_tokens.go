@@ -43,7 +43,7 @@ func encodeToken(tk token.Token) (token []lsp.Uint, found bool) {
 	}
 	out[3] = lsp.Uint(tkType)
 
-	out[0] = lsp.Uint(tk.StartPos.Line + 1) // I think vscode lines start at 1, not 0
+	out[0] = lsp.Uint(tk.StartPos.Line)
 	out[1] = lsp.Uint(tk.StartPos.Col)
 	out[2] = lsp.Uint(tk.Len)
 

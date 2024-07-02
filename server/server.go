@@ -79,7 +79,12 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 	}
 
 	requestId := getRequestID(content)
-	slog.Info("Recieved", "method", method, "id", requestId)
+	slog.Info("Recieved", "method", method, "id", func() string {
+		if requestId == nil {
+			return ""
+		}
+		return fmt.Sprint(*requestId)
+	}())
 	slog.Debug(fmt.Sprintf("Content=%s", string(content)))
 
 	if !srv.initialized && method != lsp.MethodInitialize && method != lsp.MethodInitialized {
@@ -132,7 +137,8 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 		resp := lsp.ResponseSemanticTokensFull{
 			Response: jrpc2.NewResponse(requestId, nil),
 			Result: lsp.SemanticTokens{
-				Data: srv.getSemanticTokens(),
+				//	{ line, startChar, length, tokenType, tokenModifiers }
+				Data: []lsp.Uint{0, 0, 3, lsp.Uint(semIndexKeyword), 0},
 			},
 		}
 		respond(w, &resp)

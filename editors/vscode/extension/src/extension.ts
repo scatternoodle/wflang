@@ -1,4 +1,12 @@
-import { ExtensionContext, commands, window, workspace } from "vscode";
+import { on } from "events";
+import {
+  ExtensionContext,
+  LogLevel,
+  SemanticTokens,
+  commands,
+  window,
+  workspace,
+} from "vscode";
 
 import {
   LanguageClient,
@@ -20,6 +28,10 @@ const clientOptions: LanguageClientOptions = {
     fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
   },
   traceOutputChannel: outputChannel,
+  outputChannel: outputChannel,
+  initializationOptions: {
+    LogLevel: "verbose",
+  },
 };
 
 const serverOptions: ServerOptions = {

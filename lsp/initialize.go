@@ -30,12 +30,16 @@ type InitializeRequestParams struct {
 	RootURI *string `json:"rootUri"`
 
 	// User provided init options(?) TODO - what does this mean in practice?
-	InitializationOptions []any              `json:"initializationOptions,omitempty"`
-	Capabilities          ClientCapabilities `json:"capabilities"`
+	InitializationOptions ClientInitializationOptions `json:"initializationOptions,omitempty"`
+	Capabilities          ClientCapabilities          `json:"capabilities"`
 
 	// execution trace verbosity. Permitted values:
 	//   "off" | "messages" | "verbose"
 	Trace string `json:"trace"`
+}
+
+type ClientInitializationOptions struct {
+	LogLevel string `json:"logLevel,omitempty"`
 }
 
 type AppInfo struct {
