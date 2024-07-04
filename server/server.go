@@ -35,7 +35,14 @@ type Server struct {
 func serverCapabilities() lsp.ServerCapabilities {
 	return lsp.ServerCapabilities{
 		TextDocumentSync: lsp.SyncFull,
-		// SemanticTokensProvider: semanticTokensProvider(),
+		SemanticTokensProvider: lsp.SemanticTokensOptions{
+			Legend: lsp.TokenTypesLegend{
+				TokenTypes:     []string{"var"},
+				TokenModifiers: []string{},
+			},
+			Range: false,
+			Full:  true,
+		},
 	}
 }
 
@@ -122,6 +129,21 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 			return
 		}
 		srv.updateDocument(req.Params.TextDocument)
+
+	case lsp.MethodSemanticTokensFull:
+		var req lsp.SemanticTokensRequest
+		if err := json.Unmarshal(content, &req); err != nil {
+			slog.Error("Can't marshal request", "error", err)
+			return
+		}
+
+		resp := lsp.SemanticTokensResponse{
+			Response: jrpc2.NewResponse(requestId, nil),
+			Result: lsp.SemanticTokensResult{
+				Data: []uint{},
+			},
+		}
+		respond(w, &resp)
 
 	case lsp.MethodShutdown:
 		srv.exiting = true
