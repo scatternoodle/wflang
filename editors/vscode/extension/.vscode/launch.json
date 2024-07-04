@@ -6,14 +6,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug WFLang",
+      "name": "Run Extension",
       "type": "extensionHost",
       "request": "launch",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
       "outFiles": ["${workspaceFolder}/out/**/*.js"],
-      "preLaunchTask": "${defaultBuildTask}",
-      "autoAttachChildProcesses": true,
-      "trace": true
+      "preLaunchTask": "${defaultBuildTask}"
     }
   ]
 }

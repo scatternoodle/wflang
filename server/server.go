@@ -34,8 +34,8 @@ type Server struct {
 
 func serverCapabilities() lsp.ServerCapabilities {
 	return lsp.ServerCapabilities{
-		TextDocumentSync:       lsp.SyncFull,
-		SemanticTokensProvider: semanticTokensProvider(),
+		TextDocumentSync: lsp.SyncFull,
+		// SemanticTokensProvider: semanticTokensProvider(),
 	}
 }
 
@@ -122,26 +122,6 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 			return
 		}
 		srv.updateDocument(req.Params.TextDocument)
-
-	case lsp.MethodSemanticTokensFull:
-		var req lsp.RequestSemanticTokensFull
-		if err := json.Unmarshal(content, &req); err != nil {
-			slog.Error("Can't marshall request", "error", err)
-			return
-		}
-		if req.ID == nil {
-			slog.Error("Request ID is nil")
-			return
-		}
-
-		resp := lsp.ResponseSemanticTokensFull{
-			Response: jrpc2.NewResponse(requestId, nil),
-			Result: lsp.SemanticTokens{
-				//	{ line, startChar, length, tokenType, tokenModifiers }
-				Data: []lsp.Uint{0, 0, 3, lsp.Uint(semIndexKeyword), 0},
-			},
-		}
-		respond(w, &resp)
 
 	case lsp.MethodShutdown:
 		srv.exiting = true

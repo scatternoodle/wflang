@@ -1,6 +1,7 @@
 make the server send back semantic tokens:
-This is still not working and I don't know why. Try doing semantic tokesn on the toylsp project, see if it
+>>> This is still not working and I don't know why. Try doing semantic tokens on the toylsp project, see if it
 works there?
+>>> YES IT DOES. WHY... WHY DID IT WORK FOR ME THERE?
 
 - store last lexer/parser statements / tokens in server object
     uh oh, I don't think we actually store all of our tokens... we might need to just have a simple array of those in the AST.

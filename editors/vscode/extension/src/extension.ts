@@ -15,8 +15,14 @@ import {
   ServerOptions,
 } from "vscode-languageclient/node";
 
+console.log(process.cwd());
+
 const serverPath = "editors/vscode/extension/server/bin/wflang";
+// const serverPath = "server/bin/wflang";
+
 const logPath = "editors/vscode/extension/server/logs/server.log";
+// const logPath = "server/logs/server.log";
+
 const selector = { pattern: "**/*.wflang", scheme: "file", language: "wflang" }; // TODO - change to wflang once implemented
 
 let client: LanguageClient;

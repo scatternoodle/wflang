@@ -17,6 +17,6 @@ type NotificationDidOpenParams struct {
 
 type TextDocumentItem struct {
 	URI     string `json:"uri"`
-	Version Int    `json:"version"`
+	Version int    `json:"version"`
 	Text    string `json:"text"`
 }
