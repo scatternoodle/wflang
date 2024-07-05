@@ -37,7 +37,7 @@ func serverCapabilities() lsp.ServerCapabilities {
 		TextDocumentSync: lsp.SyncFull,
 		SemanticTokensProvider: lsp.SemanticTokensOptions{
 			Legend: lsp.TokenTypesLegend{
-				TokenTypes:     []string{"var"},
+				TokenTypes:     []string{"keyword"},
 				TokenModifiers: []string{},
 			},
 			Range: false,
@@ -140,7 +140,7 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 		resp := lsp.SemanticTokensResponse{
 			Response: jrpc2.NewResponse(requestId, nil),
 			Result: lsp.SemanticTokensResult{
-				Data: []uint{},
+				Data: []uint{0, 0, 3, 0, 0},
 			},
 		}
 		respond(w, &resp)

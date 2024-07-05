@@ -6,6 +6,9 @@ works there?
     No frills or cleverness.
 >>> Next, let's look at a yo code generation of another language in a different project - also maybe change this to use
     plaintext instead of the new wflang language - this could well be an issue with the language configuration in vscode.
+>>> No difference. Let's check some other stuff next:
+    > This vscode extension - they also create a language and support it with semantic tokens https://github.com/kaby76/uni-vscode/blob/main/VsCode/package.json
+    > Language and server versions in package.json - are they older in wflang? Semantic tokens weren't always supported...
 
 - store last lexer/parser statements / tokens in server object
     uh oh, I don't think we actually store all of our tokens... we might need to just have a simple array of those in the AST.

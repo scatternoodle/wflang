@@ -55,6 +55,7 @@ const serverOptions: ServerOptions = {
 
 export function activate(context: ExtensionContext) {
   client = new LanguageClient("wflsrv", serverOptions, clientOptions);
+  // client.registerProposedFeatures();
   client.start();
 }
 
