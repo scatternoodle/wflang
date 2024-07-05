@@ -1,12 +1,4 @@
-import { on } from "events";
-import {
-  ExtensionContext,
-  LogLevel,
-  SemanticTokens,
-  commands,
-  window,
-  workspace,
-} from "vscode";
+import { ExtensionContext, window, workspace } from "vscode";
 
 import {
   LanguageClient,
