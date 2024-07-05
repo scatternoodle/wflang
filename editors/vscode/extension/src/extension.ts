@@ -18,12 +18,9 @@ import {
 console.log(process.cwd());
 
 const serverPath = "editors/vscode/extension/server/bin/wflang";
-// const serverPath = "server/bin/wflang";
-
 const logPath = "editors/vscode/extension/server/logs/server.log";
-// const logPath = "server/logs/server.log";
 
-const selector = { pattern: "**/*.wflang", scheme: "file", language: "wflang" }; // TODO - change to wflang once implemented
+const selector = { pattern: "**/*.wflang", scheme: "file", language: "wflang" };
 
 let client: LanguageClient;
 
@@ -55,7 +52,6 @@ const serverOptions: ServerOptions = {
 
 export function activate(context: ExtensionContext) {
   client = new LanguageClient("wflsrv", serverOptions, clientOptions);
-  // client.registerProposedFeatures();
   client.start();
 }
 
