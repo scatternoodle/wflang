@@ -30,6 +30,7 @@ type Server struct {
 	initialized  bool // before this is set true, we only accept requests with initialize method
 	exiting      bool // set after an shutdown request is received, awaiting exit request
 	parser       *parser.Parser
+	*tokenEncoder
 }
 
 func serverCapabilities() lsp.ServerCapabilities {
@@ -140,7 +141,7 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 		resp := lsp.SemanticTokensResponse{
 			Response: jrpc2.NewResponse(requestId, nil),
 			Result: lsp.SemanticTokensResult{
-				Data: []uint{0, 0, 3, 0, 0},
+				Data: srv.semTokens,
 			},
 		}
 		respond(w, &resp)
