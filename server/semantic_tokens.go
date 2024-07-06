@@ -39,19 +39,34 @@ import (
 
 const (
 	semKeyword = "keyword"
+	semComment = "comment"
 )
+
+func tokenTypes() []string {
+	return []string{
+		semKeyword,
+		semComment,
+	}
+}
+
+func tokenModifiers() []string {
+	return []string{}
+}
+
+func tokenMap() map[token.Type]string {
+	return map[token.Type]string{
+		token.T_BUILTIN:       semKeyword,
+		token.T_VAR:           semKeyword,
+		token.T_COMMENT_BLOCK: semComment,
+		token.T_COMMENT_LINE:  semComment,
+	}
+}
 
 func newTokenEncoder(tokens []token.Token) *tokenEncoder {
 	slog.Debug("newTokenEncoder called with", "tokens", tokens)
 	e := &tokenEncoder{
-		types: []string{
-			semKeyword,
-		},
-		typeMap: map[token.Type]string{
-			token.T_BUILTIN: semKeyword,
-			token.T_VAR:     semKeyword,
-		},
-		semTokens: []uint{},
+		types:   tokenTypes(),
+		typeMap: tokenMap(),
 	}
 	e.encode(tokens)
 	return e

@@ -50,8 +50,8 @@ func serverCapabilities() lsp.ServerCapabilities {
 		TextDocumentSync: lsp.SyncFull,
 		SemanticTokensProvider: lsp.SemanticTokensOptions{
 			Legend: lsp.TokenTypesLegend{
-				TokenTypes:     []string{"keyword"},
-				TokenModifiers: []string{},
+				TokenTypes:     tokenTypes(),
+				TokenModifiers: tokenModifiers(),
 			},
 			Range: false,
 			Full:  true,

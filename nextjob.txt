@@ -1,7 +1,6 @@
 
 TASK AT HAND...
-
--- implement deltas for semantic token encoding
+- semantic token encoding - line termination (needed for at least block comments)
 - add types, and map them to lexer token types
 
 

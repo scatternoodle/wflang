@@ -22,7 +22,7 @@ func (srv *Server) handleInitializeRequest(w io.Writer, c []byte, id *int) {
 	respond(w, srv.initialize(id))
 }
 
-func (srv *Server) handleInitializedNotification(w io.Writer, c []byte, id *int) {
+func (srv *Server) handleInitializedNotification(_ io.Writer, _ []byte, _ *int) {
 	srv.initialized = true
 }
 
