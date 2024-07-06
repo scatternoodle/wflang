@@ -106,7 +106,7 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 	slog.Debug(fmt.Sprintf("Content=%s", string(content)))
 
 	if !srv.initialized && method != lsp.MethodInitialize && method != lsp.MethodInitialized {
-		respondError(w, requestId, int(lsp.ERRCODE_SERVER_NOT_INITIALIZED), "server not yet initialized", nil)
+		respondError(w, requestId, lsp.ERRCODE_SERVER_NOT_INITIALIZED, "server not yet initialized", nil)
 		return
 	}
 
