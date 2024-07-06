@@ -11,10 +11,6 @@ Now that semantic tokens are working...
 
 POSSIBLE REFACTORS (we're mulling these over on a background thread)...
 
-When I have enough message handlers implemented, I think we could make a handlerfunc type for them. How many is enough?
-I think I'll know when I know, but I suspect more than 3 is sensible, because I'm less experienced an so my predictions
-won't be accurate.
-
 Do we need to think about making our server handle requests and responses concurrently (most probably).
 
 Better logger. I think this might become apparent when we implement trace responses.
