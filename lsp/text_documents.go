@@ -2,8 +2,19 @@ package lsp
 
 import "github.com/scatternoodle/wflang/jrpc2"
 
+type TextDocumentItem struct {
+	URI     string `json:"uri"`
+	Version int    `json:"version"`
+	Text    string `json:"text"`
+}
+
 type TextDocumentIdentifier struct {
 	URI string `json:"uri"`
+}
+
+type VersionedTextDocumentIdentifier struct {
+	TextDocumentIdentifier
+	Version int `json:"version"`
 }
 
 type NotificationDidOpen struct {
@@ -15,8 +26,16 @@ type NotificationDidOpenParams struct {
 	TextDocument TextDocumentItem `json:"textDocument"`
 }
 
-type TextDocumentItem struct {
-	URI     string `json:"uri"`
-	Version int    `json:"version"`
-	Text    string `json:"text"`
+type NotificationDidChange struct {
+	jrpc2.Notification
+	Params NotificationDidChangeParams `json:"params"`
+}
+
+type NotificationDidChangeParams struct {
+	TextDocument   VersionedTextDocumentIdentifier  `json:"textDocument"`
+	ContentChanges []TextDocumentContentChangeEvent `json:"contentChanges"`
+}
+
+type TextDocumentContentChangeEvent struct {
+	Text string `json:"text"`
 }

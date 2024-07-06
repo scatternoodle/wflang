@@ -57,6 +57,26 @@ func (srv *Server) handleDocDidOpenNotification(w io.Writer, c []byte, id *int) 
 	srv.updateDocument(r.Params.TextDocument)
 }
 
+func (srv *Server) handleDocDidChangeNotification(w io.Writer, c []byte, id *int) {
+	var r lsp.NotificationDidChange
+	if !handleParseContent(&r, w, c, id) {
+		return
+	}
+
+	// we will update document with the last item in the changes array - we're only
+	// only interested in the latest state of the document as we do not support
+	// incremental updates.
+	changes := r.Params.ContentChanges
+	lastChange := changes[len(changes)-1]
+
+	srv.updateDocument(
+		lsp.TextDocumentItem{
+			URI:     r.Params.TextDocument.URI,
+			Version: r.Params.TextDocument.Version,
+			Text:    lastChange.Text,
+		})
+}
+
 func (srv *Server) handleSemanticTokensFullRequest(w io.Writer, c []byte, id *int) {
 	var r lsp.SemanticTokensRequest
 	if !handleAssertID(w, id) || !handleParseContent(&r, w, c, id) {

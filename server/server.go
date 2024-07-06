@@ -25,6 +25,7 @@ func New(name, version *string) *Server {
 		lsp.MethodInitialize:         srv.handleInitializeRequest,
 		lsp.MethodInitialized:        srv.handleInitializedNotification,
 		lsp.MethodDocDidOpen:         srv.handleDocDidOpenNotification,
+		lsp.MethodDocDidChange:       srv.handleDocDidChangeNotification,
 		lsp.MethodSemanticTokensFull: srv.handleSemanticTokensFullRequest,
 		lsp.MethodShutdown:           srv.handleShutdownRequest,
 		lsp.MethodExit:               srv.handleExitNotification,
