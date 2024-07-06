@@ -67,6 +67,13 @@ type tokenEncoder struct {
 }
 
 func (t *tokenEncoder) encode(parserTokens []token.Token) {
+	var (
+		prvLine, prvCol     uint
+		crrLine, crrCol     uint
+		deltaLine, deltaCol uint
+	)
+	semTok := make([]uint, 5)
+
 	for _, token := range parserTokens {
 		typeStr, ok := t.typeMap[token.Type]
 		if !ok {
@@ -76,24 +83,28 @@ func (t *tokenEncoder) encode(parserTokens []token.Token) {
 		idx := slices.Index(t.types, typeStr)
 		if idx < 0 {
 			slog.Error(
-				"Type string in tokenEncoder typeMap but not in registered types array", "typeStr", typeStr, "token.Type", token.Type)
+				"Type string in tokenEncoder typeMap but not in registered types array.",
+				"typeStr", typeStr,
+				"token.Type", token.Type)
 			continue
 		}
 
-		t.semTokens = append(t.semTokens, t.encodeToken(token, uint(idx))...)
-	}
-}
+		crrLine = uint(token.StartPos.Line)
+		crrCol = uint(token.StartPos.Col)
+		deltaLine = crrLine - prvLine
+		deltaCol = crrCol
+		if crrLine == prvLine {
+			deltaCol -= prvCol
+		}
+		prvLine = crrLine
+		prvCol = crrCol
 
-// encodeToken takes a token.Token and returns it as an token consists of 5 uints:
-// array of uints encoded according to the LSP semanticToken structure:
-//
-//	{ line, startChar, length, tokenType, tokenModifiers }
-func (t *tokenEncoder) encodeToken(tok token.Token, tType uint) []uint {
-	return []uint{
-		uint(tok.StartPos.Line),
-		uint(tok.StartPos.Col),
-		uint(tok.Len),
-		tType,
-		0,
+		semTok[0] = deltaLine
+		semTok[1] = deltaCol
+		semTok[2] = uint(token.Len)
+		semTok[3] = uint(idx)
+		semTok[4] = 0 // not currently handling modifier bitmasks
+
+		t.semTokens = append(t.semTokens, semTok...)
 	}
 }

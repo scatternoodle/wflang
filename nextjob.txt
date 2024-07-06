@@ -1,11 +1,7 @@
 
 TASK AT HAND...
 
-Now that semantic tokens are working...
-- we're handling documentDidOpen but not documentDidChange - let's add handling for that next.
--- first iteration without relative positions
--- second iteration with relative positions
--- do unit tests for encoding
+-- implement deltas for semantic token encoding
 - add types, and map them to lexer token types
 
 
