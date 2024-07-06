@@ -68,10 +68,27 @@ func tokenModifiers() []string {
 
 func tokenMap() map[token.Type]string {
 	return map[token.Type]string{
-		token.T_BUILTIN:       semFunction,
-		token.T_VAR:           semKeyword,
 		token.T_COMMENT_BLOCK: semComment,
 		token.T_COMMENT_LINE:  semComment,
+
+		token.T_NUM:    semNumber,
+		token.T_STRING: semString,
+
+		token.T_BUILTIN: semFunction,
+
+		token.T_VAR:   semKeyword,
+		token.T_OVER:  semKeyword,
+		token.T_WHERE: semKeyword,
+		token.T_ORDER: semKeyword,
+		token.T_BY:    semKeyword,
+		token.T_ASC:   semKeyword,
+		token.T_DESC:  semKeyword,
+		token.T_ALIAS: semKeyword,
+		token.T_IN:    semKeyword,
+		token.T_SET:   semKeyword,
+		token.T_NULL:  semKeyword,
+		token.T_TRUE:  semKeyword,
+		token.T_FALSE: semKeyword,
 	}
 }
 
