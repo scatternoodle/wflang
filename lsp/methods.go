@@ -9,8 +9,10 @@ const (
 	MethodExit        = "exit"
 
 	// Document Sync
+
 	MethodDocDidOpen   = "textDocument/didOpen"
 	MethodDocDidChange = "textDocument/didChange"
+	MethodDocDidSave   = "textDocument/didSave"
 
 	// Semantic Token Requests
 

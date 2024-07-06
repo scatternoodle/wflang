@@ -77,6 +77,10 @@ func (srv *Server) handleDocDidChangeNotification(w io.Writer, c []byte, id *int
 		})
 }
 
+func (srv *Server) handleDocDidSaveNotification(w io.Writer, c []byte, id *int) {
+	// currently no-op
+}
+
 func (srv *Server) handleSemanticTokensFullRequest(w io.Writer, c []byte, id *int) {
 	var r lsp.SemanticTokensRequest
 	if !handleAssertID(w, id) || !handleParseContent(&r, w, c, id) {
