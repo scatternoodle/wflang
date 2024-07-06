@@ -10,42 +10,55 @@ import (
 // See Microsoft LSP spec for detailed explanation on semantic token encoding.
 // https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_semanticTokens
 
-// All LSP semantic token types:
-//  type = 'type',
-// 	class = 'class',
-// 	enum = 'enum',
-// 	interface = 'interface',
-// 	struct = 'struct',
-// 	typeParameter = 'typeParameter',
-// 	parameter = 'parameter',
-// 	variable = 'variable',
-// 	property = 'property',
-// 	enumMember = 'enumMember',
-// 	event = 'event',
-// 	function = 'function',
-// 	method = 'method',
-// 	macro = 'macro',
-// 	keyword = 'keyword',
-// 	modifier = 'modifier',
-// 	comment = 'comment',
-// 	string = 'string',
-// 	number = 'number',
-// 	regexp = 'regexp',
-// 	operator = 'operator',
-// 	/**
-// 	 * @since 3.17.0
-// 	 */
-// 	decorator = 'decorator'
-
 const (
-	semKeyword = "keyword"
-	semComment = "comment"
+	// semType string = "type"
+	// semClass string = "class"
+	// semEnum string = "enum"
+	// semInterface string = "interface"
+	// semStruct string = "struct"
+	// semTypeParameter string = "typeParameter"
+	// semParameter string = "parameter"
+	semVariable   string = "variable"
+	semProperty   string = "property"
+	semEnumMember string = "enumMember"
+	// semEvent string = "event"
+	semFunction string = "function"
+	semMethod   string = "method"
+	semMacro    string = "macro"
+	semKeyword  string = "keyword"
+	// semModifier string = "modifier"
+	semComment string = "comment"
+	semString  string = "string"
+	semNumber  string = "number"
+	// semRegexp string = "regexp"
+	semOperator  string = "operator"
+	semDecorator string = "decorator"
 )
 
 func tokenTypes() []string {
 	return []string{
+		// semType,
+		// semClass,
+		// semEnum,
+		// semInterface,
+		// semStruct,
+		// semTypeParameter,
+		// semParameter,
+		semVariable,
+		semProperty,
+		semEnumMember,
+		// semEvent,
+		semFunction,
+		semMethod,
+		semMacro,
 		semKeyword,
+		// semModifier,
 		semComment,
+		semString,
+		semNumber,
+		// semRegexp,
+		semOperator,
+		semDecorator,
 	}
 }
 
@@ -55,7 +68,7 @@ func tokenModifiers() []string {
 
 func tokenMap() map[token.Type]string {
 	return map[token.Type]string{
-		token.T_BUILTIN:       semKeyword,
+		token.T_BUILTIN:       semFunction,
 		token.T_VAR:           semKeyword,
 		token.T_COMMENT_BLOCK: semComment,
 		token.T_COMMENT_LINE:  semComment,
