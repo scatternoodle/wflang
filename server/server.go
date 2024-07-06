@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
-	"os"
 
 	"github.com/scatternoodle/wflang/jrpc2"
 	"github.com/scatternoodle/wflang/lang/parser"
@@ -14,13 +13,23 @@ import (
 )
 
 func New(name, version *string) *Server {
-	return &Server{
+	srv := &Server{
 		name:         name,
 		version:      version,
 		initialized:  false,
 		capabilities: serverCapabilities(),
 		parser:       nil,
 	}
+
+	srv.handlers = map[string]handlerFunc{
+		lsp.MethodInitialize:         srv.handleInitializeRequest,
+		lsp.MethodInitialized:        srv.handleInitializedNotification,
+		lsp.MethodDocDidOpen:         srv.handleDocDidOpenNotification,
+		lsp.MethodSemanticTokensFull: srv.handleSemanticTokensFullRequest,
+		lsp.MethodShutdown:           srv.handleShutdownRequest,
+		lsp.MethodExit:               srv.handleExitNotification,
+	}
+	return srv
 }
 
 type Server struct {
@@ -30,6 +39,7 @@ type Server struct {
 	initialized  bool // before this is set true, we only accept requests with initialize method
 	exiting      bool // set after an shutdown request is received, awaiting exit request
 	parser       *parser.Parser
+	handlers     map[string]handlerFunc
 	*tokenEncoder
 }
 
@@ -47,7 +57,7 @@ func serverCapabilities() lsp.ServerCapabilities {
 	}
 }
 
-func (srv *Server) initialize(id *int32) lsp.InitializeResponse {
+func (srv *Server) initialize(id *int) lsp.InitializeResponse {
 	var srvInfo *lsp.AppInfo
 	if srv.name == nil {
 		srvInfo = nil
@@ -96,7 +106,7 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 	slog.Debug(fmt.Sprintf("Content=%s", string(content)))
 
 	if !srv.initialized && method != lsp.MethodInitialize && method != lsp.MethodInitialized {
-		respondError(w, requestId, lsp.ERRCODE_SERVER_NOT_INITIALIZED, "server not yet initialized", nil)
+		respondError(w, requestId, int(lsp.ERRCODE_SERVER_NOT_INITIALIZED), "server not yet initialized", nil)
 		return
 	}
 
@@ -105,70 +115,12 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 		return
 	}
 
-	switch method {
-	case lsp.MethodInitialize:
-		var initReq lsp.InitializeRequest
-		if err := json.Unmarshal(content, &initReq); err != nil {
-			slog.Error("Can't marshal request", "error", err)
-			return
-		}
-		if initReq.ID == nil {
-			slog.Error("Request ID is nil")
-			return
-		}
-
-		respond(w, srv.initialize(initReq.ID))
-		slog.Info("InitializeResponse sent")
-
-	case lsp.MethodInitialized:
-		srv.initialized = true
-
-	case lsp.MethodDocDidOpen:
-		var req lsp.NotificationDidOpen
-		if err := json.Unmarshal(content, &req); err != nil {
-			slog.Error("Can't marshal request", "error", err)
-			return
-		}
-		srv.updateDocument(req.Params.TextDocument)
-
-	case lsp.MethodSemanticTokensFull:
-		var req lsp.SemanticTokensRequest
-		if err := json.Unmarshal(content, &req); err != nil {
-			slog.Error("Can't marshal request", "error", err)
-			return
-		}
-
-		resp := lsp.SemanticTokensResponse{
-			Response: jrpc2.NewResponse(requestId, nil),
-			Result: lsp.SemanticTokensResult{
-				Data: srv.semTokens,
-			},
-		}
-		respond(w, &resp)
-
-	case lsp.MethodShutdown:
-		srv.exiting = true
-		resp := struct {
-			jrpc2.Response
-			Result any `json:"result"`
-		}{
-			Response: jrpc2.NewResponse(requestId, nil),
-			Result:   nil,
-		}
-		respond(w, &resp)
-
-	case lsp.MethodExit:
-		errCode := 0
-		if !srv.exiting {
-			errCode = 1
-		}
-		slog.Info("Server exiting", "code", errCode)
-		os.Exit(errCode)
-
-	default:
+	handler, ok := srv.handlers[method]
+	if !ok {
 		slog.Warn("Unhandled method", "method", method, "id", requestId)
+		return
 	}
-
+	handler(w, content, requestId)
 }
 
 func respond(w io.Writer, v any) {
@@ -182,7 +134,7 @@ func respond(w io.Writer, v any) {
 	slog.Debug(fmt.Sprintf("Wrote content=%s", string(response)))
 }
 
-func respondError(w io.Writer, id *int32, code int32, msg string, dat any) {
+func respondError(w io.Writer, id *int, code int, msg string, dat any) {
 	rErr := jrpc2.ResponseError{
 		Code:    code,
 		Message: msg,
@@ -194,12 +146,33 @@ func respondError(w io.Writer, id *int32, code int32, msg string, dat any) {
 
 // getRequestID returns the Request ID from a content byte slice. Returns null if
 // unable to resolve the Request ID.
-func getRequestID(b []byte) *int32 {
+func getRequestID(b []byte) *int {
 	var idObj struct {
-		ID *int32 `json:"id,omitempty"` // We want to be pretty permissive here as we can just return null if we can't find
+		ID *int `json:"id,omitempty"` // We want to be pretty permissive here as we can just return null if we can't find
 	} // the ID.
 	if err := json.Unmarshal(b, &idObj); err != nil {
 		return nil
 	}
 	return idObj.ID
+}
+
+// Unmarshals an LSP request/notification message into the given interface. Returns
+// true if successful, else responds to the message with an error before returning
+// false.
+func handleParseContent(v any, w io.Writer, c []byte, id *int) bool {
+	if err := json.Unmarshal(c, v); err != nil {
+		respondError(w, id, jrpc2.ERRCODE_PARSE_ERROR, "parse error", err)
+		return false
+	}
+	return true
+}
+
+// handleAssertID returns true if the given id is non-nil, or else response with
+// the appropriate error and returns false.
+func handleAssertID(w io.Writer, id *int) bool {
+	if id == nil {
+		respondError(w, id, jrpc2.ERRCODE_INVALID_REQUEST, "request ID cannot be nil", nil)
+		return false
+	}
+	return true
 }
