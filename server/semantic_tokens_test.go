@@ -37,6 +37,14 @@ func TestEncode(t *testing.T) {
 				0, 2, 15, uint(slices.Index(tokTypes, semString)), 0, // "hello, world!"
 			},
 		},
+		{
+			name:  "multiline blockcomment",
+			input: "/*1\n2*/",
+			want: []uint{
+				0, 0, 3, uint(slices.Index(tokTypes, semComment)), 0, // /*1
+				1, 0, 3, uint(slices.Index(tokTypes, semComment)), 0, // 2*/
+			},
+		},
 	}
 
 	for _, tt := range tests {
