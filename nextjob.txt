@@ -1,6 +1,5 @@
 
 TASK AT HAND...
-- column delta looks broken (see what happens with strings) - let's get better encoder tests written and sort that out.
 - semantic token encoding - line termination (needed for at least block comments)
 - add types, and map them to lexer token types
 

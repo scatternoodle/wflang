@@ -2,6 +2,7 @@ package server
 
 import (
 	"reflect"
+	"slices"
 	"testing"
 
 	"github.com/scatternoodle/wflang/lang/lexer"
@@ -9,23 +10,43 @@ import (
 )
 
 func TestEncode(t *testing.T) {
-	input :=
-		`var x = 5;
-var y = 10;
-var z = x / y;
-z * x`
+	tokTypes := tokenTypes()
 
-	parser := parser.New(lexer.New(input))
-	encoder := newTokenEncoder(parser.Tokens())
-
-	// { deltaLine: 2, deltaStartChar: 5, length: 3, tokenType: 0, tokenModifiers: 3 }
-	want := []uint{
-		0, 0, 3, 0, 0,
-		1, 0, 3, 0, 0,
-		1, 0, 3, 0, 0,
+	tests := []struct {
+		name  string
+		input string
+		want  []uint
+	}{
+		{
+			name:  "simple",
+			input: `var x = 5;`,
+			want: []uint{
+				0, 0, 3, uint(slices.Index(tokTypes, semKeyword)), 0, // var
+				0, 4, 1, uint(slices.Index(tokTypes, semVariable)), 0, // x
+				0, 2, 1, uint(slices.Index(tokTypes, semOperator)), 0, // =
+				0, 2, 1, uint(slices.Index(tokTypes, semNumber)), 0, // 5
+			},
+		},
+		{
+			name:  "string",
+			input: `var x = "hello, world!";`,
+			want: []uint{
+				0, 0, 3, uint(slices.Index(tokTypes, semKeyword)), 0, // var
+				0, 4, 1, uint(slices.Index(tokTypes, semVariable)), 0, // x
+				0, 2, 1, uint(slices.Index(tokTypes, semOperator)), 0, // =
+				0, 2, 15, uint(slices.Index(tokTypes, semString)), 0, // "hello, world!"
+			},
+		},
 	}
 
-	if !reflect.DeepEqual(encoder.semTokens, want) {
-		t.Fatalf("have %v, want %v", encoder.semTokens, want)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			parser := parser.New(lexer.New(tt.input))
+			encoder := newTokenEncoder(parser.Tokens())
+
+			if !reflect.DeepEqual(encoder.semTokens, tt.want) {
+				t.Fatalf("have %v, want %v", encoder.semTokens, tt.want)
+			}
+		})
 	}
 }

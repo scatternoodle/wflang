@@ -73,6 +73,7 @@ func tokenMap() map[token.Type]string {
 
 		token.T_NUM:    semNumber,
 		token.T_STRING: semString,
+		token.T_IDENT:  semVariable,
 
 		token.T_BUILTIN: semFunction,
 
@@ -89,6 +90,21 @@ func tokenMap() map[token.Type]string {
 		token.T_NULL:  semKeyword,
 		token.T_TRUE:  semKeyword,
 		token.T_FALSE: semKeyword,
+
+		token.T_EQ:       semOperator,
+		token.T_PLUS:     semOperator,
+		token.T_MINUS:    semOperator,
+		token.T_BANG:     semOperator,
+		token.T_NEQ:      semOperator,
+		token.T_ASTERISK: semOperator,
+		token.T_SLASH:    semOperator,
+		token.T_MODULO:   semOperator,
+		token.T_LT:       semOperator,
+		token.T_GT:       semOperator,
+		token.T_LTE:      semOperator,
+		token.T_GTE:      semOperator,
+		token.T_AND:      semOperator,
+		token.T_OR:       semOperator,
 	}
 }
 

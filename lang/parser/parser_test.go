@@ -213,7 +213,7 @@ func TestStringLiteral(t *testing.T) {
 	_, AST := testRunParser(t, input, 1, false)
 
 	exp := testExpressionStatement(t, AST.Statements[0])
-	if !testLiteral(t, exp, "hello") {
+	if !testLiteral(t, exp, `"hello"`) {
 		return
 	}
 }
@@ -274,7 +274,7 @@ func TestMacroExpression(t *testing.T) {
 		ident  string
 		params []any
 	}{
-		{"good, just literal params", `$TEST(42, "foo", true)$`, "TEST", []any{42, "foo", true}},
+		{"good, just literal params", `$TEST(42, "foo", true)$`, "TEST", []any{42, `"foo"`, true}},
 	}
 
 	for _, tt := range tests {
@@ -375,7 +375,7 @@ func TestParseInExpression(t *testing.T) {
 			t.Fatalf("left value = %s, want %s", left.Value, wantLeft)
 		}
 
-		want := []string{"WORKED", "OVERTIME", "ON_CALL"}
+		want := []string{`"WORKED"`, `"OVERTIME"`, `"ON_CALL"`}
 		if len(list.Strings) != len(want) {
 			t.Fatalf("len(list) = %d, want %d", len(list.Strings), len(want))
 		}

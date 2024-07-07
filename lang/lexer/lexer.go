@@ -270,14 +270,16 @@ func (l *Lexer) skipWhiteSpace() {
 // readString returns the string literal between two \" characters. Call this at
 // the first \"
 func (l *Lexer) readString() string {
-	start := l.pos + 1 // +1 because this is called from first '"' in the token.
+	start := l.pos
 	for {
 		l.advance()
-		if l.ch == '"' || l.ch == eof {
-			break
+		if l.ch == eof {
+			return l.input[start:l.pos]
+		}
+		if l.ch == '"' {
+			return l.input[start : l.pos+1]
 		}
 	}
-	return l.input[start:l.pos]
 }
 
 // readNumber is called on a digit, and reads until it reaches the end of the number.
