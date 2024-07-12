@@ -21,13 +21,15 @@ func New(input string) *Lexer {
 
 // Lexer is the font of all semantic tokens. Here be words.
 type Lexer struct {
-	input string // Holds the entire text context of the Lexer
-	pos   int    // Current position in input
-	next  int    // Next reading position (char after pos)
-	ch    byte   // The current character
-	line  int    // The current line
-	lPos  int    // The position within the current line
-	lines []int  // Slice holding the lengths of all lines. Updated whenever lexer advances
+	input     string     // Holds the entire text context of the Lexer
+	pos       int        // Current position in input
+	next      int        // Next reading position (char after pos)
+	ch        byte       // The current character
+	line      int        // The current line
+	lPos      int        // The position within the current line
+	lines     []int      // Slice holding the lengths of all lines. Updated whenever lexer advances
+	multiline bool       // True if lexer is currently processing a multiline structure e.g. block comments
+	multiType token.Type // The token type currently being processed if multiline is true
 }
 
 const eof byte = 0
@@ -36,6 +38,11 @@ const eof byte = 0
 // This is the primary way in which the Parser interfaces with the Lexer.
 func (l *Lexer) NextToken() token.Token {
 	var tokn token.Token
+
+	if l.multiline {
+		return l.processMultiline()
+	}
+
 	l.skipWhiteSpace()
 
 	switch l.ch {
@@ -232,8 +239,7 @@ func (l *Lexer) advance() {
 	}
 
 	// we increment length even if newline, because that's still technically a char on
-	// the current line. We may need to change this depending on how this impacts
-	// behaviour in the Language server / text editor
+	// the current line.
 	l.lines[l.line]++
 
 	if l.pos > 0 {
@@ -333,23 +339,29 @@ func (l *Lexer) readLineComment() string {
 }
 
 // readBlockComment advances from a '/*' opening symbol until it reaches the closing
-// '*/' symbol. Returns the full comment string, including the opening and
-// closing symbols. If EOF encountered, returns an empty string (considered a failure).
+// '*/' symbol or line break. A multiline block comment will need to be read for
+// each line separately.
 func (l *Lexer) readBlockComment() string {
 	start := l.pos
 	for {
 		if l.peek() == eof {
-			return "" // we may want to handle this more explicitly later
+			break
 		}
-
+		if l.peek() == '\n' {
+			l.multiline = true
+			l.multiType = token.T_COMMENT_BLOCK
+			break
+		}
 		l.advance()
 		if l.ch == '*' {
 			if l.peek() == '/' {
+				l.multiline = false
+				l.advance()
 				break
 			}
 		}
 	}
-	l.advance()
+	// l.advance()
 	return l.input[start : l.pos+1]
 }
 
@@ -361,6 +373,23 @@ func (l *Lexer) here() token.Pos {
 		Line: l.line,
 		Col:  l.lPos,
 	}
+}
+
+// processMultiline is an alternate lexing function for resolving tokens within multiline
+// structures such as multiblock comments and string literals that span multiple lines.
+func (l *Lexer) processMultiline() token.Token {
+	if l.ch == '\n' {
+		l.advance()
+	}
+
+	var lit string
+	if l.multiType == token.T_COMMENT_BLOCK {
+		lit = l.readBlockComment()
+	} else if l.multiType == token.T_STRING {
+		lit = l.readString()
+	}
+
+	return newToken(l, l.multiType, lit, l.here())
 }
 
 // Keyword returns the Type of s if it is a keyword, or T_IDENT if not.

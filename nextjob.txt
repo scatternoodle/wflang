@@ -1,5 +1,6 @@
 
 TASK AT HAND...
+
 - semantic token encoding - line termination (needed for at least block comments)
 - add types, and map them to lexer token types
 
