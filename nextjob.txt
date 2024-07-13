@@ -1,11 +1,10 @@
 
 TASK AT HAND...
 
-- multiline tokenization for string literals (see what was done for block comments)
-- add types, and map them to lexer token types
+- add types, and map them to lexer token types. We're now getting into static evaluation for the first time.
 
 
-POSSIBLE REFACTORS (we're mulling these over on a background thread)...
+POSSIBLE REFACTORS / IMPROVEMENTS (we're mulling these over on a background thread)...
 
 Do we need to think about making our server handle requests and responses concurrently (most probably).
 
