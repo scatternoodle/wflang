@@ -4,6 +4,7 @@
 package lexer
 
 import (
+	"log/slog"
 	"strings"
 
 	"github.com/scatternoodle/wflang/lang/builtins"
@@ -32,11 +33,26 @@ type Lexer struct {
 	multiType token.Type // The token type currently being processed if multiline is true
 }
 
+func (l *Lexer) logDebug() {
+	slog.Debug(
+		"Lexer state",
+		"pos", l.pos,
+		"next", l.next,
+		"ch", string(l.ch),
+		"line", l.line,
+		"lPos", l.lPos,
+		"lines", l.lines,
+		"multiline", l.multiline,
+		"multiType", l.multiType,
+	)
+}
+
 const eof byte = 0
 
 // NextToken advances the lexer until a token is completed, and returns that token.
 // This is the primary way in which the Parser interfaces with the Lexer.
 func (l *Lexer) NextToken() token.Token {
+	l.logDebug()
 	var tokn token.Token
 
 	if l.multiline {
@@ -389,6 +405,7 @@ func (l *Lexer) processMultiline() token.Token {
 		lit = l.readString()
 	}
 
+	l.advance()
 	return newToken(l, l.multiType, lit, l.here())
 }
 
