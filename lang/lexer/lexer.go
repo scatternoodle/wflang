@@ -297,7 +297,7 @@ func (l *Lexer) readString() string {
 	for {
 		l.advance()
 		if l.ch == eof {
-			return l.input[start:l.pos]
+			return l.input[start : l.pos-1]
 		}
 		if l.ch == '"' {
 			l.multiline = false
@@ -365,10 +365,11 @@ func (l *Lexer) readLineComment() string {
 // '*/' symbol or line break. A multiline block comment will need to be read for
 // each line separately.
 func (l *Lexer) readBlockComment() string {
+	slog.Debug("starting", "pos", l.pos, "ch", string(l.ch), "input len", len(l.input))
 	start := l.pos
 	for {
 		if l.peek() == eof {
-			break
+			return l.input[start:l.pos]
 		}
 		if l.peek() == '\n' {
 			l.multiline = true
@@ -384,7 +385,6 @@ func (l *Lexer) readBlockComment() string {
 			}
 		}
 	}
-	// l.advance()
 	return l.input[start : l.pos+1]
 }
 
@@ -404,8 +404,14 @@ func (l *Lexer) processMultiline() token.Token {
 	if l.ch == '\n' {
 		l.advance()
 	}
-	start := l.here()
+	if l.ch == eof {
+		tk := newToken(l, token.T_EOF, eof, l.here())
+		tk.Literal = ""
+		l.advance()
+		return tk
+	}
 
+	start := l.here()
 	var lit string
 	if l.multiType == token.T_COMMENT_BLOCK {
 		lit = l.readBlockComment()
