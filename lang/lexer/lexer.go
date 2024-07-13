@@ -293,13 +293,20 @@ func (l *Lexer) skipWhiteSpace() {
 // the first \"
 func (l *Lexer) readString() string {
 	start := l.pos
+
 	for {
 		l.advance()
 		if l.ch == eof {
 			return l.input[start:l.pos]
 		}
 		if l.ch == '"' {
+			l.multiline = false
 			return l.input[start : l.pos+1]
+		}
+		if l.ch == '\n' {
+			l.multiline = true
+			l.multiType = token.T_STRING
+			return l.input[start:l.pos]
 		}
 	}
 }
