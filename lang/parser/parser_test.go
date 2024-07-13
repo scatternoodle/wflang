@@ -188,16 +188,19 @@ func TestParseBlockComment(t *testing.T) {
 		end       token.Pos
 	}{
 		{0, "/* 1 */", token.Pos{Num: 0, Line: 0, Col: 0}, token.Pos{Num: 6, Line: 0, Col: 6}},
-		{1, "/* 2.1\n2.2 */", token.Pos{Num: 8, Line: 1, Col: 0}, token.Pos{Num: 20, Line: 2, Col: 5}},
+		{1, "/* 2.1", token.Pos{Num: 8, Line: 1, Col: 0}, token.Pos{Num: 13, Line: 1, Col: 5}},
+		{2, "2.2 */", token.Pos{Num: 15, Line: 2, Col: 0}, token.Pos{Num: 21, Line: 2, Col: 5}},
 	}
 
-	_, AST := testRunParser(t, input, 2, false)
+	_, AST := testRunParser(t, input, 3, false)
 	for i, tt := range tests {
 		stmt := AST.Statements[tt.stmtIndex]
 
 		cStmt := testhelp.AssertType[ast.BlockCommentStatement](t, stmt)
+		t.Logf("%+v\n", cStmt)
+
 		if cStmt.TokenLiteral() != tt.literal {
-			t.Fatalf("tests[%d] literal: have %s, want %s", i, stmt.TokenLiteral(), tt.literal)
+			t.Fatalf("tests[%d] literal: have %v, want %v", i, stmt.TokenLiteral(), tt.literal)
 		}
 		if cStmt.Token.StartPos != tt.start {
 			t.Fatalf("tests[%d] start position: have %s, want %s", i, cStmt.Token.StartPos.String(), tt.start.String())

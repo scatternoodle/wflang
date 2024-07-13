@@ -397,6 +397,7 @@ func (l *Lexer) processMultiline() token.Token {
 	if l.ch == '\n' {
 		l.advance()
 	}
+	start := l.here()
 
 	var lit string
 	if l.multiType == token.T_COMMENT_BLOCK {
@@ -406,7 +407,7 @@ func (l *Lexer) processMultiline() token.Token {
 	}
 
 	l.advance()
-	return newToken(l, l.multiType, lit, l.here())
+	return newToken(l, l.multiType, lit, start)
 }
 
 // Keyword returns the Type of s if it is a keyword, or T_IDENT if not.
