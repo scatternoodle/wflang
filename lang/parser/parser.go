@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/scatternoodle/wflang/lang/ast"
-	"github.com/scatternoodle/wflang/lang/builtins"
 	"github.com/scatternoodle/wflang/lang/lexer"
 	"github.com/scatternoodle/wflang/lang/token"
 )
@@ -114,13 +113,6 @@ func (p *Parser) advance() {
 	p.current = p.next
 	p.tokens = append(p.tokens, p.current)
 	p.next = p.l.NextToken()
-}
-
-// isReserved returns true if string is a reserved language keyword.
-func isReserved(s string) bool {
-	_, isKeyword := lexer.Keyword(s)
-	_, isBuiltin := builtins.Builtins()[s]
-	return isKeyword || isBuiltin
 }
 
 // wantPeek checks if the next token is of the expected type. If not, returns
