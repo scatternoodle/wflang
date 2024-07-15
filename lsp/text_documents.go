@@ -39,3 +39,13 @@ type NotificationDidChangeParams struct {
 type TextDocumentContentChangeEvent struct {
 	Text string `json:"text"`
 }
+
+type TextDocumentPositionParams struct {
+	TextDocumentIdentifier `json:"textDocument"`
+	Position               `json:"position"`
+}
+
+type Position struct {
+	Line      uint `json:"line"`
+	Character uint `json:"character"`
+}

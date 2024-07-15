@@ -28,6 +28,7 @@ func New(name, version *string) *Server {
 		lsp.MethodDocDidChange:       srv.handleDocDidChangeNotification,
 		lsp.MethodDocDidSave:         srv.handleDocDidSaveNotification,
 		lsp.MethodSemanticTokensFull: srv.handleSemanticTokensFullRequest,
+		lsp.MethodHover:              srv.handleHoverRequest,
 		lsp.MethodShutdown:           srv.handleShutdownRequest,
 		lsp.MethodExit:               srv.handleExitNotification,
 	}
@@ -56,6 +57,7 @@ func serverCapabilities() lsp.ServerCapabilities {
 			Range: false,
 			Full:  true,
 		},
+		HoverProvider: true,
 	}
 }
 

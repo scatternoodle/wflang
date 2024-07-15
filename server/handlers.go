@@ -93,3 +93,11 @@ func (srv *Server) handleSemanticTokensFullRequest(w io.Writer, c []byte, id *in
 		},
 	})
 }
+
+func (srv *Server) handleHoverRequest(w io.Writer, c []byte, id *int) {
+	var r lsp.HoverRequest
+	if !handleAssertID(w, id) || !handleParseContent(&r, w, c, id) {
+		return
+	}
+	slog.Debug("Handled hover request", "ID", *r.ID, "textDocument", r.TextDocumentIdentifier, "positionParams", r.TextDocumentPositionParams)
+}

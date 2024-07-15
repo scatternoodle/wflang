@@ -1,20 +1,13 @@
 package lsp
 
 const (
-	// LifeCycle Messages
-
-	MethodInitialize  = "initialize"
-	MethodInitialized = "initialized"
-	MethodShutdown    = "shutdown"
-	MethodExit        = "exit"
-
-	// Document Sync
-
-	MethodDocDidOpen   = "textDocument/didOpen"
-	MethodDocDidChange = "textDocument/didChange"
-	MethodDocDidSave   = "textDocument/didSave"
-
-	// Semantic Token Requests
-
-	MethodSemanticTokensFull = "textDocument/semanticTokens/full"
+	MethodInitialize         string = "initialize"
+	MethodInitialized        string = "initialized"
+	MethodShutdown           string = "shutdown"
+	MethodExit               string = "exit"
+	MethodDocDidOpen         string = "textDocument/didOpen"
+	MethodDocDidChange       string = "textDocument/didChange"
+	MethodDocDidSave         string = "textDocument/didSave"
+	MethodSemanticTokensFull string = "textDocument/semanticTokens/full"
+	MethodHover              string = "textDocument/hover"
 )

@@ -1,8 +1,8 @@
 
 TASK AT HAND...
 
-- HoverProvider
-
+- HoverProvider for builtins
+-- add filter in server capabilities to stop client sending hover requests indiscriminately
 
 POSSIBLE REFACTORS / IMPROVEMENTS (we're mulling these over on a background thread)...
 
