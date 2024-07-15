@@ -1,7 +1,7 @@
 
 TASK AT HAND...
 
-- add types, and map them to lexer token types. We're now getting into static evaluation for the first time.
+- HoverProvider
 
 
 POSSIBLE REFACTORS / IMPROVEMENTS (we're mulling these over on a background thread)...
