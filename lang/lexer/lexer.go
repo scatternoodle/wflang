@@ -15,7 +15,7 @@ import (
 // New creates a new lexer and advances it into the first byte within the input
 // string.
 func New(input string) *Lexer {
-	l := &Lexer{input: input, lines: []int{0}}
+	l := &Lexer{input: input, lines: []uint{0}}
 	l.advance()
 	return l
 }
@@ -23,12 +23,12 @@ func New(input string) *Lexer {
 // Lexer is the font of all semantic tokens. Here be words.
 type Lexer struct {
 	input     string     // Holds the entire text context of the Lexer
-	pos       int        // Current position in input
-	next      int        // Next reading position (char after pos)
+	pos       uint       // Current position in input
+	next      uint       // Next reading position (char after pos)
 	ch        byte       // The current character
-	line      int        // The current line
-	lPos      int        // The position within the current line
-	lines     []int      // Slice holding the lengths of all lines. Updated whenever lexer advances
+	line      uint       // The current line
+	lPos      uint       // The position within the current line
+	lines     []uint     // Slice holding the lengths of all lines. Updated whenever lexer advances
 	multiline bool       // True if lexer is currently processing a multiline structure e.g. block comments
 	multiType token.Type // The token type currently being processed if multiline is true
 }
@@ -240,7 +240,7 @@ func newToken[T token.Literal](l *Lexer, tType token.Type, lit T, start token.Po
 // advance safely advances the Lexer further into its input string, correctly handling
 // EOF and internal state updates. This is the only way you should advance the Lexer.
 func (l *Lexer) advance() {
-	if l.next >= len(l.input) {
+	if l.next >= uint(len(l.input)) {
 		l.ch = eof
 	} else {
 		l.ch = l.input[l.next]
@@ -275,7 +275,7 @@ func (l *Lexer) advance() {
 
 // peek returns the character in the next position without advancing the Lexer.
 func (l *Lexer) peek() byte {
-	if l.next >= len(l.input) {
+	if l.next >= uint(len(l.input)) {
 		return eof
 	}
 	return l.input[l.next]

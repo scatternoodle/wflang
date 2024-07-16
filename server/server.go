@@ -132,8 +132,14 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 func (srv *Server) getTokenAtPos(pos lsp.Position) (tok token.Token, ok bool) {
 	toks := srv.parser.Tokens()
 	idx := slices.IndexFunc(toks, func(t token.Token) bool {
-		return t.StartPos.Line == int(pos.Line) && t.StartPos.Col == int(pos.Character)
+		slog.Debug(fmt.Sprintf("Checking token: %+v", t))
+
+		if t.StartPos.Line != pos.Line {
+			return false
+		}
+		return pos.Character >= t.StartPos.Col && pos.Character < t.EndPos.Col
 	})
+
 	if idx < 0 {
 		return token.Token{}, false
 	}

@@ -24,9 +24,9 @@ type Literal interface {
 
 // Pos represents the textual position of a token
 type Pos struct {
-	Num  int // Char position within entire input string.
-	Line int // Line number.
-	Col  int // Column number within the current line.
+	Num  uint // Char position within entire input string.
+	Line uint // Line number.
+	Col  uint // Column number within the current line.
 }
 
 func (p Pos) String() string {

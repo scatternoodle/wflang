@@ -111,7 +111,9 @@ func (p *Parser) Trace() string {
 // advance moves the parser forward by one token.
 func (p *Parser) advance() {
 	p.current = p.next
-	p.tokens = append(p.tokens, p.current)
+	if p.next.Literal != "" {
+		p.tokens = append(p.tokens, p.current)
+	}
 	p.next = p.l.NextToken()
 }
 

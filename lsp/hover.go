@@ -13,8 +13,7 @@ type HoverResponse struct {
 }
 
 type Hover struct {
-	MarkupContent `json:"content"`
-	Position      `json:"position,omitempty"`
+	MarkupContent `json:"contents"`
 }
 
 type MarkupKind string
