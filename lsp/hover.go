@@ -2,9 +2,6 @@ package lsp
 
 import "github.com/scatternoodle/wflang/jrpc2"
 
-type HoverOptions struct {
-}
-
 type HoverRequest struct {
 	jrpc2.Request
 	TextDocumentPositionParams `json:"params"`

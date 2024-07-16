@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"slices"
 
 	"github.com/scatternoodle/wflang/jrpc2"
 	"github.com/scatternoodle/wflang/lang/parser"
+	"github.com/scatternoodle/wflang/lang/token"
 	"github.com/scatternoodle/wflang/lsp"
 )
 
@@ -125,6 +127,17 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 		return
 	}
 	handler(w, content, requestId)
+}
+
+func (srv *Server) getTokenAtPos(pos lsp.Position) (tok token.Token, ok bool) {
+	toks := srv.parser.Tokens()
+	idx := slices.IndexFunc(toks, func(t token.Token) bool {
+		return t.StartPos.Line == int(pos.Line) && t.StartPos.Col == int(pos.Character)
+	})
+	if idx < 0 {
+		return token.Token{}, false
+	}
+	return toks[idx], true
 }
 
 func respond(w io.Writer, v any) {

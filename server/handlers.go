@@ -99,5 +99,9 @@ func (srv *Server) handleHoverRequest(w io.Writer, c []byte, id *int) {
 	if !handleAssertID(w, id) || !handleParseContent(&r, w, c, id) {
 		return
 	}
-	slog.Debug("Handled hover request", "ID", *r.ID, "textDocument", r.TextDocumentIdentifier, "positionParams", r.TextDocumentPositionParams)
+
+	respond(w, lsp.HoverResponse{
+		Response: jrpc2.NewResponse(id, nil),
+		Hover:    srv.hover(r.Position),
+	})
 }
