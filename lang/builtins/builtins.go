@@ -10,78 +10,154 @@ type Builtin struct {
 
 func Builtins() map[string]Builtin {
 	return map[string]Builtin{
-		"if":                           {Name: "if", ReturnType: types.BOOL},
-		"min":                          {Name: "min", ReturnType: types.NUMBER},
-		"max":                          {Name: "max", ReturnType: types.NUMBER},
-		"contains":                     {Name: "contains", ReturnType: types.BOOL},
-		"sum":                          {Name: "sum", ReturnType: types.NUMBER},
-		"count":                        {Name: "count", ReturnType: types.NUMBER},
-		"sumtime":                      {Name: "sumTime", ReturnType: types.NUMBER},
-		"counttime":                    {Name: "countTime", ReturnType: types.NUMBER},
-		"findfirsttime":                {Name: "findFirstTime", ReturnType: types.NUMBER},
-		"sumschedule":                  {Name: "sumSchedule", ReturnType: types.NUMBER},
-		"countschedule":                {Name: "countSchedule", ReturnType: types.NUMBER},
-		"findfirstschedule":            {Name: "findFirstSchedule", ReturnType: types.SCHEDREC},
-		"countexception":               {Name: "countException", ReturnType: types.NUMBER},
-		"findfirsttordetail":           {Name: "findFirstTorDetail", ReturnType: types.TORDTL},
-		"findfirstdayforward":          {Name: "findFirstDayForward", ReturnType: types.DATE},
-		"findfirstdaybackward":         {Name: "findFirstDayBackward", ReturnType: types.DATE},
-		"findfirstdeletedtime":         {Name: "findFirstDeletedTime", ReturnType: types.DATE},
-		"longestconsecutiverange":      {Name: "longestConsecutiveRange", ReturnType: types.DATERNG},
-		"firstconsecutiveday":          {Name: "firstConsecutiveDay", ReturnType: types.DATE},
-		"lastconsecutiveday":           {Name: "lastConsecutiveDay", ReturnType: types.DATE},
-		"findnthtime":                  {Name: "findNthTime", ReturnType: types.TIME},
-		"accrued":                      {Name: "accrued", ReturnType: types.NUMBER},
-		"accruedbefore":                {Name: "accruedBefore", ReturnType: types.NUMBER},
-		"balance":                      {Name: "balance", ReturnType: types.NUMBER},
-		"callsql":                      {Name: "callSql", ReturnType: types.OBJECT},
-		"convertdttmbytimezone":        {Name: "convertDttmByTimezone", ReturnType: types.DTTM},
-		"countgroupcalc":               {Name: "countGroupCalc", ReturnType: types.NUMBER},
-		"countholidays":                {Name: "countHolidays", ReturnType: types.NUMBER},
-		"getholiday":                   {Name: "getHoliday", ReturnType: types.STRING},
-		"counthomecrewmembers":         {Name: "countHomeCrewMembers", ReturnType: types.NUMBER},
-		"countshiftchanges":            {Name: "countShiftChanges", ReturnType: types.NUMBER},
-		"employee_attribute_exists":    {Name: "employee_attribute_exists", ReturnType: types.BOOL},
-		"employee_attribute":           {Name: "employee_attribute", ReturnType: types.EMPATTR},
-		"getattributecalcdate":         {Name: "getAttributeCalcDate", ReturnType: types.DATE},
-		"getbooleanfieldfromtor":       {Name: "getBooleanFieldFromTor", ReturnType: types.BOOL},
-		"getdatefieldfromtor":          {Name: "getDateFieldFromTor", ReturnType: types.DATE},
-		"getnumberfieldfromtor":        {Name: "getNumberFieldFromTor", ReturnType: types.NUMBER},
-		"getpaycurrencycode":           {Name: "getPayCurrencyCode", ReturnType: types.STRING},
-		"getselectfieldvaluefromtor":   {Name: "getSelectFieldValueFromTor", ReturnType: types.STRING},
-		"getstringfieldfromtor":        {Name: "getStringFieldFromTor", ReturnType: types.STRING},
-		"getsysdatebytimezone":         {Name: "getSysDateByTimezone", ReturnType: types.POLICY_ID},
-		"ldlookup":                     {Name: "ldLookup", ReturnType: types.LDREC},
-		"ldvalidate":                   {Name: "ldValidate", ReturnType: types.BOOL},
-		"indexof":                      {Name: "indexof", ReturnType: types.NUMBER},
-		"lengthofservice":              {Name: "lengthOfService", ReturnType: types.NUMBER},
-		"makedate":                     {Name: "makeDate", ReturnType: types.DATE},
-		"makedatetime":                 {Name: "makeDateTime", ReturnType: types.DTTM},
-		"makedatetimerange":            {Name: "makeDateTimeRange", ReturnType: types.DTTMRNG},
-		"paycodeinschedulemap":         {Name: "payCodeInScheduleMap", ReturnType: types.BOOL},
-		"paycodeintimesheetmap":        {Name: "payCodeInTimeSheetMap", ReturnType: types.BOOL},
-		"rangelookup":                  {Name: "rangeLookup", ReturnType: types.NUMBER},
-		"round":                        {Name: "round", ReturnType: types.NUMBER},
-		"roundup":                      {Name: "roundUp", ReturnType: types.NUMBER},
-		"rounddown":                    {Name: "roundDown", ReturnType: types.NUMBER},
-		"roundtoint":                   {Name: "roundToInt", ReturnType: types.NUMBER},
-		"semimonthlyperiod":            {Name: "semiMonthlyPeriod", ReturnType: types.PERIOD},
-		"substr":                       {Name: "substr", ReturnType: types.STRING},
-		"tolowercase":                  {Name: "tolowercase", ReturnType: types.STRING},
-		"touppercase":                  {Name: "touppercase", ReturnType: types.STRING},
-		"minschedule":                  {Name: "minSchedule", ReturnType: types.NUMBER},
-		"maxschedule":                  {Name: "maxSchedule", ReturnType: types.NUMBER},
-		"avgschedule":                  {Name: "avgSchedule", ReturnType: types.NUMBER},
-		"mintime":                      {Name: "minTime", ReturnType: types.NUMBER},
-		"maxtime":                      {Name: "maxTime", ReturnType: types.NUMBER},
-		"avgtime":                      {Name: "avgTime", ReturnType: types.NUMBER},
-		"swipe_in_latitude_in_range":   {Name: "Swipe_in_latitude_in_range", ReturnType: types.BOOL},
-		"swipe_in_longitude_in_range":  {Name: "Swipe_in_longitude_in_range", ReturnType: types.BOOL},
-		"swipe_out_latitude_in_range":  {Name: "Swipe_out_latitude_in_range", ReturnType: types.BOOL},
-		"swipe_out_longitude_in_range": {Name: "Swipe_out_longitude_in_range", ReturnType: types.BOOL},
-		"sumexception":                 {Name: "sumException", ReturnType: types.NUMBER},
-		"minexception":                 {Name: "minException", ReturnType: types.NUMBER},
-		"maxexception":                 {Name: "maxException", ReturnType: types.NUMBER},
-		"averageexception":             {Name: "averageException", ReturnType: types.NUMBER},
+		If:                         {Name: If, ReturnType: types.BOOL},
+		Min:                        {Name: Min, ReturnType: types.NUMBER},
+		Max:                        {Name: Max, ReturnType: types.NUMBER},
+		Contains:                   {Name: Contains, ReturnType: types.BOOL},
+		Sum:                        {Name: Sum, ReturnType: types.NUMBER},
+		Count:                      {Name: Count, ReturnType: types.NUMBER},
+		SumTime:                    {Name: SumTime, ReturnType: types.NUMBER},
+		CountTime:                  {Name: CountTime, ReturnType: types.NUMBER},
+		FindFirstTime:              {Name: FindFirstTime, ReturnType: types.NUMBER},
+		SumSchedule:                {Name: SumSchedule, ReturnType: types.NUMBER},
+		CountSchedule:              {Name: CountSchedule, ReturnType: types.NUMBER},
+		FindFirstSchedule:          {Name: FindFirstSchedule, ReturnType: types.SCHEDREC},
+		CountException:             {Name: CountException, ReturnType: types.NUMBER},
+		FindFirstTorDetail:         {Name: FindFirstTorDetail, ReturnType: types.TORDTL},
+		FindFirstDayForward:        {Name: FindFirstDayForward, ReturnType: types.DATE},
+		FindFirstDayBackward:       {Name: FindFirstDayBackward, ReturnType: types.DATE},
+		FindFirstDeletedTime:       {Name: FindFirstDeletedTime, ReturnType: types.DATE},
+		LongestConsecutiveRange:    {Name: LongestConsecutiveRange, ReturnType: types.DATERNG},
+		FirstConsecutiveDay:        {Name: FirstConsecutiveDay, ReturnType: types.DATE},
+		LastConsecutiveDay:         {Name: LastConsecutiveDay, ReturnType: types.DATE},
+		FindNthTime:                {Name: FindNthTime, ReturnType: types.TIME},
+		Accrued:                    {Name: Accrued, ReturnType: types.NUMBER},
+		AccruedBefore:              {Name: AccruedBefore, ReturnType: types.NUMBER},
+		Balance:                    {Name: Balance, ReturnType: types.NUMBER},
+		CallSql:                    {Name: CallSql, ReturnType: types.OBJECT},
+		ConvertDttmByTimezone:      {Name: ConvertDttmByTimezone, ReturnType: types.DTTM},
+		CountGroupCalc:             {Name: CountGroupCalc, ReturnType: types.NUMBER},
+		CountHolidays:              {Name: CountHolidays, ReturnType: types.NUMBER},
+		GetHoliday:                 {Name: GetHoliday, ReturnType: types.STRING},
+		CountHomeCrewMembers:       {Name: CountHomeCrewMembers, ReturnType: types.NUMBER},
+		CountShiftChanges:          {Name: CountShiftChanges, ReturnType: types.NUMBER},
+		EmployeeAttributeExists:    {Name: EmployeeAttributeExists, ReturnType: types.BOOL},
+		EmployeeAttribute:          {Name: EmployeeAttribute, ReturnType: types.EMPATTR},
+		GetAttributeCalcDate:       {Name: GetAttributeCalcDate, ReturnType: types.DATE},
+		GetBooleanFieldFromTor:     {Name: GetBooleanFieldFromTor, ReturnType: types.BOOL},
+		GetDateFieldFromTor:        {Name: GetDateFieldFromTor, ReturnType: types.DATE},
+		GetNumberFieldFromTor:      {Name: GetNumberFieldFromTor, ReturnType: types.NUMBER},
+		GetPayCurrencyCode:         {Name: GetPayCurrencyCode, ReturnType: types.STRING},
+		GetSelectFieldValueFromTor: {Name: GetSelectFieldValueFromTor, ReturnType: types.STRING},
+		GetStringFieldFromTor:      {Name: GetStringFieldFromTor, ReturnType: types.STRING},
+		GetSysDateByTimezone:       {Name: GetSysDateByTimezone, ReturnType: types.POLICY_ID},
+		LdLookup:                   {Name: LdLookup, ReturnType: types.LDREC},
+		LdValidate:                 {Name: LdValidate, ReturnType: types.BOOL},
+		IndexOf:                    {Name: IndexOf, ReturnType: types.NUMBER},
+		LengthOfService:            {Name: LengthOfService, ReturnType: types.NUMBER},
+		MakeDate:                   {Name: MakeDate, ReturnType: types.DATE},
+		MakeDateTime:               {Name: MakeDateTime, ReturnType: types.DTTM},
+		MakeDateTimeRange:          {Name: MakeDateTimeRange, ReturnType: types.DTTMRNG},
+		PayCodeInScheduleMap:       {Name: PayCodeInScheduleMap, ReturnType: types.BOOL},
+		PayCodeInTimeSheetMap:      {Name: PayCodeInTimeSheetMap, ReturnType: types.BOOL},
+		RangeLookup:                {Name: RangeLookup, ReturnType: types.NUMBER},
+		Round:                      {Name: Round, ReturnType: types.NUMBER},
+		RoundUp:                    {Name: RoundUp, ReturnType: types.NUMBER},
+		RoundDown:                  {Name: RoundDown, ReturnType: types.NUMBER},
+		RoundToInt:                 {Name: RoundToInt, ReturnType: types.NUMBER},
+		SemiMonthlyPeriod:          {Name: SemiMonthlyPeriod, ReturnType: types.PERIOD},
+		Substr:                     {Name: Substr, ReturnType: types.STRING},
+		ToLowerCase:                {Name: ToLowerCase, ReturnType: types.STRING},
+		ToUpperCase:                {Name: ToUpperCase, ReturnType: types.STRING},
+		MinSchedule:                {Name: MinSchedule, ReturnType: types.NUMBER},
+		MaxSchedule:                {Name: MaxSchedule, ReturnType: types.NUMBER},
+		AvgSchedule:                {Name: AvgSchedule, ReturnType: types.NUMBER},
+		MinTime:                    {Name: MinTime, ReturnType: types.NUMBER},
+		MaxTime:                    {Name: MaxTime, ReturnType: types.NUMBER},
+		AvgTime:                    {Name: AvgTime, ReturnType: types.NUMBER},
+		SwipeInLatitudeInRange:     {Name: SwipeInLatitudeInRange, ReturnType: types.BOOL},
+		SwipeInLongitudeInRange:    {Name: SwipeInLongitudeInRange, ReturnType: types.BOOL},
+		SwipeOutLatitudeInRange:    {Name: SwipeOutLatitudeInRange, ReturnType: types.BOOL},
+		SwipeOutLongitudeInRange:   {Name: SwipeOutLongitudeInRange, ReturnType: types.BOOL},
+		SumException:               {Name: SumException, ReturnType: types.NUMBER},
+		MinException:               {Name: MinException, ReturnType: types.NUMBER},
+		MaxException:               {Name: MaxException, ReturnType: types.NUMBER},
+		AverageException:           {Name: AverageException, ReturnType: types.NUMBER},
 	}
 }
+
+const (
+	If                         string = "if"
+	Min                        string = "min"
+	Max                        string = "max"
+	Contains                   string = "contains"
+	Sum                        string = "sum"
+	Count                      string = "count"
+	SumTime                    string = "sumtime"
+	CountTime                  string = "counttime"
+	FindFirstTime              string = "findfirsttime"
+	SumSchedule                string = "sumschedule"
+	CountSchedule              string = "countschedule"
+	FindFirstSchedule          string = "findfirstschedule"
+	CountException             string = "countexception"
+	FindFirstTorDetail         string = "findfirsttordetail"
+	FindFirstDayForward        string = "findfirstdayforward"
+	FindFirstDayBackward       string = "findfirstdaybackward"
+	FindFirstDeletedTime       string = "findfirstdeletedtime"
+	LongestConsecutiveRange    string = "longestconsecutiverange"
+	FirstConsecutiveDay        string = "firstconsecutiveday"
+	LastConsecutiveDay         string = "lastconsecutiveday"
+	FindNthTime                string = "findnthtime"
+	Accrued                    string = "accrued"
+	AccruedBefore              string = "accruedbefore"
+	Balance                    string = "balance"
+	CallSql                    string = "callsql"
+	ConvertDttmByTimezone      string = "convertdttmbytimezone"
+	CountGroupCalc             string = "countgroupcalc"
+	CountHolidays              string = "countholidays"
+	GetHoliday                 string = "getholiday"
+	CountHomeCrewMembers       string = "counthomecrewmembers"
+	CountShiftChanges          string = "countshiftchanges"
+	EmployeeAttributeExists    string = "employee_attribute_exists"
+	EmployeeAttribute          string = "employee_attribute"
+	GetAttributeCalcDate       string = "getattributecalldate"
+	GetBooleanFieldFromTor     string = "getbooleanfieldfromtor"
+	GetDateFieldFromTor        string = "getdatefieldfromtor"
+	GetNumberFieldFromTor      string = "getnumberfieldfromtor"
+	GetPayCurrencyCode         string = "getpaycurrencycode"
+	GetSelectFieldValueFromTor string = "getselectfieldvaluefromtor"
+	GetStringFieldFromTor      string = "getstringfieldfromtor"
+	GetSysDateByTimezone       string = "getsysdatebytimezone"
+	LdLookup                   string = "ldlookup"
+	LdValidate                 string = "ldvalidate"
+	IndexOf                    string = "indexof"
+	LengthOfService            string = "lengthofservice"
+	MakeDate                   string = "makedate"
+	MakeDateTime               string = "makedatetime"
+	MakeDateTimeRange          string = "makedatetimerange"
+	PayCodeInScheduleMap       string = "paycodeinschedulemap"
+	PayCodeInTimeSheetMap      string = "paycodeintimesheetmap"
+	RangeLookup                string = "rangelookup"
+	Round                      string = "round"
+	RoundUp                    string = "roundup"
+	RoundDown                  string = "rounddown"
+	RoundToInt                 string = "roundtoint"
+	SemiMonthlyPeriod          string = "semimonthlyperiod"
+	Substr                     string = "substr"
+	ToLowerCase                string = "tolowercase"
+	ToUpperCase                string = "touppercase"
+	MinSchedule                string = "minschedule"
+	MaxSchedule                string = "maxschedule"
+	AvgSchedule                string = "avgschedule"
+	MinTime                    string = "mintime"
+	MaxTime                    string = "maxtime"
+	AvgTime                    string = "avgtime"
+	SwipeInLatitudeInRange     string = "swipe_in_latitude_in_range"
+	SwipeInLongitudeInRange    string = "swipe_in_longitude_in_range"
+	SwipeOutLatitudeInRange    string = "swipe_out_latitude_in_range"
+	SwipeOutLongitudeInRange   string = "swipe_out_longitude_in_range"
+	SumException               string = "sumexception"
+	MinException               string = "minexception"
+	MaxException               string = "maxexception"
+	AverageException           string = "averageexception"
+)
