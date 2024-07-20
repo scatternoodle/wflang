@@ -1,11 +1,29 @@
 package hovertext
 
 const (
-	SumTime string = "```wflang\n" +
+	CodeBlockStart string = "```wflang\n"
+	CodeBlockEnd   string = "```\n"
+)
+
+const (
+	If string = CodeBlockStart +
+		"if( condition: boolean\n" +
+		"  , then: expression\n" +
+		"  , else: expression )\n" +
+		CodeBlockEnd +
+		"### If\n" +
+		"If expressions in WFLang comprise a check condition, a consequence and an alternative." +
+		" Unlike most languages, in WFLang the `then` and `else` expressions are mandatory, so all If expressions" +
+		" are in fact If-Else expressions.\n\n" +
+		"@param condition: boolean - the condition to evaluate\n\n" +
+		"@param `then`: expression - the expression to evaluate if the condition is true\n\n" +
+		"@param `else`: expression - the expression to evaluate if the condition is false\n\n"
+
+	SumTime string = CodeBlockStart +
 		"sumTime( over range: timePeriod [alias aliasName?: string]\n" +
 		"       , sumExpression: number\n" +
 		"      [, where whereExpression: bool] )\n" +
-		"```\n" +
+		CodeBlockEnd +
 		"### SumTime\n" +
 		"SumTime calculates the sum of a numeric expression over a range of time records.\n\n" +
 		"@param `range: timePeriod` - the time period over which to sum\n\n" +
