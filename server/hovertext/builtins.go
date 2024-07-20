@@ -31,25 +31,27 @@ const (
 		"@param `string2: string` - the string to search for\n\n"
 
 	Sum string = CodeBlockStart +
-		"sum( by interval: day|week|period| over range: dateRange|week|period\n" +
+		"sum( by interval: day|week|period| over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"   , expression: number \n" +
 		"  [, where condition: bool] )\n" +
 		CodeBlockEnd +
 		"### Sum\n" +
 		"Sum calculates the sum of a numeric expression repeatedly over `range`.\n\n" +
 		"@param `interval: day|week|period` - the time period to group by\n\n" +
-		"@param `range: dateRange|week|period` - the time period over which to sum\n\n" +
+		"@param `range: day|week|period|dateRange` - the time period over which to sum\n\n" +
+		"@param `aliasName?: string` - alias for the interval currently being evaluated\n\n" +
 		"@param `expression: number` - this is what will be summed for each qualifying interval\n\n" +
 		"@param `condition?: boolean` - only intervals where this expression returns true will be evaluated. If omitted, all intervals will be summed\n\n"
 
 	Count string = CodeBlockStart +
-		"count( by interval: day|week|period| over range: dateRange|week|period\n" +
+		"count( by interval: day|week|period over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"     , where condition: bool )\n" +
 		CodeBlockEnd +
 		"### Count\n" +
 		"Count calculates a total count of qualifying intervals across `range`.\n\n" +
 		"@param `interval: day|week|period` - the time period to group by\n\n" +
-		"@param `range: dateRange|week|period` - the time period over which to count\n\n" +
+		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
+		"@param `aliasName?: string` - alias for the interval currently being evaluated\n\n" +
 		"@param `condition: boolean` - only intervals where this expression returns true will be counted.\n\n"
 
 	If string = CodeBlockStart +
@@ -66,14 +68,24 @@ const (
 		"@param `else`: expression - the expression to evaluate if the condition is false\n\n"
 
 	SumTime string = CodeBlockStart +
-		"sumTime( over range: timePeriod [alias aliasName?: string]\n" +
+		"sumTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"       , sumExpression: number\n" +
-		"      [, where whereExpression: bool] )\n" +
+		"      [, where whereExpression?: bool] )\n" +
 		CodeBlockEnd +
 		"### SumTime\n" +
 		"SumTime calculates the sum of a numeric expression over a range of time records.\n\n" +
-		"@param `range: timePeriod` - the time period over which to sum\n\n" +
+		"@param `range: day|week|period|dateRange` - the time period over which to sum\n\n" +
 		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
 		"@param `sumExpression: number` - numeric expression - this is what will be summed for each qualifying slice\n\n" +
 		"@param `whereExpression?: boolean` - if used, only slices where this expression returns true will be evaluated\n\n"
+
+	CountTime string = CodeBlockStart +
+		"countTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"        [, where whereExpression?: bool] )\n" +
+		CodeBlockEnd +
+		"### CountTime\n" +
+		"CountTime calculates the count of time records in a range.\n\n" +
+		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
+		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
+		"@param `whereExpression?: boolean` - if used, only slices where this expression returns true will be counted\n\n"
 )
