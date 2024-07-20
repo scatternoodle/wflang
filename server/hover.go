@@ -40,6 +40,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.Max, true
 	case builtins.Contains:
 		return hovertext.Contains, true
+	case builtins.Sum:
+		return hovertext.Sum, true
 	case builtins.If:
 		return hovertext.If, true
 	case builtins.SumTime:
