@@ -6,6 +6,22 @@ const (
 )
 
 const (
+	Min string = CodeBlockStart +
+		"min(args: number...)\n" +
+		CodeBlockEnd +
+		"### Min\n" +
+		"Min returns the smallest of its arguments. It takes a list of arguments as long as you like, which can be any" +
+		" expression that evaluates to a number.\n\n" +
+		"@param `args: number...` - list of numbers to compare\n\n"
+
+	Max string = CodeBlockStart +
+		"max(args: number...)\n" +
+		CodeBlockEnd +
+		"### Max\n" +
+		"Max returns the largest of its arguments. It takes a list of arguments as long as you like, which can be any" +
+		" expression that evaluates to a number.\n\n" +
+		"@param `args: number...` - list of numbers to compare\n\n"
+
 	If string = CodeBlockStart +
 		"if( condition: boolean\n" +
 		"  , then: expression\n" +

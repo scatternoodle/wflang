@@ -34,6 +34,10 @@ func (srv *Server) hover(pos lsp.Position) lsp.Hover {
 
 func builtinHoverText(name string) (text string, ok bool) {
 	switch name {
+	case builtins.Min:
+		return hovertext.Min, true
+	case builtins.Max:
+		return hovertext.Max, true
 	case builtins.If:
 		return hovertext.If, true
 	case builtins.SumTime:
