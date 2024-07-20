@@ -5,8 +5,8 @@ The following built-in functions currently have hover support:
 | Function                   | Supported |
 | -------------------------- | --------- |
 | If                         | ✅        |
-| Min                        | :x:       |
-| Max                        | :x:       |
+| Min                        | ✅        |
+| Max                        | ✅        |
 | Contains                   | :x:       |
 | Sum                        | :x:       |
 | Count                      | :x:       |
