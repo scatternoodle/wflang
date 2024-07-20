@@ -12,7 +12,7 @@ The following built-in functions currently have hover support:
 | Count                      | ✅        |
 | SumTime                    | ✅        |
 | CountTime                  | ✅        |
-| FindFirstTime              | :x:       |
+| FindFirstTime              | ✅        |
 | SumSchedule                | :x:       |
 | CountSchedule              | :x:       |
 | FindFirstSchedule          | :x:       |
