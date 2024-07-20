@@ -10,7 +10,7 @@ The following built-in functions currently have hover support:
 | Contains                   | :x:                |
 | Sum                        | :x:                |
 | Count                      | :x:                |
-| SumTime                    | :heavy_check_mark: |
+| SumTime                    | ✅ |
 | CountTime                  | :x:                |
 | FindFirstTime              | :x:                |
 | SumSchedule                | :x:                |
