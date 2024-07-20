@@ -36,11 +36,20 @@ const (
 		"  [, where condition: bool] )\n" +
 		CodeBlockEnd +
 		"### Sum\n" +
-		"Sum calculates the sum of a numeric expression repeatedly over `range`. Intervals may be grouped by day, week, period or time record group.\n\n" +
+		"Sum calculates the sum of a numeric expression repeatedly over `range`.\n\n" +
 		"@param `interval: day|week|period` - the time period to group by\n\n" +
 		"@param `range: dateRange|week|period` - the time period over which to sum\n\n" +
 		"@param `expression: number` - this is what will be summed for each qualifying interval\n\n" +
-		"@param `where condition?: boolean` - only intervals where this expression returns true will be evaluated. If omitted, all intervals will be summed\n\n"
+		"@param `condition?: boolean` - only intervals where this expression returns true will be evaluated. If omitted, all intervals will be summed\n\n"
+
+	Count string = CodeBlockStart +
+		"" +
+		CodeBlockEnd +
+		"### Count\n" +
+		"Count calculates a total count of qualifying intervals across `range`.\n\n" +
+		"@param `interval: day|week|period` - the time period to group by\n\n" +
+		"@param `range: dateRange|week|period` - the time period over which to count\n\n" +
+		"@param `condition: boolean` - only intervals where this expression returns true will be counted. If omitted, all intervals will be counted\n\n"
 
 	If string = CodeBlockStart +
 		"if( condition: boolean\n" +

@@ -42,6 +42,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.Contains, true
 	case builtins.Sum:
 		return hovertext.Sum, true
+	case builtins.Count:
+		return hovertext.Count, true
 	case builtins.If:
 		return hovertext.If, true
 	case builtins.SumTime:
