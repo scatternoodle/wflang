@@ -22,6 +22,14 @@ const (
 		" expression that evaluates to a number.\n\n" +
 		"@param `args: number...` - list of numbers to compare\n\n"
 
+	Contains string = CodeBlockStart +
+		"contains(string1: string, string2: string)\n" +
+		CodeBlockEnd +
+		"### Contains\n" +
+		"Contains returns true if `string2` is a substring of `string1`.\n\n" +
+		"@param `string1: string` - the string to search in\n\n" +
+		"@param `string2: string` - the string to search for\n\n"
+
 	If string = CodeBlockStart +
 		"if( condition: boolean\n" +
 		"  , then: expression\n" +

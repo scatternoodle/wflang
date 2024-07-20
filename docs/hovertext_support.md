@@ -7,7 +7,7 @@ The following built-in functions currently have hover support:
 | If                         | ✅        |
 | Min                        | ✅        |
 | Max                        | ✅        |
-| Contains                   | :x:       |
+| Contains                   | ✅        |
 | Sum                        | :x:       |
 | Count                      | :x:       |
 | SumTime                    | ✅        |
