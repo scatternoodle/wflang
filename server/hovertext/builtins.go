@@ -257,4 +257,14 @@ const (
 		"@param `condition: boolean` - the condition to evaluate\n\n" +
 		"@param `ordering: string|number|date|dateTime` - the value to order by\n\n" +
 		"@param `n`: number - the 'N' in 'Nth', e.g. 2 gets you the 2nd timeRecord meeting `condition`\n\n"
+
+	Accrued string = codeBlockStart +
+		"accrued(bank: ident, start: day|date to end: day|date)\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### Accrued\n\n" +
+		"Returns the balance accrued to `bank` over date range of `start` to `end`. Only returns the product of **positive** transactions.\n\n" +
+		"@param `bank`: ident - the identifier of the bank\n\n" +
+		"@param `start`: day|date - start of the range\n\n" +
+		"@param `end`: day|date - end of the range\n\n"
 )

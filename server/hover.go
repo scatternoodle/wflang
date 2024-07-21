@@ -76,6 +76,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.LastConsecutiveDay, true
 	case builtins.FindNthTime:
 		return hovertext.FindNthTime, true
+	case builtins.Accrued:
+		return hovertext.Accrued, true
 	}
 
 	return "", false

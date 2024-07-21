@@ -5,6 +5,7 @@ type BaseType string
 const (
 	NUMBER    BaseType = "number"
 	STRING    BaseType = "string"
+	IDENT     BaseType = "ident"
 	TIME      BaseType = "time"
 	DTTM      BaseType = "datetime"
 	DTTMRNG   BaseType = "datetime range"
