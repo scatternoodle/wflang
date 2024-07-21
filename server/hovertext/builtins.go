@@ -267,4 +267,15 @@ const (
 		"@param `bank`: ident - the identifier of the bank\n\n" +
 		"@param `start`: day|date - start of the range\n\n" +
 		"@param `end`: day|date - end of the range\n\n"
+
+	BalanceAccruedBefore string = codeBlockStart +
+		"balanceAccruedBefore(bank: string, asOfDate: day|date)\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### BalanceAccruedBefore\n\n" +
+		"Returns all balance accrued to `bank` prior to `asOfDate`. Only returns the product of **positive** transactions." +
+		" Note that syntax is inconsistent to the `accrued` function which takes an `ident` for its `bank` parameter, whereas" +
+		" for `balanceAccruedBefore`, `bank` must be a string literal.\n\n" +
+		"@param `bank`: string - the policy ID of the bank\n\n" +
+		"@param `asOfDate`: day|date - accruals are summed prior to this date\n\n" +
 )

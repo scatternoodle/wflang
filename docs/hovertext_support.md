@@ -26,7 +26,7 @@ The following built-in functions currently have hover support:
 | LastConsecutiveDay         | ✅        |
 | FindNthTime                | ✅        |
 | Accrued                    | ✅        |
-| AccruedBefore              | :x:       |
+| AccruedBefore              | ✅        |
 | Balance                    | :x:       |
 | CallSql                    | :x:       |
 | ConvertDttmByTimezone      | :x:       |

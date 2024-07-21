@@ -78,6 +78,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.FindNthTime, true
 	case builtins.Accrued:
 		return hovertext.Accrued, true
+	case builtins.AccruedBefore:
+		return hovertext.BalanceAccruedBefore, true
 	}
 
 	return "", false
