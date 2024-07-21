@@ -19,7 +19,7 @@ The following built-in functions currently have hover support:
 | CountException             | ✅        |
 | FindFirstTorDetail         | ✅        |
 | FindFirstDayForward        | ✅        |
-| FindFirstDayBackward       | :x:       |
+| FindFirstDayBackward       | ✅        |
 | FindFirstDeletedTime       | :x:       |
 | LongestConsecutiveRange    | :x:       |
 | FirstConsecutiveDay        | :x:       |

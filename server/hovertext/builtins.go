@@ -166,4 +166,14 @@ const (
 		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
 		"@param `aliasName?: string` - alias for the day currently being evaluated\n\n" +
 		"@param `condition: boolean` - the condition to evaluate\n\n"
+
+	FindFirstDayBackward string = CodeBlockStart +
+		"findFirstBackward( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"                 , where condition: boolean )\n" +
+		CodeBlockEnd +
+		"### FindFirstDayBackward\n" +
+		"Returns the first date that meets `condition`, going from the end to the start of `range`, excluding the end date.\n\n" +
+		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
+		"@param `aliasName?: string` - alias for the day currently being evaluated\n\n" +
+		"@param `condition: boolean` - the condition to evaluate\n\n"
 )
