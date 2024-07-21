@@ -70,7 +70,7 @@ const (
 	SumTime string = CodeBlockStart +
 		"sumTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"       , expression: number\n" +
-		"      [, where whereExpression?: bool] )\n" +
+		"      [, where expression?: bool] )\n" +
 		CodeBlockEnd +
 		"### SumTime\n" +
 		"Calculates the sum of a numeric expression over a range of time records.\n\n" +
@@ -81,13 +81,13 @@ const (
 
 	CountTime string = CodeBlockStart +
 		"countTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
-		"        [, where whereExpression?: bool] )\n" +
+		"        [, where expression?: bool] )\n" +
 		CodeBlockEnd +
 		"### CountTime\n" +
 		"Calculates the count of time records in a range.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
 		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
-		"@param `whereExpression?: boolean` - if used, only slices where this expression returns true will be counted\n\n"
+		"@param `expression?: boolean` - if used, only slices where this expression returns true will be counted\n\n"
 
 	FindFirstTime string = CodeBlockStart +
 		"findFirstTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
@@ -104,7 +104,7 @@ const (
 	SumSchedule string = CodeBlockStart +
 		"sumSchedule( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"           , expression: number\n" +
-		"          [, where whereExpression?: bool] )\n" +
+		"          [, where expression?: bool] )\n" +
 		CodeBlockEnd +
 		"### SumSchedule\n" +
 		"Calculates the sum of a numeric expression over a range of schedule records.\n\n" +
@@ -115,13 +115,13 @@ const (
 
 	CountSchedule string = CodeBlockStart +
 		"countSchedule( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
-		"            [, where whereExpression?: bool] )\n" +
+		"            [, where expression?: bool] )\n" +
 		CodeBlockEnd +
 		"### CountSchedule\n" +
 		"Calculates the count of schedule records in a range.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
 		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
-		"@param `whereExpression?: boolean` - if used, only slices where this expression returns true will be counted\n\n"
+		"@param `expression?: boolean` - if used, only slices where this expression returns true will be counted\n\n"
 
 	FindFirstSchedule string = CodeBlockStart +
 		"findFirstSchedule( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
@@ -134,4 +134,14 @@ const (
 		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
 		"@param `condition: boolean` - the condition to evaluate\n\n" +
 		"@param `ordering: string|number|date|dateTime` - the value to order by\n\n"
+
+	CountException string = CodeBlockStart +
+		"countException( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"             [, where expression?: bool] )\n" +
+		CodeBlockEnd +
+		"### CountException\n" +
+		"Calculates the count of exception records in a range.\n\n" +
+		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
+		"@param `aliasName?: string` - alias for the exception currently being evaluated\n\n" +
+		"@param `expression?: boolean` - if used, only exceptions where this expression returns true will be counted\n\n"
 )

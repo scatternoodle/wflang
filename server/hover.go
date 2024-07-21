@@ -58,6 +58,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.CountSchedule, true
 	case builtins.FindFirstSchedule:
 		return hovertext.FindFirstSchedule, true
+	case builtins.CountException:
+		return hovertext.CountException, true
 	}
 
 	return "", false
