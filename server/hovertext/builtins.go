@@ -277,5 +277,5 @@ const (
 		" Note that syntax is inconsistent to the `accrued` function which takes an `ident` for its `bank` parameter, whereas" +
 		" for `balanceAccruedBefore`, `bank` must be a string literal.\n\n" +
 		"@param `bank`: string - the policy ID of the bank\n\n" +
-		"@param `asOfDate`: day|date - accruals are summed prior to this date\n\n" +
+		"@param `asOfDate`: day|date - accruals are summed prior to this date\n\n"
 )
