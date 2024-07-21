@@ -32,7 +32,7 @@ func Builtins() map[string]Builtin {
 		LastConsecutiveDay:         {Name: LastConsecutiveDay, ReturnType: types.DATE},
 		FindNthTime:                {Name: FindNthTime, ReturnType: types.TIME},
 		Accrued:                    {Name: Accrued, ReturnType: types.NUMBER},
-		AccruedBefore:              {Name: AccruedBefore, ReturnType: types.NUMBER},
+		BalanceAccruedBefore:       {Name: BalanceAccruedBefore, ReturnType: types.NUMBER},
 		Balance:                    {Name: Balance, ReturnType: types.NUMBER},
 		CallSql:                    {Name: CallSql, ReturnType: types.OBJECT},
 		ConvertDttmByTimezone:      {Name: ConvertDttmByTimezone, ReturnType: types.DTTM},
@@ -109,7 +109,7 @@ const (
 	LastConsecutiveDay         string = "lastconsecutiveday"
 	FindNthTime                string = "findnthtime"
 	Accrued                    string = "accrued"
-	AccruedBefore              string = "accruedbefore"
+	BalanceAccruedBefore       string = "balanceaccruedbefore"
 	Balance                    string = "balance"
 	CallSql                    string = "callsql"
 	ConvertDttmByTimezone      string = "convertdttmbytimezone"
@@ -120,7 +120,7 @@ const (
 	CountShiftChanges          string = "countshiftchanges"
 	EmployeeAttributeExists    string = "employee_attribute_exists"
 	EmployeeAttribute          string = "employee_attribute"
-	GetAttributeCalcDate       string = "getattributecalldate"
+	GetAttributeCalcDate       string = "getattributecalcdate"
 	GetBooleanFieldFromTor     string = "getbooleanfieldfromtor"
 	GetDateFieldFromTor        string = "getdatefieldfromtor"
 	GetNumberFieldFromTor      string = "getnumberfieldfromtor"

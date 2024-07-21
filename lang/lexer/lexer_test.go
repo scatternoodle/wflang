@@ -79,7 +79,7 @@ func TestBuiltins(t *testing.T) {
 		"longestConsecutiveRange",
 		"findNthTime",
 		"accrued",
-		"accruedBefore",
+		"balanceaccruedBefore",
 		"balance",
 		"callSql",
 		"firstConsecutiveDay",
