@@ -156,4 +156,14 @@ const (
 		"@param `aliasName?: string` - alias for the record currently being evaluated\n\n" +
 		"@param `condition: boolean` - the condition to evaluate\n\n" +
 		"@param `ordering: string|number|date|dateTime` - the value to order by\n\n"
+
+	FindFirstDayForward string = CodeBlockStart +
+		"findFirstDayForward( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"                   , where condition: boolean )\n" +
+		CodeBlockEnd +
+		"### FindFirstDayForward\n" +
+		"Returns the first date that meets `condition`, going from the start to the end of `range`, excluding the start date.\n\n" +
+		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
+		"@param `aliasName?: string` - alias for the day currently being evaluated\n\n" +
+		"@param `condition: boolean` - the condition to evaluate\n\n"
 )

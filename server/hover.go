@@ -62,6 +62,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.CountException, true
 	case builtins.FindFirstTorDetail:
 		return hovertext.FindFirstTorDetail, true
+	case builtins.FindFirstDayForward:
+		return hovertext.FindFirstDayForward, true
 	}
 
 	return "", false
