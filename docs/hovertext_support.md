@@ -21,9 +21,9 @@ The following built-in functions currently have hover support:
 | FindFirstDayForward        | ✅        |
 | FindFirstDayBackward       | ✅        |
 | FindFirstDeletedTime       | ✅        |
-| LongestConsecutiveRange    | :x:       |
-| FirstConsecutiveDay        | :x:       |
-| LastConsecutiveDay         | :x:       |
+| LongestConsecutiveRange    | ✅        |
+| FirstConsecutiveDay        | ✅        |
+| LastConsecutiveDay         | ✅        |
 | FindNthTime                | :x:       |
 | Accrued                    | :x:       |
 | AccruedBefore              | :x:       |

@@ -68,6 +68,12 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.FindFirstDayBackward, true
 	case builtins.FindFirstDeletedTime:
 		return hovertext.FindFirstDeletedTime, true
+	case builtins.LongestConsecutiveRange:
+		return hovertext.LongestConsecutiveRange, true
+	case builtins.FirstConsecutiveDay:
+		return hovertext.FirstConsecutiveDay, true
+	case builtins.LastConsecutiveDay:
+		return hovertext.LastConsecutiveDay, true
 	}
 
 	return "", false
