@@ -27,7 +27,7 @@ The following built-in functions currently have hover support:
 | FindNthTime                | ✅        |
 | Accrued                    | ✅        |
 | BalanceAccruedBefore       | ✅        |
-| Balance                    | :x:       |
+| Balance                    | ✅        |
 | CallSql                    | :x:       |
 | ConvertDttmByTimezone      | :x:       |
 | CountGroupCalc             | :x:       |
