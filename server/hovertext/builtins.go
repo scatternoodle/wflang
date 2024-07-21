@@ -1,9 +1,9 @@
 package hovertext
 
 const (
-	codeBlockStart   string = "```wflang\n"
-	codeBlockReturns string = "\nreturns: "
-	codeBlockEnd     string = "```\n"
+	codeBlockStart   string = "```wflang\nSYNTAX:\n"
+	codeBlockReturns string = "\nRETURN TYPE: "
+	codeBlockEnd     string = "```\n\n---\n\n"
 )
 
 const (
@@ -11,7 +11,7 @@ const (
 		"min(args: number...)\n" +
 		codeBlockReturns + "number\n" +
 		codeBlockEnd +
-		"### Min\n" +
+		"### Min\n\n" +
 		"Returns the smallest of its arguments. It takes a list of arguments as long as you like, which can be any" +
 		" expression that evaluates to a number.\n\n" +
 		"@param `args: number...` - list of numbers to compare\n\n"
@@ -20,7 +20,7 @@ const (
 		"max(args: number...)\n" +
 		codeBlockReturns + "number\n" +
 		codeBlockEnd +
-		"### Max\n" +
+		"### Max\n\n" +
 		"Returns the largest of its arguments. It takes a list of arguments as long as you like, which can be any" +
 		" expression that evaluates to a number.\n\n" +
 		"@param `args: number...` - list of numbers to compare\n\n"
@@ -29,7 +29,7 @@ const (
 		"contains(string1: string, string2: string)\n" +
 		codeBlockReturns + "boolean\n" +
 		codeBlockEnd +
-		"### Contains\n" +
+		"### Contains\n\n" +
 		"Returns true if `string2` is a substring of `string1`.\n\n" +
 		"@param `string1: string` - the string to search in\n\n" +
 		"@param `string2: string` - the string to search for\n\n"
@@ -40,7 +40,7 @@ const (
 		"  [, where condition: boolean] )\n" +
 		codeBlockReturns + "number\n" +
 		codeBlockEnd +
-		"### Sum\n" +
+		"### Sum\n\n" +
 		"Calculates the sum of a numeric expression repeatedly over `range`.\n\n" +
 		"@param `interval: day|week|period` - the time period to group by\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to sum\n\n" +
@@ -53,7 +53,7 @@ const (
 		"     , where condition: boolean )\n" +
 		codeBlockReturns + "number\n" +
 		codeBlockEnd +
-		"### Count\n" +
+		"### Count\n\n" +
 		"Calculates a total count of qualifying intervals across `range`.\n\n" +
 		"@param `interval: day|week|period` - the time period to group by\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
@@ -66,7 +66,7 @@ const (
 		"  , else: any )\n" +
 		codeBlockReturns + "any\n" +
 		codeBlockEnd +
-		"### If\n" +
+		"### If\n\n" +
 		"If expressions in WFLang comprise a check condition, a consequence and an alternative." +
 		" Unlike most languages, in WFLang the `then` and `else` expressions are mandatory, so all If expressions" +
 		" are in fact If-Else expressions.\n\n" +
@@ -80,7 +80,7 @@ const (
 		"      [, where expression?: bool] )\n" +
 		codeBlockReturns + "number\n" +
 		codeBlockEnd +
-		"### SumTime\n" +
+		"### SumTime\n\n" +
 		"Calculates the sum of a numeric expression over a range of time records.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to sum\n\n" +
 		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
@@ -92,7 +92,7 @@ const (
 		"        [, where expression?: bool] )\n" +
 		codeBlockReturns + "number\n" +
 		codeBlockEnd +
-		"### CountTime\n" +
+		"### CountTime\n\n" +
 		"Calculates the count of time records in a range.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
 		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
@@ -104,7 +104,7 @@ const (
 		"             , order by ordering: string|number|date|dateTime )\n" +
 		codeBlockReturns + "timeRecord\n" +
 		codeBlockEnd +
-		"### FindFirstTime\n" +
+		"### FindFirstTime\n\n" +
 		"Returns the first time record that meets `condition`, ordered by `ordering`.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
 		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
@@ -117,7 +117,7 @@ const (
 		"          [, where expression?: bool] )\n" +
 		codeBlockReturns + "number\n" +
 		codeBlockEnd +
-		"### SumSchedule\n" +
+		"### SumSchedule\n\n" +
 		"Calculates the sum of a numeric expression over a range of schedule records.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to sum\n\n" +
 		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
@@ -129,7 +129,7 @@ const (
 		"            [, where expression?: bool] )\n" +
 		codeBlockReturns + "number\n" +
 		codeBlockEnd +
-		"### CountSchedule\n" +
+		"### CountSchedule\n\n" +
 		"Calculates the count of schedule records in a range.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
 		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
@@ -141,7 +141,7 @@ const (
 		"                 , order by ordering: string|number|date|dateTime )\n" +
 		codeBlockReturns + "scheduleRecord\n" +
 		codeBlockEnd +
-		"### FindFirstSchedule\n" +
+		"### FindFirstSchedule\n\n" +
 		"Returns the first schedule record that meets `condition`, ordered by `ordering`.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
 		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
@@ -153,7 +153,7 @@ const (
 		"             [, where condition?: bool] )\n" +
 		codeBlockReturns + "exception\n" +
 		codeBlockEnd +
-		"### CountException\n" +
+		"### CountException\n\n" +
 		"Calculates the count of exception records in a range.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
 		"@param `aliasName?: string` - alias for the exception currently being evaluated\n\n" +
@@ -165,7 +165,7 @@ const (
 		"                  , order by ordering: string|number|date|dateTime )\n" +
 		codeBlockReturns + "torDetailRecord\n" +
 		codeBlockEnd +
-		"### FindFirstTorDetail\n" +
+		"### FindFirstTorDetail\n\n" +
 		"Returns the first TOR detail record that meets `condition`, ordered by `ordering`.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
 		"@param `aliasName?: string` - alias for the record currently being evaluated\n\n" +
@@ -177,7 +177,7 @@ const (
 		"                   , where condition: boolean )\n" +
 		codeBlockReturns + "date\n" +
 		codeBlockEnd +
-		"### FindFirstDayForward\n" +
+		"### FindFirstDayForward\n\n" +
 		"Returns the first date that meets `condition`, going from the start to the end of `range`, excluding the start date.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
 		"@param `aliasName?: string` - alias for the day currently being evaluated\n\n" +
@@ -188,7 +188,7 @@ const (
 		"                 , where condition: boolean )\n" +
 		codeBlockReturns + "date\n" +
 		codeBlockEnd +
-		"### FindFirstDayBackward\n" +
+		"### FindFirstDayBackward\n\n" +
 		"Returns the first date that meets `condition`, going from the end to the start of `range`, excluding the end date.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
 		"@param `aliasName?: string` - alias for the day currently being evaluated\n\n" +
@@ -200,7 +200,7 @@ const (
 		"                    , order by ordering: string|number|date|dateTime )\n" +
 		codeBlockReturns + "timeRecord\n" +
 		codeBlockEnd +
-		"### FindFirstDeletedTime\n" +
+		"### FindFirstDeletedTime\n\n" +
 		"Returns the first deleted time record that meets `condition`, ordered by `ordering`. Will only return time records" +
 		" that have been deleted within the time entry window in the front-end (as opposed to within a script, for instance).\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
@@ -213,7 +213,7 @@ const (
 		"                       , where condition: bool )\n" +
 		codeBlockReturns + "dateRange\n" +
 		codeBlockEnd +
-		"### LongestConsecutiveRange\n" +
+		"### LongestConsecutiveRange\n\n" +
 		"evaluates a `condition` over a date range and returns the longest consecutive date range where `condition` is true.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
 		"@param `aliasName?: string` - alias for the date currently being evaluated\n\n" +
@@ -224,7 +224,7 @@ const (
 		"                   , where condition: bool )\n" +
 		codeBlockReturns + "date\n" +
 		codeBlockEnd +
-		"### FirstConsecutiveDay\n" +
+		"### FirstConsecutiveDay\n\n" +
 		"evaluates a `condition` over a date range and returns the first date of the longest consecutive range where `condition` is true." +
 		" This is effectively the same as `longestConsecutiveRange().start`\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
@@ -236,7 +236,7 @@ const (
 		"                   , where condition: bool )\n" +
 		codeBlockReturns + "date\n" +
 		codeBlockEnd +
-		"### LastConsecutiveDay\n" +
+		"### LastConsecutiveDay\n\n" +
 		"evaluates a `condition` over a date range and returns the last date of the longest consecutive range where `condition` is true." +
 		" This is effectively the same as `longestConsecutiveRange().end`\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
