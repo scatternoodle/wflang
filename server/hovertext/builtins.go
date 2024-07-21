@@ -176,4 +176,17 @@ const (
 		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
 		"@param `aliasName?: string` - alias for the day currently being evaluated\n\n" +
 		"@param `condition: boolean` - the condition to evaluate\n\n"
+
+	FindFirstDeletedTime string = CodeBlockStart +
+		"findFirstDeletedTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"                    , where condition: boolean\n" +
+		"                    , order by ordering: string|number|date|dateTime )\n" +
+		CodeBlockEnd +
+		"### FindFirstDeletedTime\n" +
+		"Returns the first deleted time record that meets `condition`, ordered by `ordering`. Will only return time records" +
+		" that have been deleted within the time entry window in the front-end (as opposed to within a script, for instance).\n\n" +
+		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
+		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
+		"@param `condition: boolean` - the condition to evaluate\n\n" +
+		"@param `ordering: string|number|date|dateTime` - the value to order by\n\n"
 )

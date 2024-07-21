@@ -66,6 +66,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.FindFirstDayForward, true
 	case builtins.FindFirstDayBackward:
 		return hovertext.FindFirstDayBackward, true
+	case builtins.FindFirstDeletedTime:
+		return hovertext.FindFirstDeletedTime, true
 	}
 
 	return "", false
