@@ -17,7 +17,7 @@ The following built-in functions currently have hover support:
 | CountSchedule              | ✅        |
 | FindFirstSchedule          | ✅        |
 | CountException             | ✅        |
-| FindFirstTorDetail         | :x:       |
+| FindFirstTorDetail         | ✅        |
 | FindFirstDayForward        | :x:       |
 | FindFirstDayBackward       | :x:       |
 | FindFirstDeletedTime       | :x:       |
