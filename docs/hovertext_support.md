@@ -13,9 +13,9 @@ The following built-in functions currently have hover support:
 | SumTime                    | ✅        |
 | CountTime                  | ✅        |
 | FindFirstTime              | ✅        |
-| SumSchedule                | :x:       |
-| CountSchedule              | :x:       |
-| FindFirstSchedule          | :x:       |
+| SumSchedule                | ✅        |
+| CountSchedule              | ✅        |
+| FindFirstSchedule          | ✅        |
 | CountException             | :x:       |
 | FindFirstTorDetail         | :x:       |
 | FindFirstDayForward        | :x:       |

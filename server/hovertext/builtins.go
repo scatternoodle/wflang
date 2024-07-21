@@ -69,7 +69,7 @@ const (
 
 	SumTime string = CodeBlockStart +
 		"sumTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
-		"       , sumExpression: number\n" +
+		"       , expression: number\n" +
 		"      [, where whereExpression?: bool] )\n" +
 		CodeBlockEnd +
 		"### SumTime\n" +
@@ -96,6 +96,40 @@ const (
 		CodeBlockEnd +
 		"### FindFirstTime\n" +
 		"FindFirstTime returns the first time record that meets `condition`, ordered by `ordering`.\n\n" +
+		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
+		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
+		"@param `condition: boolean` - the condition to evaluate\n\n" +
+		"@param `ordering: string|number|date|dateTime` - the value to order by\n\n"
+
+	SumSchedule string = CodeBlockStart +
+		"sumSchedule( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"           , expression: number\n" +
+		"          [, where whereExpression?: bool] )\n" +
+		CodeBlockEnd +
+		"### SumSchedule\n" +
+		"SumSchedule calculates the sum of a numeric expression over a range of schedule records.\n\n" +
+		"@param `range: day|week|period|dateRange` - the time period over which to sum\n\n" +
+		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
+		"@param `expression: number` - numeric expression - this is what will be summed for each qualifying slice\n\n" +
+		"@param `condition?: boolean` - if used, only slices where this expression returns true will be evaluated\n\n"
+
+	CountSchedule string = CodeBlockStart +
+		"countSchedule( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"            [, where whereExpression?: bool] )\n" +
+		CodeBlockEnd +
+		"### CountSchedule\n" +
+		"CountSchedule calculates the count of schedule records in a range.\n\n" +
+		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
+		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
+		"@param `whereExpression?: boolean` - if used, only slices where this expression returns true will be counted\n\n"
+
+	FindFirstSchedule string = CodeBlockStart +
+		"findFirstSchedule( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"                 , where condition: boolean\n" +
+		"                 , order by ordering: string|number|date|dateTime )\n" +
+		CodeBlockEnd +
+		"### FindFirstSchedule\n" +
+		"FindFirstSchedule returns the first schedule record that meets `condition`, ordered by `ordering`.\n\n" +
 		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
 		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
 		"@param `condition: boolean` - the condition to evaluate\n\n" +

@@ -52,6 +52,12 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.CountTime, true
 	case builtins.FindFirstTime:
 		return hovertext.FindFirstTime, true
+	case builtins.SumSchedule:
+		return hovertext.SumSchedule, true
+	case builtins.CountSchedule:
+		return hovertext.CountSchedule, true
+	case builtins.FindFirstSchedule:
+		return hovertext.FindFirstSchedule, true
 	}
 
 	return "", false
