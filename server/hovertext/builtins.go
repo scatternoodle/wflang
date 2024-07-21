@@ -242,4 +242,19 @@ const (
 		"@param `range: day|week|period|dateRange` - the time period over which to count\n\n" +
 		"@param `aliasName?: string` - alias for the date currently being evaluated\n\n" +
 		"@param `condition: boolean` - the condition to evaluate in finding the return date\n\n"
+
+	FindNthTime string = codeBlockStart +
+		"findNthTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"             , where condition: boolean\n" +
+		"             , order by ordering: string|number|date|dateTime\n" +
+		"             , n: number )\n" +
+		codeBlockReturns + "timeRecord\n" +
+		codeBlockEnd +
+		"### FindNthTime\n\n" +
+		"Returns the Nth time record that meets `condition`, ordered by `ordering`.\n\n" +
+		"@param `range: day|week|period|dateRange` - the time period over which to search\n\n" +
+		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
+		"@param `condition: boolean` - the condition to evaluate\n\n" +
+		"@param `ordering: string|number|date|dateTime` - the value to order by\n\n" +
+		"@param `n`: number - the 'N' in 'Nth', e.g. 2 gets you the 2nd timeRecord meeting `condition`\n\n"
 )

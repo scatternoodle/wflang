@@ -24,7 +24,7 @@ The following built-in functions currently have hover support:
 | LongestConsecutiveRange    | ✅        |
 | FirstConsecutiveDay        | ✅        |
 | LastConsecutiveDay         | ✅        |
-| FindNthTime                | :x:       |
+| FindNthTime                | ✅        |
 | Accrued                    | :x:       |
 | AccruedBefore              | :x:       |
 | Balance                    | :x:       |
