@@ -102,7 +102,7 @@ const (
 		"findFirstTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"             , where condition: boolean\n" +
 		"             , order by ordering: string|number|date|dateTime )\n" +
-		codeBlockReturns + "timeRecord\n" +
+		codeBlockReturns + "timeRecord|null\n" +
 		codeBlockEnd +
 		"### FindFirstTime\n\n" +
 		"Returns the first time record that meets `condition`, ordered by `ordering`.\n\n" +
@@ -139,7 +139,7 @@ const (
 		"findFirstSchedule( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"                 , where condition: boolean\n" +
 		"                 , order by ordering: string|number|date|dateTime )\n" +
-		codeBlockReturns + "scheduleRecord\n" +
+		codeBlockReturns + "scheduleRecord|null\n" +
 		codeBlockEnd +
 		"### FindFirstSchedule\n\n" +
 		"Returns the first schedule record that meets `condition`, ordered by `ordering`.\n\n" +
@@ -151,7 +151,7 @@ const (
 	CountException string = codeBlockStart +
 		"countException( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"             [, where condition?: bool] )\n" +
-		codeBlockReturns + "exception\n" +
+		codeBlockReturns + "exception|null\n" +
 		codeBlockEnd +
 		"### CountException\n\n" +
 		"Calculates the count of exception records in a range.\n\n" +
@@ -163,7 +163,7 @@ const (
 		"findFirstTorDetail( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"                  , where condition: boolean\n" +
 		"                  , order by ordering: string|number|date|dateTime )\n" +
-		codeBlockReturns + "torDetailRecord\n" +
+		codeBlockReturns + "torDetailRecord|null\n" +
 		codeBlockEnd +
 		"### FindFirstTorDetail\n\n" +
 		"Returns the first TOR detail record that meets `condition`, ordered by `ordering`.\n\n" +
@@ -175,7 +175,7 @@ const (
 	FindFirstDayForward string = codeBlockStart +
 		"findFirstDayForward( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"                   , where condition: boolean )\n" +
-		codeBlockReturns + "date\n" +
+		codeBlockReturns + "date|null\n" +
 		codeBlockEnd +
 		"### FindFirstDayForward\n\n" +
 		"Returns the first date that meets `condition`, going from the start to the end of `range`, excluding the start date.\n\n" +
@@ -186,7 +186,7 @@ const (
 	FindFirstDayBackward string = codeBlockStart +
 		"findFirstBackward( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"                 , where condition: boolean )\n" +
-		codeBlockReturns + "date\n" +
+		codeBlockReturns + "date|null\n" +
 		codeBlockEnd +
 		"### FindFirstDayBackward\n\n" +
 		"Returns the first date that meets `condition`, going from the end to the start of `range`, excluding the end date.\n\n" +
@@ -198,7 +198,7 @@ const (
 		"findFirstDeletedTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"                    , where condition: boolean\n" +
 		"                    , order by ordering: string|number|date|dateTime )\n" +
-		codeBlockReturns + "timeRecord\n" +
+		codeBlockReturns + "timeRecord|null\n" +
 		codeBlockEnd +
 		"### FindFirstDeletedTime\n\n" +
 		"Returns the first deleted time record that meets `condition`, ordered by `ordering`. Will only return time records" +
@@ -211,7 +211,7 @@ const (
 	LongestConsecutiveRange string = codeBlockStart +
 		"longestConsecutiveRange( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"                       , where condition: bool )\n" +
-		codeBlockReturns + "dateRange\n" +
+		codeBlockReturns + "dateRange|null\n" +
 		codeBlockEnd +
 		"### LongestConsecutiveRange\n\n" +
 		"evaluates a `condition` over a date range and returns the longest consecutive date range where `condition` is true.\n\n" +
@@ -222,7 +222,7 @@ const (
 	FirstConsecutiveDay string = codeBlockStart +
 		"firstConsecutiveDay( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"                   , where condition: bool )\n" +
-		codeBlockReturns + "date\n" +
+		codeBlockReturns + "date|null\n" +
 		codeBlockEnd +
 		"### FirstConsecutiveDay\n\n" +
 		"evaluates a `condition` over a date range and returns the first date of the longest consecutive range where `condition` is true." +
@@ -234,7 +234,7 @@ const (
 	LastConsecutiveDay string = codeBlockStart +
 		"lastConsecutiveDay( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
 		"                   , where condition: bool )\n" +
-		codeBlockReturns + "date\n" +
+		codeBlockReturns + "date|null\n" +
 		codeBlockEnd +
 		"### LastConsecutiveDay\n\n" +
 		"evaluates a `condition` over a date range and returns the last date of the longest consecutive range where `condition` is true." +
@@ -248,7 +248,7 @@ const (
 		"             , where condition: boolean\n" +
 		"             , order by ordering: string|number|date|dateTime\n" +
 		"             , n: number )\n" +
-		codeBlockReturns + "timeRecord\n" +
+		codeBlockReturns + "timeRecord|null\n" +
 		codeBlockEnd +
 		"### FindNthTime\n\n" +
 		"Returns the Nth time record that meets `condition`, ordered by `ordering`.\n\n" +
