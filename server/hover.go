@@ -84,6 +84,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.ConvertDttmByTimezone, true
 	case builtins.CountHolidays:
 		return hovertext.CountHolidays, true
+	case builtins.GetHoliday:
+		return hovertext.GetHoliday, true
 	}
 
 	return "", false

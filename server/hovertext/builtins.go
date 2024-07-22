@@ -298,4 +298,13 @@ const (
 		" unlike with `getHoliday()`, the Policy ID of the Holiday Set in question must be known at compile time.\n\n" +
 		"@param `timePeriod: day|date|dateRange|week|period` - date range to count over\n\n" +
 		"@param `holidaySet: ident` - the policy ID of the holiday set to check\n\n"
+
+	GetHoliday string = codeBlockStart +
+		"getHoliday(holidaySet: string, date: day|date)\n" +
+		codeBlockReturns + "string\n" +
+		codeBlockEnd +
+		"### GetHoliday\n\n" +
+		"Checks the given holiday set on `date`. If no holidays found or if `holidaySet` is invalid, returns an empty string.\n\n" +
+		"@param `holidaySet: string` - the Policy ID of a Holiday Set\n\n" +
+		"@param `date: day|date` - the date to check in the set\n\n"
 )

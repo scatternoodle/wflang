@@ -32,7 +32,7 @@ The following built-in functions currently have hover support:
 | ConvertDttmByTimezone      | ✅        |
 | CountGroupCalc             | :x:       |
 | CountHolidays              | ✅        |
-| GetHoliday                 | :x:       |
+| GetHoliday                 | ✅        |
 | CountHomeCrewMembers       | :x:       |
 | CountShiftChanges          | :x:       |
 | EmployeeAttributeExists    | :x:       |
