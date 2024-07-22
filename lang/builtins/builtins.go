@@ -120,7 +120,7 @@ const (
 	CountShiftChanges          string = "countshiftchanges"
 	EmployeeAttributeExists    string = "employee_attribute_exists"
 	EmployeeAttribute          string = "employee_attribute"
-	GetAttributeCalcDate       string = "getattributecalcdate"
+	GetAttributeCalcDate       string = "getattributecalculationdate"
 	GetBooleanFieldFromTor     string = "getbooleanfieldfromtor"
 	GetDateFieldFromTor        string = "getdatefieldfromtor"
 	GetNumberFieldFromTor      string = "getnumberfieldfromtor"

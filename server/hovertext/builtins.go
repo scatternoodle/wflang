@@ -334,4 +334,16 @@ const (
 		" dateTime, number, boolean].\n\n" +
 		"@param `id: ident` - the Policy ID of the employee attribute\n\n" +
 		"@param `asOf?: day|date` - date on which to check. If omitted, {TBC} is used \n\n" // TODO - confirm behaviour when asOf is omitted.
+
+	GetAttributeCalculationDate string = codeBlockStart +
+		"getAttributeCalculationDate(id: string, asOf: day|date)\n" +
+		codeBlockReturns + "date|null\n" +
+		codeBlockEnd +
+		"### GetAttributeCalculationDate\n\n" +
+		"Returns the date on which a given employee attribute value was calculated. Useful if you need to go and pull other data" +
+		" from the timesheet or employee record on that date.\n\nNote that despite having the similar syntax to `employee_attribute()` and" +
+		" `employee_attribute_exists()`, `getAttributeCalculationDate()` differs in that `id` is a string not an ident, and" +
+		" `asOf` is *not* optional. Easy to trip up on this.\n\n" +
+		"@param `id: string` - the Policy ID of the Employee Attribute\n\n" +
+		"@param `asOf: day|date` - the date on which to check the value of the Employee Attribute\n\n"
 )
