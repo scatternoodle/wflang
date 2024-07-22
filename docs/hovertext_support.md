@@ -38,7 +38,7 @@ The following built-in functions currently have hover support:
 | EmployeeAttributeExists     | ✅        |
 | EmployeeAttribute           | ✅        |
 | GetAttributeCalculationDate | ✅        |
-| GetBooleanFieldFromTor      | :x:       |
+| GetBooleanFieldFromTor      | ✅        |
 | GetDateFieldFromTor         | :x:       |
 | GetNumberFieldFromTor       | :x:       |
 | GetPayCurrencyCode          | :x:       |

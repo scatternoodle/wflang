@@ -346,4 +346,17 @@ const (
 		" `asOf` is *not* optional. Easy to trip up on this.\n\n" +
 		"@param `id: string` - the Policy ID of the Employee Attribute\n\n" +
 		"@param `asOf: day|date` - the date on which to check the value of the Employee Attribute\n\n"
+
+	GetBooleanFieldFromTor string = codeBlockStart +
+		"getBooleanFieldFromTor(torId: string, fieldId: string)\n" +
+		codeBlockReturns + "boolean\n" +
+		codeBlockEnd +
+		"### GetBooleanFieldFromTor\n\n" +
+		"Takes a Time Off Request ID, a policy ID for a boolean field, and returns the value of that boolean. It has some nuances" +
+		" to be aware of:\n\n" +
+		"- `torId` param is string type but **must** resolve to an integer otherwise it'll compile then error at runtime.\n\n" +
+		"- If `fieldId` is not a valid Time Off Request Field Policy ID, formula compiles then errors at runtime.\n\n" +
+		"- If no TOR with `torId` is found at runtime, returns false.\n\n" +
+		"@param `torId: string` - TOR ID - must resolve to an integer\n\n" +
+		"@param `fieldId: string` - the Policy ID of the TOR field\n\n"
 )
