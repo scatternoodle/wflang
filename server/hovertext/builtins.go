@@ -264,9 +264,9 @@ const (
 		codeBlockEnd +
 		"### Accrued\n\n" +
 		"Returns the balance accrued to `bank` over date range of `start` to `end`. Only returns the product of **positive** transactions.\n\n" +
-		"@param `bank`: ident - the identifier of the bank\n\n" +
-		"@param `start`: day|date - start of the range\n\n" +
-		"@param `end`: day|date - end of the range\n\n"
+		"@param `bank: ident` - the identifier of the bank\n\n" +
+		"@param `start: day|date` - start of the range\n\n" +
+		"@param `end: day|date` - end of the range\n\n"
 
 	BalanceAccruedBefore string = codeBlockStart +
 		"balanceAccruedBefore(bank: string, asOfDate: day|date)\n" +
@@ -276,6 +276,26 @@ const (
 		"Returns all balance accrued to `bank` prior to `asOfDate`. Only returns the product of **positive** transactions." +
 		" Note that syntax is inconsistent to the `accrued` function which takes an `ident` for its `bank` parameter, whereas" +
 		" for `balanceAccruedBefore`, `bank` must be a string literal.\n\n" +
-		"@param `bank`: string - the policy ID of the bank\n\n" +
-		"@param `asOfDate`: day|date - accruals are summed prior to this date\n\n"
+		"@param `bank: string` - the policy ID of the bank\n\n" +
+		"@param `asOfDate: day|date` - accruals are summed prior to this date\n\n"
+
+	ConvertDttmByTimezone string = codeBlockStart +
+		"convertDttmByTimezone( timezone: string, dttm: dateTime )\n" +
+		codeBlockReturns + "dateTime|null\n" +
+		codeBlockEnd +
+		"### ConvertDttmByTimezone\n\n" +
+		"Converts the given dateTime to the specified timezone.\n\n" +
+		"@param `timezone: string` - the timezone to convert to, which must be the policy ID of a valid Timezones Policy\n\n" +
+		"@param `dttm: dateTime` - the dateTime to be converted\n\n"
+
+	CountHolidays string = codeBlockStart +
+		"countHolidays(timePeriod: day|date|dateRange|week|period, holidaySet: ident)\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### CountHolidays\n\n" +
+		"Returns a count of all holidays in `holidaySet` over `timePeriod`. Note that `holidaySet` must be an explicit ident" +
+		" for a valid Holiday Set; you cannot use a string literal or assignment.HOLIDAYS, for instance. This means that," +
+		" unlike with `getHoliday()`, the Policy ID of the Holiday Set in question must be known at compile time.\n\n" +
+		"@param `timePeriod: day|date|dateRange|week|period` - date range to count over\n\n" +
+		"@param `holidaySet: ident` - the policy ID of the holiday set to check\n\n"
 )

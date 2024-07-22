@@ -80,6 +80,10 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.Accrued, true
 	case builtins.BalanceAccruedBefore:
 		return hovertext.BalanceAccruedBefore, true
+	case builtins.ConvertDttmByTimezone:
+		return hovertext.ConvertDttmByTimezone, true
+	case builtins.CountHolidays:
+		return hovertext.CountHolidays, true
 	}
 
 	return "", false
