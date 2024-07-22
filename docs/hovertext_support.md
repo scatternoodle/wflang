@@ -35,8 +35,8 @@ The following built-in functions currently have hover support:
 | GetHoliday                 | ✅        |
 | CountHomeCrewMembers       | :x:       |
 | CountShiftChanges          | :x:       |
-| EmployeeAttributeExists    | :x:       |
-| EmployeeAttribute          | :x:       |
+| EmployeeAttributeExists    | ✅        |
+| EmployeeAttribute          | ✅        |
 | GetAttributeCalcDate       | :x:       |
 | GetBooleanFieldFromTor     | :x:       |
 | GetDateFieldFromTor        | :x:       |

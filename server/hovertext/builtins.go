@@ -307,4 +307,31 @@ const (
 		"Checks the given holiday set on `date`. If no holidays found or if `holidaySet` is invalid, returns an empty string.\n\n" +
 		"@param `holidaySet: string` - the Policy ID of a Holiday Set\n\n" +
 		"@param `date: day|date` - the date to check in the set\n\n"
+
+	Employee_attribute_exists string = codeBlockStart +
+		"employee_attribute_exists(id: ident, asOf?: day|date)\n" +
+		codeBlockReturns + "boolean\n" +
+		codeBlockEnd +
+		"### employee_attribute_exists\n\n" +
+		"Returns true if the employee attribute with `id` exists on the timesheet on `asOf`. Use to nullcheck Employee Attributes" +
+		" before calling `employee_attribute()`, usually nested within an if statement like so:\n\n" +
+		"```wflang\n" +
+		"if( employee_attribute_exists(MY_NUMBER_ATTRIBUTE, day)\n" +
+		"  , employee_attribute(MY_NUMBER_ATTRIBUTE, day)\n" +
+		"  , 0 )\n" +
+		"```\n\n" +
+		"@param `id: ident` - the Policy ID of the employee attribute\n\n" +
+		"@param `asOf?: day|date` - date on which to check. If omitted, {TBC} is used \n\n" // TODO - confirm behaviour when asOf is omitted.
+
+	Employee_attribute string = codeBlockStart +
+		"employee_attribute(id: ident, asOf?: day|date)\n" +
+		codeBlockReturns + "date|dateTime|number|string|boolean|null\n" +
+		codeBlockEnd +
+		"### employee_attribute\n\n" +
+		"Returns the value of the Employee Attribute with `id` on `asOf`.\n\nThe type of the return value depends on the type" +
+		" of the Employee Attribute (parent node >> Main >> Attribute Type). Interestingly, the Attribute Type dropdown lists" +
+		" quite a lot of options (e.g. exception severity, color), but only permits saving the policy with one of [string, date," +
+		" dateTime, number, boolean].\n\n" +
+		"@param `id: ident` - the Policy ID of the employee attribute\n\n" +
+		"@param `asOf?: day|date` - date on which to check. If omitted, {TBC} is used \n\n" // TODO - confirm behaviour when asOf is omitted.
 )
