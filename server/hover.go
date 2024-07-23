@@ -98,6 +98,10 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.GetDateFieldFromTor, true
 	case builtins.GetSelectFieldValueFromTor:
 		return hovertext.GetSelectFieldValueFromTor, true
+	case builtins.GetNumberFieldFromTor:
+		return hovertext.GetNumberFieldFromTor, true
+	case builtins.GetStringFieldFromTor:
+		return hovertext.GetStringValueFromTor, true
 	}
 
 	return "", false
