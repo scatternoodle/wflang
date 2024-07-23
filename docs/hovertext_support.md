@@ -39,7 +39,7 @@ The following built-in functions currently have hover support:
 | EmployeeAttribute           | ✅        |
 | GetAttributeCalculationDate | ✅        |
 | GetBooleanFieldFromTor      | ✅        |
-| GetDateFieldFromTor         | :x:       |
+| GetDateFieldFromTor         | ✅        |
 | GetNumberFieldFromTor       | :x:       |
 | GetPayCurrencyCode          | :x:       |
 | GetSelectFieldValueFromTor  | :x:       |
