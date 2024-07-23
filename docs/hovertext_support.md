@@ -42,7 +42,7 @@ The following built-in functions currently have hover support:
 | GetDateFieldFromTor         | ✅        |
 | GetNumberFieldFromTor       | ✅        |
 | GetPayCurrencyCode          | :x:       |
-| GetSelectFieldValueFromTor  | :x:       |
+| GetSelectFieldValueFromTor  | ✅        |
 | GetStringFieldFromTor       | :x:       |
 | GetSysDateByTimezone        | :x:       |
 | LdLookup                    | :x:       |
