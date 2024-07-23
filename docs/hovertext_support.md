@@ -44,7 +44,7 @@ The following built-in functions currently have hover support:
 | GetPayCurrencyCode          | :x:       |
 | GetSelectFieldValueFromTor  | ✅        |
 | GetStringFieldFromTor       | ✅        |
-| GetSysDateByTimezone        | :x:       |
+| GetSysDateByTimezone        | ✅        |
 | LdLookup                    | :x:       |
 | LdValidate                  | :x:       |
 | IndexOf                     | :x:       |

@@ -416,4 +416,15 @@ const (
 		"- If no TOR with `torId` is found at runtime, returns null.\n\n" +
 		"@param `torId: string` - TOR ID - must resolve to an integer\n\n" +
 		"@param `fieldId: string` - the Policy ID of the TOR field\n\n"
+
+	GetSysDateByTimezone string = codeBlockStart +
+		"getSysDateByTimezone(timezone: IDENT)\n" +
+		codeBlockReturns + "date|null\n" +
+		codeBlockEnd +
+		"### GetSysDateByTimezone\n\n" +
+		"Returns the current sysdate based on the TIME_ZONE value of the assignment. Interestingly, this only compiles when" +
+		" we pass `timezone` as `assignment(context).TIME_ZONE` and will not allow us to explicitly specify a Time Zones" +
+		" Policy ident. If assignment(context).TIME_ZONE is blank, returns the current sysdate according to the default" +
+		" server timezone.\n\n" +
+		"@param `timezone: ident` - Time Zones Policy Ident - can only take `assignment(context).TIME_ZONE`!\n\n"
 )
