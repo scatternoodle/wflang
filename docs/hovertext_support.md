@@ -47,7 +47,7 @@ The following built-in functions currently have hover support:
 | GetSysDateByTimezone        | ✅        |
 | LdLookup                    | ✅        |
 | LdValidate                  | ✅        |
-| IndexOf                     | :x:       |
+| IndexOf                     | ✅        |
 | LengthOfService             | :x:       |
 | MakeDate                    | :x:       |
 | MakeDateTime                | :x:       |

@@ -2,7 +2,7 @@ package hovertext
 
 const (
 	codeBlockStart   string = "```wflang\nSYNTAX:\n"
-	codeBlockReturns string = "\nRETURN TYPE: "
+	codeBlockReturns string = "\nRETURNS: "
 	codeBlockEnd     string = "```\n\n---\n\n"
 )
 
@@ -451,4 +451,13 @@ const (
 		"@param `field: ident` - LD Field Policy ID\n\n" +
 		"@param `slice: timeRecord` - the time record on which to check the LD field value\n\n" +
 		"@param `asOf?: date` - function checks only for records in the LD table that are active on the `asOf` date\n\n" // TODO confirm default behaviour if omitted
+
+	IndexOf string = codeBlockStart +
+		"indexOf(x: string, y: string)\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### IndexOf\n\n" +
+		"Returns the index of string `y` in string `x`, or -1 if `y` is not in `x`.\n\n" +
+		"@param `x: string`\n\n" +
+		"@param `y: string`\n\n"
 )

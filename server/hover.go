@@ -108,6 +108,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.LDLookup, true
 	case builtins.LdValidate:
 		return hovertext.LDValidate, true
+	case builtins.IndexOf:
+		return hovertext.IndexOf, true
 	}
 
 	return "", false
