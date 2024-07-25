@@ -441,4 +441,14 @@ const (
 		"@param `fieldX: ident` - the Policy ID of the LD field to look up - normally just the same LD Field policy as `policyName`" +
 		" but can be different for more complex multifield lookups where an LD Table supplies multiple LD Field Policies.\n\n" +
 		"@param `valueX: string` - the value to match on. Always a string value.\n\n"
+
+	LDValidate string = codeBlockStart +
+		"ldValidate(field: ident, slice: timeRecord, asOf?: date)\n" +
+		codeBlockReturns + "boolean\n" +
+		codeBlockEnd +
+		"### LDValidate\n\n" +
+		"Returns true if the value of `field` in time record `slice` is a valid value in the LD table as of `asOf`.\n\n" +
+		"@param `field: ident` - LD Field Policy ID\n\n" +
+		"@param `slice: timeRecord` - the time record on which to check the LD field value\n\n" +
+		"@param `asOf?: date` - function checks only for records in the LD table that are active on the `asOf` date\n\n" // TODO confirm default behaviour if omitted
 )

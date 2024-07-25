@@ -46,7 +46,7 @@ The following built-in functions currently have hover support:
 | GetStringFieldFromTor       | ✅        |
 | GetSysDateByTimezone        | ✅        |
 | LdLookup                    | ✅        |
-| LdValidate                  | :x:       |
+| LdValidate                  | ✅        |
 | IndexOf                     | :x:       |
 | LengthOfService             | :x:       |
 | MakeDate                    | :x:       |
