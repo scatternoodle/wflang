@@ -427,4 +427,18 @@ const (
 		" Policy ident. If assignment(context).TIME_ZONE is blank, returns the current sysdate according to the default" +
 		" server timezone.\n\n" +
 		"@param `timezone: ident` - Time Zones Policy Ident - can only take `assignment(context).TIME_ZONE`!\n\n"
+
+	LDLookup string = codeBlockStart +
+		"ldLookup( policyName: ident\n" +
+		"        , field1: ident => value1: string\n" +
+		"       [, field2?: ident, value2?: string\n" +
+		"        , ...] )" +
+		codeBlockReturns + "ldRecord|null\n" +
+		codeBlockEnd +
+		"### LDLookup\n\n" +
+		"Looks up and returns an ldRecord object from the given LD Table and field / value pairs.\n\n" +
+		"@param `policyName: ident` - the Policy ID of the LD Field that points to the table's primary key.\n\n" +
+		"@param `fieldX: ident` - the Policy ID of the LD field to look up - normally just the same LD Field policy as `policyName`" +
+		" but can be different for more complex multifield lookups where an LD Table supplies multiple LD Field Policies.\n\n" +
+		"@param `valueX: string` - the value to match on. Always a string value.\n\n"
 )

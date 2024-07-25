@@ -104,6 +104,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.GetStringValueFromTor, true
 	case builtins.GetSysDateByTimezone:
 		return hovertext.GetSysDateByTimezone, true
+	case builtins.LdLookup:
+		return hovertext.LDLookup, true
 	}
 
 	return "", false
