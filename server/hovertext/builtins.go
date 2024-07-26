@@ -460,4 +460,13 @@ const (
 		"Returns the index of string `y` in string `x`, or -1 if `y` is not in `x`.\n\n" +
 		"@param `x: string`\n\n" +
 		"@param `y: string`\n\n"
+
+	GetPayCurrencyCode string = codeBlockStart +
+		"getPayCurrencyCode(over timePeriod: day|date|dateRange|period)\n" +
+		codeBlockReturns + "string\n" +
+		codeBlockEnd +
+		"### GetPayCurrencyCode\n\n" +
+		"Returns the ISO Currency Code for `timePeriod`, or the string literal `\"MULTI\"` if there are multiple over the range." +
+		" Determined by `assignment.PAY_CURRENCY_CODE`.\n\n" +
+		"@param `timePeriod: day|date|dateRange|period`\n\n"
 )

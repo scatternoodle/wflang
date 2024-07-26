@@ -110,6 +110,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.LDValidate, true
 	case builtins.IndexOf:
 		return hovertext.IndexOf, true
+	case builtins.GetPayCurrencyCode:
+		return hovertext.GetPayCurrencyCode, true
 	}
 
 	return "", false
