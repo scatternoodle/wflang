@@ -28,7 +28,7 @@ The following built-in functions currently have hover support:
 | Accrued                     | ✅        |
 | BalanceAccruedBefore        | ✅        |
 | Balance                     | ✅        |
-| CallSql                     | :x:       |
+| CallSql                     | ✅        |
 | ConvertDttmByTimezone       | ✅        |
 | CountGroupCalc              | :x:       |
 | CountHolidays               | ✅        |

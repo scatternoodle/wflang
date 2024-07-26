@@ -469,4 +469,15 @@ const (
 		"Returns the ISO Currency Code for `timePeriod`, or the string literal `\"MULTI\"` if there are multiple over the range." +
 		" Determined by `assignment.PAY_CURRENCY_CODE`.\n\n" +
 		"@param `timePeriod: day|date|dateRange|period`\n\n"
+
+	CallSQL string = codeBlockStart +
+		"callSQL(policyId: ident, [param1?: ident, value1?: any, ..., paramN?: ident, valueN?: any])\n" +
+		codeBlockReturns + "any|null\n" +
+		codeBlockEnd +
+		"### CallSQL\n\n" +
+		"Returns the results of a SQL Invocation. The results can be a `resultSet` object containing named columns, or" +
+		" one of many other types.\n\n" +
+		"@param `policyId: ident` - the SQL Invocation Policy ID\n\n" +
+		"@param `paramN?: ident` - must correspond with a parameter on the Parameters tab of the SQL Invocation\n\n" +
+		"@param `valueN?: any`\n\n"
 )

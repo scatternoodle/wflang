@@ -112,6 +112,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.IndexOf, true
 	case builtins.GetPayCurrencyCode:
 		return hovertext.GetPayCurrencyCode, true
+	case builtins.CallSql:
+		return hovertext.CallSQL, true
 	}
 
 	return "", false
