@@ -53,7 +53,7 @@ The following built-in functions currently have hover support:
 | MakeDateTime                | ✅        |
 | MakeDateTimeRange           | ✅        |
 | PayCodeInScheduleMap        | ✅        |
-| PayCodeInTimeSheetMap       | :x:       |
+| PayCodeInTimeSheetMap       | ✅        |
 | RangeLookup                 | :x:       |
 | Round                       | :x:       |
 | RoundUp                     | :x:       |
