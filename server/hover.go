@@ -154,6 +154,14 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.MaxTime, true
 	case builtins.AvgTime:
 		return hovertext.AvgTime, true
+	case builtins.SumException:
+		return hovertext.SumException, true
+	case builtins.MinException:
+		return hovertext.MinException, true
+	case builtins.MaxException:
+		return hovertext.MaxException, true
+	case builtins.AvgException:
+		return hovertext.AvgException, true
 	}
 
 	return "", false

@@ -690,8 +690,8 @@ const (
 
 	MinTime string = codeBlockStart +
 		"minTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
-		"           , expression: number\n" +
-		"          [, where expression?: bool] )\n" +
+		"       , expression: number\n" +
+		"      [, where expression?: bool] )\n" +
 		codeBlockReturns + "number\n" +
 		codeBlockEnd +
 		"### MinTime\n\n" +
@@ -703,8 +703,8 @@ const (
 
 	MaxTime string = codeBlockStart +
 		"maxTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
-		"           , expression: number\n" +
-		"          [, where expression?: bool] )\n" +
+		"       , expression: number\n" +
+		"      [, where expression?: bool] )\n" +
 		codeBlockReturns + "number\n" +
 		codeBlockEnd +
 		"### MaxTime\n\n" +
@@ -716,8 +716,8 @@ const (
 
 	AvgTime string = codeBlockStart +
 		"avgTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
-		"           , expression: number\n" +
-		"          [, where expression?: bool] )\n" +
+		"       , expression: number\n" +
+		"      [, where expression?: bool] )\n" +
 		codeBlockReturns + "number\n" +
 		codeBlockEnd +
 		"### AvgTime\n\n" +
@@ -726,4 +726,56 @@ const (
 		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
 		"@param `expression: number`\n\n" +
 		"@param `condition?: boolean` - if used, only slices where this expression returns true will be evaluated\n\n"
+
+	SumException string = codeBlockStart +
+		"sumException( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"            , expression: number\n" +
+		"           [, where expression?: bool] )\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### SumException\n\n" +
+		"Returns the sum of calculated values of `expression` over a `range` of exceptions.\n\n" +
+		"@param `range: day|week|period|dateRange`\n\n" +
+		"@param `aliasName?: string` - alias for the exception currently being evaluated\n\n" +
+		"@param `expression: number`\n\n" +
+		"@param `condition?: boolean` - if used, only exceptions where this expression returns true will be evaluated\n\n"
+
+	MinException string = codeBlockStart +
+		"minException( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"            , expression: number\n" +
+		"           [, where expression?: bool] )\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### SumException\n\n" +
+		"Returns the minimum of calculated values of `expression` over a `range` of exceptions.\n\n" +
+		"@param `range: day|week|period|dateRange`\n\n" +
+		"@param `aliasName?: string` - alias for the exception currently being evaluated\n\n" +
+		"@param `expression: number`\n\n" +
+		"@param `condition?: boolean` - if used, only exceptions where this expression returns true will be evaluated\n\n"
+
+	MaxException string = codeBlockStart +
+		"maxException( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"            , expression: number\n" +
+		"           [, where expression?: bool] )\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### MaxException\n\n" +
+		"Returns the maximum of calculated values of `expression` over a `range` of exceptions.\n\n" +
+		"@param `range: day|week|period|dateRange`\n\n" +
+		"@param `aliasName?: string` - alias for the exception currently being evaluated\n\n" +
+		"@param `expression: number`\n\n" +
+		"@param `condition?: boolean` - if used, only exceptions where this expression returns true will be evaluated\n\n"
+
+	AvgException string = codeBlockStart +
+		"avgException( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"            , expression: number\n" +
+		"           [, where expression?: bool] )\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### AvgException\n\n" +
+		"Returns the average of calculated values of `expression` over a `range` of exceptions.\n\n" +
+		"@param `range: day|week|period|dateRange`\n\n" +
+		"@param `aliasName?: string` - alias for the exception currently being evaluated\n\n" +
+		"@param `expression: number`\n\n" +
+		"@param `condition?: boolean` - if used, only exceptions where this expression returns true will be evaluated\n\n"
 )

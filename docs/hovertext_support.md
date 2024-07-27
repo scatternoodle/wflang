@@ -69,7 +69,7 @@ The following built-in functions currently have hover support:
 | MinTime                     | ✅        |
 | MaxTime                     | ✅        |
 | AvgTime                     | ✅        |
-| SumException                | :x:       |
-| MinException                | :x:       |
-| MaxException                | :x:       |
-| AverageException            | :x:       |
+| SumException                | ✅        |
+| MinException                | ✅        |
+| MaxException                | ✅        |
+| AverageException            | ✅        |

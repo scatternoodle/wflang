@@ -78,7 +78,7 @@ func Builtins() map[string]Builtin {
 		SumException:               {Name: SumException, ReturnType: types.NUMBER},
 		MinException:               {Name: MinException, ReturnType: types.NUMBER},
 		MaxException:               {Name: MaxException, ReturnType: types.NUMBER},
-		AverageException:           {Name: AverageException, ReturnType: types.NUMBER},
+		AvgException:               {Name: AvgException, ReturnType: types.NUMBER},
 	}
 }
 
@@ -151,5 +151,5 @@ const (
 	SumException               string = "sumexception"
 	MinException               string = "minexception"
 	MaxException               string = "maxexception"
-	AverageException           string = "averageexception"
+	AvgException               string = "averageexception"
 )
