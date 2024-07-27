@@ -114,6 +114,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.GetPayCurrencyCode, true
 	case builtins.CallSql:
 		return hovertext.CallSQL, true
+	case builtins.LengthOfService:
+		return hovertext.LengthOfService, true
 	}
 
 	return "", false

@@ -48,7 +48,7 @@ The following built-in functions currently have hover support:
 | LdLookup                    | ✅        |
 | LdValidate                  | ✅        |
 | IndexOf                     | ✅        |
-| LengthOfService             | :x:       |
+| LengthOfService             | ✅        |
 | MakeDate                    | :x:       |
 | MakeDateTime                | :x:       |
 | MakeDateTimeRange           | :x:       |

@@ -480,4 +480,16 @@ const (
 		"@param `policyId: ident` - the SQL Invocation Policy ID\n\n" +
 		"@param `paramN?: ident` - must correspond with a parameter on the Parameters tab of the SQL Invocation\n\n" +
 		"@param `valueN?: any`\n\n"
+
+	LengthOfService string = codeBlockStart +
+		"lengthOfService(startDate: date, endDate: date, units: ident{days|months|years}, adjustTo?: TBC)\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### LengthOfService\n\n" +
+		"returns the length of time in `units` between `startDate` `endDate`. It is acceptable to use a `startDate` that is" +
+		" after `endDate`, which will return a negative number.\n\n" +
+		"@param - `startDate: date`\n\n" +
+		"@param - `endDate: date`\n\n" +
+		"@param - `units: ident` - accepted values are days, months, or years\n\n" +
+		"@param - `adjustTo?: ???` - TBC" // TODO confirm behaviour of adjustTo param
 )
