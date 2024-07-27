@@ -7,7 +7,7 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/scatternoodle/wflang/lang/builtins"
+	"github.com/scatternoodle/wflang/lang/object"
 	"github.com/scatternoodle/wflang/lang/token"
 	"github.com/scatternoodle/wflang/util"
 )
@@ -193,7 +193,7 @@ func (l *Lexer) NextToken() token.Token {
 			litLwr := strings.ToLower(lit)
 			var tType token.Type
 			kType, isKwd := Keyword(litLwr)
-			_, isBtn := builtins.Builtins()[litLwr]
+			_, isBtn := object.Builtins()[litLwr]
 			if isKwd {
 				tType = kType
 			} else if isBtn {

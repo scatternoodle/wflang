@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/scatternoodle/wflang/lang/analysis"
 	"github.com/scatternoodle/wflang/lang/ast"
 	"github.com/scatternoodle/wflang/lang/token"
 )
@@ -92,7 +91,7 @@ func (p *Parser) parseIdent() (ast.Expression, error) {
 	if val == "" {
 		return ast.Ident{}, newParseErr("blank ident string", p.current)
 	}
-	if analysis.IsReserved(val) {
+	if isReserved(val) {
 		msg := fmt.Sprintf("token %s is a reserved word, and cannot be used as an identifier", val)
 		return ast.Ident{}, newParseErr(msg, p.current)
 	}

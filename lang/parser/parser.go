@@ -9,6 +9,7 @@ import (
 
 	"github.com/scatternoodle/wflang/lang/ast"
 	"github.com/scatternoodle/wflang/lang/lexer"
+	"github.com/scatternoodle/wflang/lang/object"
 	"github.com/scatternoodle/wflang/lang/token"
 )
 
@@ -137,4 +138,11 @@ func (p *Parser) passIf(want token.Type) error {
 	p.advance()
 	p.advance()
 	return nil
+}
+
+// isReserved returns true if string is a reserved language keyword.
+func isReserved(s string) bool {
+	_, isKeyword := lexer.Keyword(s)
+	_, isBuiltin := object.Builtins()[s]
+	return isKeyword || isBuiltin
 }
