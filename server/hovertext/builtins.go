@@ -486,7 +486,7 @@ const (
 		codeBlockReturns + "number\n" +
 		codeBlockEnd +
 		"### LengthOfService\n\n" +
-		"returns the length of time in `units` between `startDate` `endDate`. It is acceptable to use a `startDate` that is" +
+		"Returns the length of time in `units` between `startDate` `endDate`. It is acceptable to use a `startDate` that is" +
 		" after `endDate`, which will return a negative number.\n\n" +
 		"@param `startDate: date`\n\n" +
 		"@param `endDate: date`\n\n" +
@@ -498,7 +498,7 @@ const (
 		codeBlockReturns + "date\n" +
 		codeBlockEnd +
 		"### MakeDate\n\n" +
-		"returns a date object with the given `year`, `month`, `day`. Will compile but error at runtime if `month` > 12" +
+		"Returns a date object with the given `year`, `month`, `day`. Will compile but error at runtime if `month` > 12" +
 		" or `day` > 31. Caution: it will let you save, and there **will be no runtime error** if `day` is 31 for a month" +
 		" that has fewer than 31 days, which could cause unexpected behavior / errors in formulas that consume the date.\n\n" +
 		"There appear to be no restrictions on `year`, and using a negative integer interestingly results in the product" +
@@ -514,10 +514,20 @@ const (
 		codeBlockReturns + "dateTime\n" +
 		codeBlockEnd +
 		"### MakeDateTime\n\n" +
-		"returns a dateTime object with the given `date` and `time`. If `useDSTFallback` is true, the DST Fallback Hour will" +
+		"Returns a dateTime object with the given `date` and `time`. If `useDSTFallback` is true, the DST Fallback Hour will" +
 		" be used if applicable. The Fallback is the extra hour from the DST Autumn change.\n\n" +
 		"For more information on DST, see https://en.wikipedia.org/wiki/Daylight_saving_time\n\n" +
 		"@param `date: date`\n\n" +
 		"@param `time: time`\n\n" +
 		"@param `useDSTFallback?: boolean` - if true, the DST Fallback Hour will be used if applicable\n\n"
+
+	MakeDateTimeRange string = codeBlockStart +
+		"makeDateTimeRange(start: dateTime, end: dateTime)\n" +
+		codeBlockReturns + "dateTimeRange\n" +
+		codeBlockEnd +
+		"### MakeDateTimeRange\n\n" +
+		"Returns a dateTimeRange object for the range of `start` to `end`. `start` must be <= `end`, otherwise formula will" +
+		" compile but will error at runtime.\n\n" +
+		"@param `start: dateTime`\n\n" +
+		"@param `end: dateTime`\n\n"
 )
