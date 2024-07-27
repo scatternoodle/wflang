@@ -118,6 +118,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.LengthOfService, true
 	case builtins.MakeDate:
 		return hovertext.MakeDate, true
+	case builtins.MakeDateTime:
+		return hovertext.MakeDateTime, true
 	}
 
 	return "", false

@@ -508,4 +508,16 @@ const (
 		"@param `year: int`\n\n" +
 		"@param `month: int` - must be > 0 \n\n" +
 		"@param `day: int`\n\n"
+
+	MakeDateTime string = codeBlockStart +
+		"makeDateTime(date: date, time: time, useDSTFallback?: boolean)\n" +
+		codeBlockReturns + "dateTime\n" +
+		codeBlockEnd +
+		"### MakeDateTime\n\n" +
+		"returns a dateTime object with the given `date` and `time`. If `useDSTFallback` is true, the DST Fallback Hour will" +
+		" be used if applicable. The Fallback is the extra hour from the DST Autumn change.\n\n" +
+		"For more information on DST, see https://en.wikipedia.org/wiki/Daylight_saving_time\n\n" +
+		"@param `date: date`\n\n" +
+		"@param `time: time`\n\n" +
+		"@param `useDSTFallback?: boolean` - if true, the DST Fallback Hour will be used if applicable\n\n"
 )

@@ -50,7 +50,7 @@ The following built-in functions currently have hover support:
 | IndexOf                     | ✅        |
 | LengthOfService             | ✅        |
 | MakeDate                    | ✅        |
-| MakeDateTime                | :x:       |
+| MakeDateTime                | ✅        |
 | MakeDateTimeRange           | :x:       |
 | PayCodeInScheduleMap        | :x:       |
 | PayCodeInTimeSheetMap       | :x:       |
