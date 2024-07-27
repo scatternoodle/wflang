@@ -5,17 +5,80 @@ import "github.com/scatternoodle/wflang/lang/types"
 type Builtin struct {
 	Name       string
 	ReturnType types.BaseType
-	Params     []types.BaseType
+	Params     []Param
 }
+
+type Param struct {
+	Name     string
+	Types    pT // permitted types, can be many for some params
+	Optional bool
+	List     bool // function call can have N number of this param
+	PairA    bool // is 1st in pair of params
+	PairB    bool // is 2nd in pair of params
+}
+
+type pT []types.BaseType
 
 func Builtins() map[string]Builtin {
 	return map[string]Builtin{
-		If:                         {Name: If, ReturnType: types.BOOL},
-		Min:                        {Name: Min, ReturnType: types.NUMBER},
-		Max:                        {Name: Max, ReturnType: types.NUMBER},
-		Contains:                   {Name: Contains, ReturnType: types.BOOL},
-		Sum:                        {Name: Sum, ReturnType: types.NUMBER},
-		Count:                      {Name: Count, ReturnType: types.NUMBER},
+		If: {
+			Name:       If,
+			ReturnType: types.BOOL,
+			Params: []Param{
+				{Name: "condition", Types: pT{types.BOOL}},
+				{Name: "then", Types: pT{types.ANY}},
+				{Name: "else", Types: pT{types.ANY}},
+			},
+		},
+
+		Min: {
+			Name:       Min,
+			ReturnType: types.NUMBER,
+			Params: []Param{
+				{Name: "args", Types: pT{types.NUMBER}, List: true},
+			},
+		},
+
+		Max: {
+			Name:       Max,
+			ReturnType: types.NUMBER,
+			Params: []Param{
+				{Name: "args", Types: pT{types.NUMBER}, List: true},
+			},
+		},
+
+		Contains: {
+			Name:       Contains,
+			ReturnType: types.BOOL,
+			Params: []Param{
+				{Name: "x", Types: pT{types.STRING}},
+				{Name: "y", Types: pT{types.STRING}},
+			},
+		},
+
+		Sum: {
+			Name:       Sum,
+			ReturnType: types.NUMBER,
+			Params: []Param{
+				{Name: "interval", Types: pT{types.DAY, types.WEEK, types.PERIOD}},
+				{Name: "range", Types: pT{types.DAY, types.WEEK, types.PERIOD, types.DATERNG}},
+				{Name: "aliasName", Types: pT{types.STRING}, Optional: true},
+				{Name: "expression", Types: pT{types.NUMBER}},
+				{Name: "condition", Types: pT{types.BOOL}, Optional: true},
+			},
+		},
+
+		Count: {
+			Name:       Count,
+			ReturnType: types.NUMBER,
+			Params: []Param{
+				{Name: "interval", Types: pT{types.DAY, types.WEEK, types.PERIOD}},
+				{Name: "range", Types: pT{types.DAY, types.WEEK, types.PERIOD, types.DATERNG}},
+				{Name: "aliasName", Types: pT{types.STRING}, Optional: true},
+				{Name: "condition", Types: pT{types.BOOL}},
+			},
+		},
+
 		SumTime:                    {Name: SumTime, ReturnType: types.NUMBER},
 		CountTime:                  {Name: CountTime, ReturnType: types.NUMBER},
 		FindFirstTime:              {Name: FindFirstTime, ReturnType: types.NUMBER},

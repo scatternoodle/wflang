@@ -26,13 +26,13 @@ const (
 		"@param `args: number...` - list of numbers to compare\n\n"
 
 	Contains string = codeBlockStart +
-		"contains(string1: string, string2: string)\n" +
+		"contains(x: string, y: string)\n" +
 		codeBlockReturns + "boolean\n" +
 		codeBlockEnd +
 		"### Contains\n\n" +
-		"Returns true if `string2` is a substring of `string1`.\n\n" +
-		"@param `string1: string` - the string to search in\n\n" +
-		"@param `string2: string` - the string to search for\n\n"
+		"Returns true if `y` is a substring of `x`.\n\n" +
+		"@param `x: string` - the string to search in\n\n" +
+		"@param `y: string` - the string to search for\n\n"
 
 	Sum string = codeBlockStart +
 		"sum( by interval: day|week|period| over range: day|week|period|dateRange alias aliasName: string\n" +
