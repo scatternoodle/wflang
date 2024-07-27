@@ -530,4 +530,42 @@ const (
 		" compile but will error at runtime.\n\n" +
 		"@param `start: dateTime`\n\n" +
 		"@param `end: dateTime`\n\n"
+
+	PayCodeInScheduleMap string = codeBlockStart +
+		"payCodeInScheduleMap(payCode: {timeRecord|scheduleRecord}.PAY_CODE, asOf?: date)\n" +
+		codeBlockReturns + "boolean\n" +
+		codeBlockEnd +
+		"### PayCodeInScheduleMap\n\n" +
+		"Returns true if the given `timeRecord.PAY_CODE` is in the schedule map on `asOf` date.\n\n" +
+		"This function must be used either in a slice context formula, or within a slice-level scope, e.g.\n\n" +
+		"```wflang\n" +
+		"countSchedule( over day alias x\n" +
+		"             , where payCodeInScheduleMap(x.PAY_CODE) )\n" +
+		"```\n\n" +
+		"You cannot directly use a pay code IDENT or string literal for `payCode` - it can only be the PAY_CODE field on" +
+		" a timeRecord or scheduleRecord object.\n\n" +
+		"Arguably, this function has limited value when we consider that all codes should be in all maps as a best practice" +
+		" to avoid application errors when employees switch Policy Profile mid-period.\n\n" +
+		"@param `payCode: {timeRecord|scheduleRecord}.PAY_CODE` - must be the actual timeRecord.PAY_CODE field access," +
+		" either in a slice-level formula or within a slice-level scope such as in a summary function clause\n\n" +
+		"@param `asOf?: date` - if omitted, period.end is used\n\n"
+
+	PayCodeInTimeSheetMap string = codeBlockStart +
+		"payCodeInTimeSheetMap(payCode: {timeRecord|scheduleRecord}.PAY_CODE, asOf?: date)\n" +
+		codeBlockReturns + "boolean\n" +
+		codeBlockEnd +
+		"### PayCodeInScheduleMap\n\n" +
+		"Returns true if the given `timeRecord.PAY_CODE` is in the timesheet paycodes map on `asOf` date.\n\n" +
+		"This function must be used either in a slice context formula, or within a slice-level scope, e.g.\n\n" +
+		"```wflang\n" +
+		"countSchedule( over day alias x\n" +
+		"             , where payCodeInTimeSheetMap(x.PAY_CODE) )\n" +
+		"```\n\n" +
+		"You cannot directly use a pay code IDENT or string literal for `payCode` - it can only be the PAY_CODE field on" +
+		" a timeRecord or scheduleRecord object.\n\n" +
+		"Arguably, this function has limited value when we consider that all codes should be in all maps as a best practice" +
+		" to avoid application errors when employees switch Policy Profile mid-period.\n\n" +
+		"@param `payCode: {timeRecord|scheduleRecord}.PAY_CODE` - must be the actual timeRecord.PAY_CODE field access," +
+		" either in a slice-level formula or within a slice-level scope such as in a summary function clause\n\n" +
+		"@param `asOf?: date` - if omitted, period.end is used\n\n"
 )

@@ -122,6 +122,10 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.MakeDateTime, true
 	case builtins.MakeDateTimeRange:
 		return hovertext.MakeDateTimeRange, true
+	case builtins.PayCodeInScheduleMap:
+		return hovertext.PayCodeInScheduleMap, true
+	case builtins.PayCodeInTimeSheetMap:
+		return hovertext.PayCodeInTimeSheetMap, true
 	}
 
 	return "", false
