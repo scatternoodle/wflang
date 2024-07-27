@@ -648,4 +648,43 @@ const (
 		"### ToUpperCase\n\n" +
 		"Returns the uppercase version of `x`.\n\n" +
 		"@param `x: string`\n\n"
+
+	MinSchedule string = codeBlockStart +
+		"minSchedule( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"           , expression: number\n" +
+		"          [, where expression?: bool] )\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### MinSchedule\n\n" +
+		"Returns the minimum of calculated values of `expression` over a `range` of schedule records.\n\n" +
+		"@param `range: day|week|period|dateRange`\n\n" +
+		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
+		"@param `expression: number`\n\n" +
+		"@param `condition?: boolean` - if used, only slices where this expression returns true will be evaluated\n\n"
+
+	MaxSchedule string = codeBlockStart +
+		"maxSchedule( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"           , expression: number\n" +
+		"          [, where expression?: bool] )\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### MaxSchedule\n\n" +
+		"Returns the maximum of calculated values of `expression` over a `range` of schedule records.\n\n" +
+		"@param `range: day|week|period|dateRange`\n\n" +
+		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
+		"@param `expression: number`\n\n" +
+		"@param `condition?: boolean` - if used, only slices where this expression returns true will be evaluated\n\n"
+
+	AvgSchedule string = codeBlockStart +
+		"avgSchedule( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"           , expression: number\n" +
+		"          [, where expression?: bool] )\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### AvgSchedule\n\n" +
+		"Returns the average of calculated values of `expression` over a `range` of schedule records.\n\n" +
+		"@param `range: day|week|period|dateRange`\n\n" +
+		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
+		"@param `expression: number`\n\n" +
+		"@param `condition?: boolean` - if used, only slices where this expression returns true will be evaluated\n\n"
 )

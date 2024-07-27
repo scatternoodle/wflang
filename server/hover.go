@@ -142,6 +142,12 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.ToLowerCase, true
 	case builtins.ToUpperCase:
 		return hovertext.ToUpperCase, true
+	case builtins.MinSchedule:
+		return hovertext.MinSchedule, true
+	case builtins.MaxSchedule:
+		return hovertext.MaxSchedule, true
+	case builtins.AvgSchedule:
+		return hovertext.AvgSchedule, true
 	}
 
 	return "", false

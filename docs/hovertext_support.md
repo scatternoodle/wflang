@@ -63,9 +63,9 @@ The following built-in functions currently have hover support:
 | Substr                      | ✅        |
 | ToLowerCase                 | ✅        |
 | ToUpperCase                 | ✅        |
-| MinSchedule                 | :x:       |
-| MaxSchedule                 | :x:       |
-| AvgSchedule                 | :x:       |
+| MinSchedule                 | ✅        |
+| MaxSchedule                 | ✅        |
+| AvgSchedule                 | ✅        |
 | MinTime                     | :x:       |
 | MaxTime                     | :x:       |
 | AvgTime                     | :x:       |
