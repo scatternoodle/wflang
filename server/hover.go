@@ -138,6 +138,10 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.SemiMonthlyPeriod, true
 	case builtins.Substr:
 		return hovertext.Substr, true
+	case builtins.ToLowerCase:
+		return hovertext.ToLowerCase, true
+	case builtins.ToUpperCase:
+		return hovertext.ToUpperCase, true
 	}
 
 	return "", false

@@ -632,4 +632,20 @@ const (
 		"@param `x: string`\n\n" +
 		"@param `start: number`\n\n" +
 		"@param `length: number`\n\n"
+
+	ToLowerCase string = codeBlockStart +
+		"toLowerCase(x: string)\n" +
+		codeBlockReturns + "string\n" +
+		codeBlockEnd +
+		"### ToLowerCase\n\n" +
+		"Returns the lowercase version of `x`.\n\n" +
+		"@param `x: string`\n\n"
+
+	ToUpperCase string = codeBlockStart +
+		"toUpperCase(x: string)\n" +
+		codeBlockReturns + "string\n" +
+		codeBlockEnd +
+		"### ToUpperCase\n\n" +
+		"Returns the uppercase version of `x`.\n\n" +
+		"@param `x: string`\n\n"
 )

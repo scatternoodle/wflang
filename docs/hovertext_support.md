@@ -61,8 +61,8 @@ The following built-in functions currently have hover support:
 | RoundToInt                  | ✅        |
 | SemiMonthlyPeriod           | ✅        |
 | Substr                      | ✅        |
-| ToLowerCase                 | :x:       |
-| ToUpperCase                 | :x:       |
+| ToLowerCase                 | ✅        |
+| ToUpperCase                 | ✅        |
 | MinSchedule                 | :x:       |
 | MaxSchedule                 | :x:       |
 | AvgSchedule                 | :x:       |
