@@ -1,21 +1,4 @@
 {
-  // Place your wflang workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
-  // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
-  // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
-  // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
-  // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
-  // Placeholders with the same ids are connected.
-  // Example:
-  // "Print to console": {
-  // 	"scope": "javascript,typescript",
-  // 	"prefix": "log",
-  // 	"body": [
-  // 		"console.log('$1');",
-  // 		"$2"
-  // 	],
-  // 	"description": "Log output to console"
-  // }
-
   "trace update": {
     "scope": "go",
     "prefix": "trace update",
@@ -30,5 +13,28 @@
       "wrap := func(e error) error { return fmt.Errorf(\"$1: %w\", e) }"
     ],
     "description": "very simple error wrapper func"
+  },
+
+  "param simple": {
+    "scope": "go",
+    "prefix": "paramSimple",
+    "body": ["{Name: $1, Types: $2},"],
+    "description": "quick definition of a simple (required) wflang function param"
+  },
+
+  "param optional": {
+    "scope": "go",
+    "prefix": "paramOptional",
+    "body": ["{Name: $1, Types: $2, Optional: true},"],
+    "description": "quick definition of an optional wflang function param"
+  },
+
+  "param full": {
+    "scope": "go",
+    "prefix": "paramFull",
+    "body": [
+      "{Name: $1, Types: $2, Optional: $3, List: $4, PairA: $5, PairB: $6},"
+    ],
+    "description": "full definition of a simple wflang function param"
   }
 }
