@@ -617,4 +617,19 @@ const (
 		" based on calendar months, and is not connected with actual Policy Profile config in any way; effectively this is" +
 		" just simple date-maths.\n\n" +
 		"@param `date: date`\n\n"
+
+	Substr string = codeBlockStart +
+		"substr(x: string, start: number, length: number)\n" +
+		codeBlockReturns + "string\n" +
+		codeBlockEnd +
+		"### Substr\n\n" +
+		"Returns a substring of `x` starting at `start` with length `length`. Some usage considerations:\n\n" +
+		"- `start` is 1-indexed (i.e. the first character is at index 1, not 0)\n\n" +
+		"- If `start` is < 1, it is treated as 1\n\n" +
+		"- If `length` is greater than the remaining length of the string, the substring will be truncated to the end of the string\n\n" +
+		"- ***If `length` is negative, formula compiles but errors at runtime***\n\n" +
+		"- If `length` is 0, an empty string is returned\n\n" +
+		"@param `x: string`\n\n" +
+		"@param `start: number`\n\n" +
+		"@param `length: number`\n\n"
 )
