@@ -607,4 +607,14 @@ const (
 		"Shorthand for `round(x, 0)` - returns the number `x` rounded to the nearest integer. If you need to force direction," +
 		" use `roundUp()` or `roundDown()` instead.\n\n" +
 		"@param `x: number`\n\n"
+
+	SemiMonthlyPeriod string = codeBlockStart +
+		"semiMonthlyPeriod(date: date)\n" +
+		codeBlockReturns + "period\n" +
+		codeBlockEnd +
+		"### SemiMonthlyPeriod\n\n" +
+		"Returns the period in which the given `date` falls, based on the semi-monthly pay period. The returned period is" +
+		" based on calendar months, and is not connected with actual Policy Profile config in any way; effectively this is" +
+		" just simple date-maths.\n\n" +
+		"@param `date: date`\n\n"
 )

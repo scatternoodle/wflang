@@ -59,7 +59,7 @@ The following built-in functions currently have hover support:
 | RoundUp                     | ✅        |
 | RoundDown                   | ✅        |
 | RoundToInt                  | ✅        |
-| SemiMonthlyPeriod           | :x:       |
+| SemiMonthlyPeriod           | ✅        |
 | Substr                      | :x:       |
 | ToLowerCase                 | :x:       |
 | ToUpperCase                 | :x:       |

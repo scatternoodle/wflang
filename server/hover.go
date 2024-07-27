@@ -134,6 +134,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.RoundUp, true
 	case builtins.RoundToInt:
 		return hovertext.RoundToInt, true
+	case builtins.SemiMonthlyPeriod:
+		return hovertext.SemiMonthlyPeriod, true
 	}
 
 	return "", false
