@@ -66,9 +66,9 @@ The following built-in functions currently have hover support:
 | MinSchedule                 | ✅        |
 | MaxSchedule                 | ✅        |
 | AvgSchedule                 | ✅        |
-| MinTime                     | :x:       |
-| MaxTime                     | :x:       |
-| AvgTime                     | :x:       |
+| MinTime                     | ✅        |
+| MaxTime                     | ✅        |
+| AvgTime                     | ✅        |
 | SwipeInLatitudeInRange      | :x:       |
 | SwipeInLongitudeInRange     | :x:       |
 | SwipeOutLatitudeInRange     | :x:       |

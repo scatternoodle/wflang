@@ -687,4 +687,43 @@ const (
 		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
 		"@param `expression: number`\n\n" +
 		"@param `condition?: boolean` - if used, only slices where this expression returns true will be evaluated\n\n"
+
+	MinTime string = codeBlockStart +
+		"minTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"           , expression: number\n" +
+		"          [, where expression?: bool] )\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### MinTime\n\n" +
+		"Returns the minimum of calculated values of `expression` over a `range` of timeRecords.\n\n" +
+		"@param `range: day|week|period|dateRange`\n\n" +
+		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
+		"@param `expression: number`\n\n" +
+		"@param `condition?: boolean` - if used, only slices where this expression returns true will be evaluated\n\n"
+
+	MaxTime string = codeBlockStart +
+		"maxTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"           , expression: number\n" +
+		"          [, where expression?: bool] )\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### MaxTime\n\n" +
+		"Returns the maximum of calculated values of `expression` over a `range` of timeRecords.\n\n" +
+		"@param `range: day|week|period|dateRange`\n\n" +
+		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
+		"@param `expression: number`\n\n" +
+		"@param `condition?: boolean` - if used, only slices where this expression returns true will be evaluated\n\n"
+
+	AvgTime string = codeBlockStart +
+		"avgTime( over range: day|week|period|dateRange [alias aliasName?: string]\n" +
+		"           , expression: number\n" +
+		"          [, where expression?: bool] )\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### AvgTime\n\n" +
+		"Returns the average of calculated values of `expression` over a `range` of timeRecords.\n\n" +
+		"@param `range: day|week|period|dateRange`\n\n" +
+		"@param `aliasName?: string` - alias for the slice currently being evaluated\n\n" +
+		"@param `expression: number`\n\n" +
+		"@param `condition?: boolean` - if used, only slices where this expression returns true will be evaluated\n\n"
 )
