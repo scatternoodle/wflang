@@ -75,10 +75,6 @@ func Builtins() map[string]Builtin {
 		MinTime:                    {Name: MinTime, ReturnType: types.NUMBER},
 		MaxTime:                    {Name: MaxTime, ReturnType: types.NUMBER},
 		AvgTime:                    {Name: AvgTime, ReturnType: types.NUMBER},
-		SwipeInLatitudeInRange:     {Name: SwipeInLatitudeInRange, ReturnType: types.BOOL},
-		SwipeInLongitudeInRange:    {Name: SwipeInLongitudeInRange, ReturnType: types.BOOL},
-		SwipeOutLatitudeInRange:    {Name: SwipeOutLatitudeInRange, ReturnType: types.BOOL},
-		SwipeOutLongitudeInRange:   {Name: SwipeOutLongitudeInRange, ReturnType: types.BOOL},
 		SumException:               {Name: SumException, ReturnType: types.NUMBER},
 		MinException:               {Name: MinException, ReturnType: types.NUMBER},
 		MaxException:               {Name: MaxException, ReturnType: types.NUMBER},
@@ -152,10 +148,6 @@ const (
 	MinTime                    string = "mintime"
 	MaxTime                    string = "maxtime"
 	AvgTime                    string = "avgtime"
-	SwipeInLatitudeInRange     string = "swipe_in_latitude_in_range"
-	SwipeInLongitudeInRange    string = "swipe_in_longitude_in_range"
-	SwipeOutLatitudeInRange    string = "swipe_out_latitude_in_range"
-	SwipeOutLongitudeInRange   string = "swipe_out_longitude_in_range"
 	SumException               string = "sumexception"
 	MinException               string = "minexception"
 	MaxException               string = "maxexception"

@@ -69,10 +69,6 @@ The following built-in functions currently have hover support:
 | MinTime                     | ✅        |
 | MaxTime                     | ✅        |
 | AvgTime                     | ✅        |
-| SwipeInLatitudeInRange      | :x:       |
-| SwipeInLongitudeInRange     | :x:       |
-| SwipeOutLatitudeInRange     | :x:       |
-| SwipeOutLongitudeInRange    | :x:       |
 | SumException                | :x:       |
 | MinException                | :x:       |
 | MaxException                | :x:       |
