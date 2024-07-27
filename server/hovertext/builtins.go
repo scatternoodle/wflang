@@ -568,4 +568,43 @@ const (
 		"@param `payCode: {timeRecord|scheduleRecord}.PAY_CODE` - must be the actual timeRecord.PAY_CODE field access," +
 		" either in a slice-level formula or within a slice-level scope such as in a summary function clause\n\n" +
 		"@param `asOf?: date` - if omitted, period.end is used\n\n"
+
+	Round string = codeBlockStart +
+		"round(x: number, precision?: number=0)\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### Round\n\n" +
+		"Returns the number `x` rounded to `precision` decimal places. If `precision` is omitted, the number is rounded" +
+		" to the nearest integer.\n\n" +
+		"@param `x: number`\n\n" +
+		"@param `precision?: number=0` - the number of decimal places to round to\n\n"
+
+	RoundUp string = codeBlockStart +
+		"roundUp(x: number, precision?: number=0)\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### RoundUp\n\n" +
+		"Returns the number `x` rounded up to `precision` decimal places. If `precision` is omitted, the number is rounded" +
+		" to the nearest integer.\n\n" +
+		"@param `x: number`\n\n" +
+		"@param `precision?: number=0` - the number of decimal places to round to\n\n"
+
+	RoundDown string = codeBlockStart +
+		"roundDown(x: number, precision?: number=0)\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### RoundDown\n\n" +
+		"Returns the number `x` rounded down to `precision` decimal places. If `precision` is omitted, the number is rounded" +
+		" to the nearest integer.\n\n" +
+		"@param `x: number`\n\n" +
+		"@param `precision?: number=0` - the number of decimal places to round to\n\n"
+
+	RoundToInt string = codeBlockStart +
+		"roundToInt(x: number)\n" +
+		codeBlockReturns + "number\n" +
+		codeBlockEnd +
+		"### RoundToInt\n\n" +
+		"Shorthand for `round(x, 0)` - returns the number `x` rounded to the nearest integer. If you need to force direction," +
+		" use `roundUp()` or `roundDown()` instead.\n\n" +
+		"@param `x: number`\n\n"
 )

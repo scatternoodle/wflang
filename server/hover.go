@@ -126,6 +126,14 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.PayCodeInScheduleMap, true
 	case builtins.PayCodeInTimeSheetMap:
 		return hovertext.PayCodeInTimeSheetMap, true
+	case builtins.Round:
+		return hovertext.Round, true
+	case builtins.RoundDown:
+		return hovertext.RoundDown, true
+	case builtins.RoundUp:
+		return hovertext.RoundUp, true
+	case builtins.RoundToInt:
+		return hovertext.RoundToInt, true
 	}
 
 	return "", false

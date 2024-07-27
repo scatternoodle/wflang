@@ -55,10 +55,10 @@ The following built-in functions currently have hover support:
 | PayCodeInScheduleMap        | ✅        |
 | PayCodeInTimeSheetMap       | ✅        |
 | RangeLookup                 | :x:       |
-| Round                       | :x:       |
-| RoundUp                     | :x:       |
-| RoundDown                   | :x:       |
-| RoundToInt                  | :x:       |
+| Round                       | ✅        |
+| RoundUp                     | ✅        |
+| RoundDown                   | ✅        |
+| RoundToInt                  | ✅        |
 | SemiMonthlyPeriod           | :x:       |
 | Substr                      | :x:       |
 | ToLowerCase                 | :x:       |
