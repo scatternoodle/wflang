@@ -18,14 +18,14 @@
   "param simple": {
     "scope": "go",
     "prefix": "paramSimple",
-    "body": ["{Name: $1, Types: $2},"],
+    "body": ["{Name: $1, Types: pT{$2}},"],
     "description": "quick definition of a simple (required) wflang function param"
   },
 
   "param optional": {
     "scope": "go",
     "prefix": "paramOptional",
-    "body": ["{Name: $1, Types: $2, Optional: true},"],
+    "body": ["{Name: $1, Types: pT{$2}, Optional: true},"],
     "description": "quick definition of an optional wflang function param"
   },
 
@@ -33,7 +33,7 @@
     "scope": "go",
     "prefix": "paramFull",
     "body": [
-      "{Name: $1, Types: $2, Optional: $3, List: $4, PairA: $5, PairB: $6},"
+      "{Name: $1, Types: pT{$2}, Optional: $3, List: $4, PairA: $5, PairB: $6},"
     ],
     "description": "full definition of a simple wflang function param"
   }
