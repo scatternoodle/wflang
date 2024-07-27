@@ -3,6 +3,7 @@ package types
 type BaseType string
 
 const (
+	ANY       BaseType = "any"
 	NUMBER    BaseType = "number"
 	STRING    BaseType = "string"
 	IDENT     BaseType = "ident"
