@@ -488,8 +488,24 @@ const (
 		"### LengthOfService\n\n" +
 		"returns the length of time in `units` between `startDate` `endDate`. It is acceptable to use a `startDate` that is" +
 		" after `endDate`, which will return a negative number.\n\n" +
-		"@param - `startDate: date`\n\n" +
-		"@param - `endDate: date`\n\n" +
-		"@param - `units: ident` - accepted values are days, months, or years\n\n" +
-		"@param - `adjustTo?: ???` - TBC" // TODO confirm behaviour of adjustTo param
+		"@param `startDate: date`\n\n" +
+		"@param `endDate: date`\n\n" +
+		"@param `units: ident` - accepted values are days, months, or years\n\n" +
+		"@param `adjustTo?: ???` - TBC" // TODO confirm behaviour of adjustTo param
+
+	MakeDate string = codeBlockStart +
+		"makeDate(year: int, month: int, day: int)\n" +
+		codeBlockReturns + "date\n" +
+		codeBlockEnd +
+		"### MakeDate\n\n" +
+		"returns a date object with the given `year`, `month`, `day`. Will compile but error at runtime if `month` > 12" +
+		" or `day` > 31. Caution: it will let you save, and there **will be no runtime error** if `day` is 31 for a month" +
+		" that has fewer than 31 days, which could cause unexpected behavior / errors in formulas that consume the date.\n\n" +
+		"There appear to be no restrictions on `year`, and using a negative integer interestingly results in the product" +
+		" of `2000-year`. e.g. `year = -42` results in `1958` being used as the year for the returned date. Using a negative" +
+		" number below 2000 is also fine! e.g. `-2001` results in `0002`. Needless to say, I recommend just using positive" +
+		" integers for the `year` value.\n\n" +
+		"@param `year: int`\n\n" +
+		"@param `month: int` - must be > 0 \n\n" +
+		"@param `day: int`\n\n"
 )

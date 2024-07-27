@@ -116,6 +116,8 @@ func builtinHoverText(name string) (text string, ok bool) {
 		return hovertext.CallSQL, true
 	case builtins.LengthOfService:
 		return hovertext.LengthOfService, true
+	case builtins.MakeDate:
+		return hovertext.MakeDate, true
 	}
 
 	return "", false

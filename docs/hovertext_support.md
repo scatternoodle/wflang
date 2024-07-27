@@ -49,7 +49,7 @@ The following built-in functions currently have hover support:
 | LdValidate                  | ✅        |
 | IndexOf                     | ✅        |
 | LengthOfService             | ✅        |
-| MakeDate                    | :x:       |
+| MakeDate                    | ✅        |
 | MakeDateTime                | :x:       |
 | MakeDateTimeRange           | :x:       |
 | PayCodeInScheduleMap        | :x:       |
