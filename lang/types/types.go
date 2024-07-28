@@ -29,7 +29,7 @@ const (
 
 // IsNullable returns true if the given WFLang base type can be null (and therefore
 // requires nullchecking in formulae).
-func IsNullable(t Type) bool {
+func (t Type) IsNullable() bool {
 	switch t {
 	case T_STRING, T_SCHEDREC, T_TIMEREC, T_EMPATTR, T_LDREC, T_TORDTL, T_DATE, T_TIME, T_DTTM,
 		T_DATERNG, T_DTTMRNG, T_TRGROUP, T_EXCEPTION:
