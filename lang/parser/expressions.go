@@ -113,7 +113,7 @@ func (p *Parser) parseNumberLiteral() (ast.Expression, error) {
 		msg := fmt.Sprintf("error parsing number literal: %s", err)
 		return nil, newParseErr(msg, p.current)
 	}
-	return ast.NumberLiteral{Token: p.current, Value: val}, nil
+	return ast.NumberLiteral{Token: p.current, Val: val}, nil
 }
 
 func (p *Parser) parseStringLiteral() (ast.Expression, error) {

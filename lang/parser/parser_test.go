@@ -468,8 +468,8 @@ func testStringLiteral(t testhelp.TH, exp ast.Expression, want string) bool {
 func testNumberLiteral(t testhelp.TH, exp ast.Expression, want float64) bool {
 	nstmt := testhelp.AssertType[ast.NumberLiteral](t, exp)
 
-	if nstmt.Value != want {
-		t.Errorf("value: have %f, want %f", nstmt.Value, want)
+	if nstmt.Val != want {
+		t.Errorf("value: have %f, want %f", nstmt.Val, want)
 		return false
 	}
 

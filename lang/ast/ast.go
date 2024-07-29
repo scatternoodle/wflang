@@ -156,12 +156,12 @@ func (i Ident) Pos() (start, end token.Pos) { return i.Token.StartPos, i.Token.E
 // type).
 type NumberLiteral struct {
 	token.Token
-	Value float64
+	Val float64
 }
 
 func (n NumberLiteral) ExpressionNode()      {}
 func (n NumberLiteral) TokenLiteral() string { return n.Token.Literal }
-func (n NumberLiteral) String() string       { return fmt.Sprint(n.Value) }
+func (n NumberLiteral) String() string       { return fmt.Sprint(n.Val) }
 func (n NumberLiteral) Pos() (start, end token.Pos) {
 	return n.Token.StartPos, n.Token.EndPos
 }

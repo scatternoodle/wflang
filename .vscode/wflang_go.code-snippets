@@ -36,5 +36,12 @@
       "{Name: $1, Types: pT{$2}, Optional: $3, List: $4, PairA: $5, PairB: $6},"
     ],
     "description": "full definition of a simple wflang function param"
+  },
+
+  "testhelp wanttype": {
+    "scope": "go",
+    "prefix": "testhelp.AssertType",
+    "body": ["testhelp.AssertType[$1](t, $2)"],
+    "description": "testhelp.AssertType helper"
   }
 }
