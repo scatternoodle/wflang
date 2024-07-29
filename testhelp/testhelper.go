@@ -16,7 +16,7 @@ type TH interface {
 func AssertType[T any](t TH, x any) T {
 	y, ok := x.(T)
 	if !ok {
-		t.Fatalf("type = %t, want %s", x, *new(T))
+		t.Fatalf("type = %t, want %T", x, *new(T))
 	}
 	return y
 }
