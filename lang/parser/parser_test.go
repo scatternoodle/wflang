@@ -509,6 +509,7 @@ func testInfix(t testhelp.TH, exp ast.Expression, operator string, left, right a
 	return true
 }
 
+// use -1 for wantLen if you don't care about how many statements are returned.
 func testRunParser(t testhelp.TH, input string, wantLen int, errOk bool) (*Parser, *ast.AST) {
 	l := lexer.New(input)
 	prs := New(l)
@@ -527,7 +528,7 @@ func testRunParser(t testhelp.TH, input string, wantLen int, errOk bool) (*Parse
 	if AST.Statements == nil {
 		t.Fatal("AST.Statements is nil")
 	}
-	if len(AST.Statements) != wantLen {
+	if wantLen > 0 && len(AST.Statements) != wantLen {
 		t.Fatalf("AST statements length have %d, want %d", len(AST.Statements), wantLen)
 	}
 	return prs, AST

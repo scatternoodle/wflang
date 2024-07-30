@@ -12,7 +12,7 @@ import (
 type Object interface {
 	Type() types.Type
 	Methods() []Function
-	OK() bool
+	Value() (v any, ok bool)
 }
 
 type Number struct {
@@ -20,9 +20,9 @@ type Number struct {
 	Val    float64
 }
 
-func (n Number) Type() types.Type    { return types.T_NUMBER }
-func (n Number) Methods() []Function { return nil }
-func (n Number) OK() bool            { return false }
+func (n Number) Type() types.Type        { return types.T_NUMBER }
+func (n Number) Methods() []Function     { return nil }
+func (n Number) Value() (v any, ok bool) { return n.Val, n.Static }
 
 type Variable struct {
 	Name string
@@ -30,9 +30,15 @@ type Variable struct {
 	Pos  token.Pos
 }
 
-func (v Variable) Methods() []Function { return nil }
-func (v Variable) Type() types.Type    { return v.Val.Type() }
-func (v Variable) OK() bool            { return false }
+func (vr Variable) Methods() []Function { return nil }
+func (vr Variable) Type() types.Type    { return vr.Val.Type() }
+
+func (vr Variable) Value() (v any, ok bool) {
+	if v, ok = vr.Val.Value(); !ok {
+		return nil, false
+	}
+	return v, true
+}
 
 func (v Variable) String() string {
 	return "var " + v.Name + ": " + string(v.Type())
@@ -43,36 +49,36 @@ type String struct {
 	Val    string
 }
 
-func (s String) Type() types.Type    { return types.T_STRING }
-func (s String) Methods() []Function { return nil }
-func (s String) OK() bool            { return s.Static }
+func (s String) Type() types.Type        { return types.T_STRING }
+func (s String) Methods() []Function     { return nil }
+func (s String) Value() (v any, ok bool) { return s.Val, s.Static }
 
 type Ident struct {
 	Static bool
 	Val    string
 }
 
-func (i Ident) Type() types.Type    { return types.T_IDENT }
-func (i Ident) Methods() []Function { return nil }
-func (i Ident) OK() bool            { return i.Static }
+func (i Ident) Type() types.Type        { return types.T_IDENT }
+func (i Ident) Methods() []Function     { return nil }
+func (i Ident) Value() (v any, ok bool) { return i.Val, i.Static }
 
 type Time struct {
 	Static bool
 	Val    time.Time
 }
 
-func (t Time) Type() types.Type    { return types.T_TIME }
-func (t Time) Methods() []Function { return nil }
-func (t Time) OK() bool            { return t.Static }
+func (t Time) Type() types.Type        { return types.T_TIME }
+func (t Time) Methods() []Function     { return nil }
+func (t Time) Value() (v any, ok bool) { return t.Val, t.Static }
 
 type DateTime struct {
 	Static bool
 	Val    time.Time
 }
 
-func (d DateTime) Type() types.Type    { return types.T_DTTM }
-func (d DateTime) Methods() []Function { return nil }
-func (d DateTime) OK() bool            { return d.Static && !d.Val.IsZero() }
+func (d DateTime) Type() types.Type        { return types.T_DTTM }
+func (d DateTime) Methods() []Function     { return nil }
+func (d DateTime) Value() (v any, ok bool) { return d.Val, d.Static && !d.Val.IsZero() }
 
 type DateTimeRange struct {
 	Static bool
@@ -84,16 +90,18 @@ type DateTimeRange struct {
 
 func (r DateTimeRange) Type() types.Type    { return types.T_DTTMRNG }
 func (r DateTimeRange) Methods() []Function { return nil }
-func (r DateTimeRange) OK() bool            { return r.Static && !r.Val.Start.IsZero() && !r.Val.End.IsZero() }
+func (r DateTimeRange) Value() (v any, ok bool) {
+	return r.Val, r.Static && !r.Val.Start.IsZero() && !r.Val.End.IsZero()
+}
 
 type Date struct {
 	Static bool
 	Val    time.Time
 }
 
-func (d Date) Type() types.Type    { return types.T_DATE }
-func (d Date) Methods() []Function { return nil }
-func (d Date) OK() bool            { return d.Static && !d.Val.IsZero() }
+func (d Date) Type() types.Type        { return types.T_DATE }
+func (d Date) Methods() []Function     { return nil }
+func (d Date) Value() (v any, ok bool) { return d.Val, d.Static && !d.Val.IsZero() }
 
 type DateRange struct {
 	Static bool
@@ -105,49 +113,51 @@ type DateRange struct {
 
 func (d DateRange) Type() types.Type    { return types.T_DATERNG }
 func (d DateRange) Methods() []Function { return nil }
-func (d DateRange) OK() bool            { return d.Static && !d.Val.Start.IsZero() && !d.Val.End.IsZero() }
+func (d DateRange) Value() (v any, ok bool) {
+	return d.Val, d.Static && !d.Val.Start.IsZero() && !d.Val.End.IsZero()
+}
 
 type Boolean struct {
 	Static bool
 	Val    bool
 }
 
-func (b Boolean) Type() types.Type    { return types.T_BOOL }
-func (b Boolean) Methods() []Function { return nil }
-func (b Boolean) OK() bool            { return b.Static }
+func (b Boolean) Type() types.Type        { return types.T_BOOL }
+func (b Boolean) Methods() []Function     { return nil }
+func (b Boolean) Value() (v any, ok bool) { return b.Val, b.Static }
 
 type ScheduleRecord struct{}
 
-func (s ScheduleRecord) Type() types.Type    { return types.T_SCHEDREC }
-func (s ScheduleRecord) Methods() []Function { return nil }
-func (s ScheduleRecord) OK() bool            { return false }
+func (s ScheduleRecord) Type() types.Type        { return types.T_SCHEDREC }
+func (s ScheduleRecord) Methods() []Function     { return nil }
+func (s ScheduleRecord) Value() (v any, ok bool) { return nil, false }
 
 type TimeRecord struct{}
 
-func (t TimeRecord) Type() types.Type    { return types.T_TIMEREC }
-func (t TimeRecord) Methods() []Function { return nil }
-func (t TimeRecord) OK() bool            { return false }
+func (t TimeRecord) Type() types.Type        { return types.T_TIMEREC }
+func (t TimeRecord) Methods() []Function     { return nil }
+func (t TimeRecord) Value() (v any, ok bool) { return nil, false }
 
 type Attribute struct {
 	Name    string
 	AttType types.Type
 }
 
-func (a Attribute) Type() types.Type    { return types.T_EMPATTR }
-func (a Attribute) Methods() []Function { return nil }
-func (a Attribute) OK() bool            { return false }
+func (a Attribute) Type() types.Type        { return types.T_EMPATTR }
+func (a Attribute) Methods() []Function     { return nil }
+func (a Attribute) Value() (v any, ok bool) { return nil, false }
 
 type LDRecord struct{}
 
-func (l LDRecord) Type() types.Type    { return types.T_LDREC }
-func (l LDRecord) Methods() []Function { return nil }
-func (l LDRecord) OK() bool            { return false }
+func (l LDRecord) Type() types.Type        { return types.T_LDREC }
+func (l LDRecord) Methods() []Function     { return nil }
+func (l LDRecord) Value() (v any, ok bool) { return nil, false }
 
 type TORDetailRecord struct{}
 
-func (t TORDetailRecord) Type() types.Type    { return types.T_TORDTL }
-func (t TORDetailRecord) Methods() []Function { return nil }
-func (t TORDetailRecord) OK() bool            { return false }
+func (t TORDetailRecord) Type() types.Type        { return types.T_TORDTL }
+func (t TORDetailRecord) Methods() []Function     { return nil }
+func (t TORDetailRecord) Value() (v any, ok bool) { return nil, false }
 
 type ResultSet struct {
 	Columns []struct {
@@ -156,48 +166,48 @@ type ResultSet struct {
 	}
 }
 
-func (r ResultSet) Type() types.Type    { return types.T_RESULTSET }
-func (r ResultSet) Methods() []Function { return nil }
-func (r ResultSet) OK() bool            { return false }
+func (r ResultSet) Type() types.Type        { return types.T_RESULTSET }
+func (r ResultSet) Methods() []Function     { return nil }
+func (r ResultSet) Value() (v any, ok bool) { return nil, false }
 
 type TimeRecordGroup struct{}
 
-func (t TimeRecordGroup) Type() types.Type    { return types.T_TRGROUP }
-func (t TimeRecordGroup) Methods() []Function { return nil }
-func (t TimeRecordGroup) OK() bool            { return false }
+func (t TimeRecordGroup) Type() types.Type        { return types.T_TRGROUP }
+func (t TimeRecordGroup) Methods() []Function     { return nil }
+func (t TimeRecordGroup) Value() (v any, ok bool) { return nil, false }
 
 type Exception struct{}
 
-func (s Exception) Type() types.Type    { return types.T_EXCEPTION }
-func (s Exception) Methods() []Function { return nil }
-func (s Exception) OK() bool            { return false }
+func (s Exception) Type() types.Type        { return types.T_EXCEPTION }
+func (s Exception) Methods() []Function     { return nil }
+func (s Exception) Value() (v any, ok bool) { return nil, false }
 
 type Day struct{}
 
-func (d Day) Type() types.Type    { return types.T_DAY }
-func (d Day) Methods() []Function { return nil }
-func (d Day) OK() bool            { return false }
+func (d Day) Type() types.Type        { return types.T_DAY }
+func (d Day) Methods() []Function     { return nil }
+func (d Day) Value() (v any, ok bool) { return nil, false }
 
 type Week struct{}
 
-func (w Week) Type() types.Type    { return types.T_WEEK }
-func (w Week) Methods() []Function { return nil }
-func (w Week) OK() bool            { return false }
+func (w Week) Type() types.Type        { return types.T_WEEK }
+func (w Week) Methods() []Function     { return nil }
+func (w Week) Value() (v any, ok bool) { return nil, false }
 
 type Period struct{}
 
-func (p Period) Type() types.Type    { return types.T_PERIOD }
-func (p Period) Methods() []Function { return nil }
-func (p Period) OK() bool            { return false }
+func (p Period) Type() types.Type        { return types.T_PERIOD }
+func (p Period) Methods() []Function     { return nil }
+func (p Period) Value() (v any, ok bool) { return nil, false }
 
 type Null struct{}
 
-func (n Null) Type() types.Type    { return types.T_NULL }
-func (n Null) Methods() []Function { return nil }
-func (n Null) OK() bool            { return false }
+func (n Null) Type() types.Type        { return types.T_NULL }
+func (n Null) Methods() []Function     { return nil }
+func (n Null) Value() (v any, ok bool) { return nil, false }
 
 type Any struct{}
 
-func (a Any) Type() types.Type    { return types.T_ANY }
-func (a Any) Methods() []Function { return nil }
-func (a Any) OK() bool            { return false }
+func (a Any) Type() types.Type        { return types.T_ANY }
+func (a Any) Methods() []Function     { return nil }
+func (a Any) Value() (v any, ok bool) { return nil, false }
