@@ -228,7 +228,7 @@ type StringLiteral struct {
 
 func (s StringLiteral) ExpressionNode()      {}
 func (s StringLiteral) TokenLiteral() string { return s.Token.Literal }
-func (s StringLiteral) String() string       { return `"` + s.Token.Literal + `"` }
+func (s StringLiteral) String() string       { return s.Token.Literal }
 func (s StringLiteral) Pos() (start, end token.Pos) {
 	return s.Token.StartPos, s.Token.EndPos
 }
