@@ -355,16 +355,24 @@ func (f FunctionCall) Pos() (start, end token.Pos) {
 
 // OverExpression represents the "over" keyword, which occurs as the first subExpression
 // of all summary functions. It prefaces the summary context of the function call
-// (e.g. day, period.end)
+// (e.g. day, period.end). Optionally can include an AliasExpression.
 type OverExpression struct {
 	token.Token
-	Context Expression
+	Context  Expression
+	HasAlias bool
+	Alias    AliasExpression
 }
 
 func (o OverExpression) ExpressionNode()      {}
 func (o OverExpression) TokenLiteral() string { return o.Token.Literal }
 
-func (o OverExpression) String() string { return "over " + o.Context.String() }
+func (o OverExpression) String() string {
+	s := "over " + o.Context.String()
+	if o.HasAlias {
+		s += " " + o.Alias.String()
+	}
+	return s
+}
 
 func (o OverExpression) Pos() (start, end token.Pos) {
 	start = o.Token.StartPos

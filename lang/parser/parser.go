@@ -81,9 +81,10 @@ func New(l *lexer.Lexer) *Parser {
 	return p
 }
 
-func (p *Parser) Errors() []error         { return p.errors }
-func (p *Parser) Tokens() []token.Token   { return p.tokens }
-func (p *Parser) Vars() []object.Variable { return p.vars }
+func (p *Parser) Errors() []error             { return p.errors }
+func (p *Parser) Tokens() []token.Token       { return p.tokens }
+func (p *Parser) Vars() []object.Variable     { return p.vars }
+func (p *Parser) Statements() []ast.Statement { return p.ast.Statements }
 
 // parse begins the static analysis process, producing an AST from the token stream
 // created by the lexer.

@@ -309,10 +309,21 @@ func (p *Parser) parseOverExpression() (ast.Expression, error) {
 
 	ctx, err := p.parseExpression()
 	if err != nil {
-		return nil, fmt.Errorf("paseOverExpression: %w", err)
+		return nil, fmt.Errorf("parseOverExpression: %w", err)
 	}
 	overExp.Context = ctx
 
+	if p.next.Type != token.T_ALIAS {
+		return overExp, nil
+	}
+
+	p.advance()
+	alias, err := p.parseAliasExpression()
+	if err != nil {
+		return nil, fmt.Errorf("parseOverExpression: %w", err)
+	}
+	overExp.HasAlias = true
+	overExp.Alias = alias.(ast.AliasExpression)
 	return overExp, nil
 }
 

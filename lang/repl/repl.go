@@ -29,9 +29,35 @@ func Run() error {
 		}
 
 		prs := parser.New(lexer.New(txt))
-		for _, token := range prs.Tokens() {
-			fmt.Printf("%+v", token)
-			fmt.Print("\n\n")
-		}
+		fmt.Println("Tokens:")
+		PrintTokens(prs)
+		fmt.Println()
+
+		fmt.Println("Statements:")
+		PrintStatements(prs)
+		fmt.Println()
+
+		fmt.Println("Errors:")
+		PrintErrs(prs)
+		fmt.Println()
+	}
+}
+
+func PrintTokens(prs *parser.Parser) {
+	for _, token := range prs.Tokens() {
+		fmt.Printf("%+v", token)
+		fmt.Print("\n")
+	}
+}
+
+func PrintStatements(prs *parser.Parser) {
+	for _, stmt := range prs.Statements() {
+		fmt.Println(stmt.String())
+	}
+}
+
+func PrintErrs(prs *parser.Parser) {
+	for _, err := range prs.Errors() {
+		fmt.Println(err.Error())
 	}
 }
