@@ -9,6 +9,7 @@ wflsrv
 *.so
 *.dylib
 out
+repl
 /editors/vscode/extension/server/bin/*
 
 # Test binary, built with `go test -c`
