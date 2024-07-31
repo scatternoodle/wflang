@@ -1,7 +1,7 @@
 
 TASK AT HAND...
 
-- fix log dir panic issue ( newest issue in Github )
+- bash some more bugs
 
 POSSIBLE REFACTORS / IMPROVEMENTS (we're mulling these over on a background thread)...
 
