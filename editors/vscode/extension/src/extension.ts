@@ -7,7 +7,8 @@ import {
   ServerOptions,
 } from "vscode-languageclient/node";
 
-console.log(process.cwd());
+import fs from "fs";
+import path from "path";
 
 const serverPath = "editors/vscode/extension/server/bin/wflang";
 const logPath = "editors/vscode/extension/server/logs/server.log";
@@ -42,7 +43,28 @@ const serverOptions: ServerOptions = {
   },
 };
 
+function validateLogPath(): boolean {
+  const logDir = path.dirname(logPath);
+
+  if (!fs.existsSync(logDir)) {
+    console.log(`Log directory does not exist, creating it at ${logDir}`);
+    try {
+      fs.mkdirSync(logDir, { recursive: true });
+    } catch (e) {
+      console.error(`Error creating logDir: ${e}`);
+      return false;
+    }
+  }
+  return true;
+}
+
 export function activate(context: ExtensionContext) {
+  console.log(`Extension starting, CWD: ${process.cwd()}`);
+  if (!validateLogPath()) {
+    console.log("Unable to validate log path, exiting");
+    return;
+  }
+
   client = new LanguageClient("wflsrv", serverOptions, clientOptions);
   client.start();
 }
