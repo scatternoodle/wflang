@@ -7,7 +7,7 @@ import (
 	"github.com/scatternoodle/wflang/lang/object"
 )
 
-// Eval descends an ast.AST recursively and evaluates the statements, resolving
+// Eval descends an AST recursively and evaluates the statements, resolving
 // object types and looking for more advanced syntax and semantic errors than what
 // the lexer / parser can detect.
 func (p *Parser) Eval(n ast.Node) object.Object {
