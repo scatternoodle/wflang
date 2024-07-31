@@ -1,7 +1,6 @@
 
 TASK AT HAND...
 
-- get alias expression parsing working
 - fix log dir panic issue ( newest issue in Github )
 
 POSSIBLE REFACTORS / IMPROVEMENTS (we're mulling these over on a background thread)...
