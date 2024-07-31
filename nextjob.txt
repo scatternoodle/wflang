@@ -1,10 +1,8 @@
 
 TASK AT HAND...
 
-- HoverProvider for builtins
--- add filter in server capabilities to stop client sending hover requests indiscriminately. Is that what that does?
--- nope don't think so - I think I just need to respond with an empty string in the data field if there is no hover for the requested token
--- if that doesn't work, then try sending back null (though that  doesn't appear to be allowed in the spec)
+- get alias expression parsing working
+- fix log dir panic issue ( newest issue in Github )
 
 POSSIBLE REFACTORS / IMPROVEMENTS (we're mulling these over on a background thread)...
 
