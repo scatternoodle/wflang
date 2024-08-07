@@ -13,7 +13,7 @@ import (
 const (
 	// semType string = "type"
 	// semClass string = "class"
-	// semEnum string = "enum"
+	semEnum string = "enum"
 	// semInterface string = "interface"
 	// semStruct string = "struct"
 	// semTypeParameter string = "typeParameter"
@@ -39,7 +39,7 @@ func tokenTypes() []string {
 	return []string{
 		// semType,
 		// semClass,
-		// semEnum,
+		semEnum,
 		// semInterface,
 		// semStruct,
 		// semTypeParameter,
@@ -73,6 +73,8 @@ func tokenMap() map[token.Type]string {
 
 		token.T_NUM:    semNumber,
 		token.T_STRING: semString,
+		token.T_DATE:   semNumber,
+		token.T_TIME:   semNumber,
 		token.T_IDENT:  semVariable,
 
 		token.T_BUILTIN: semFunction,

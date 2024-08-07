@@ -156,13 +156,14 @@ func (l *Lexer) NextToken() token.Token {
 
 	// Brace pairs can only be used for date or time literals
 	case '{':
+		start := l.here()
 		lit := l.readBraceString()
 		if wdate.IsDateLiteral(lit) {
-			tok = newToken(l, token.T_DATE, lit, l.here())
+			tok = newToken(l, token.T_DATE, lit, start)
 		} else if wdate.IsTimeLiteral(lit) {
-			tok = newToken(l, token.T_TIME, lit, l.here())
+			tok = newToken(l, token.T_TIME, lit, start)
 		} else {
-			tok = newToken(l, token.T_ILLEGAL, lit, l.here())
+			tok = newToken(l, token.T_ILLEGAL, lit, start)
 		}
 
 	case '[':
