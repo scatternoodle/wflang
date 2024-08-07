@@ -43,5 +43,19 @@
     "prefix": "testhelp.AssertType",
     "body": ["testhelp.AssertType[$1](t, $2)"],
     "description": "testhelp.AssertType helper"
+  },
+
+  "testfunc": {
+    "scope": "go",
+    "prefix": "testfunc",
+    "body": ["func $1(t *testing.T) {", "\t$0", "}"],
+    "description": "standard testing function declaration"
+  },
+
+  "testArray": {
+    "scope": "go",
+    "prefix": "testArray",
+    "body": ["tests := []struct{", "\tname string", "\t$0", "}{}"],
+    "description": "create a slice of test structs"
   }
 }
