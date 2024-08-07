@@ -1,7 +1,6 @@
 package server
 
 import (
-	"log/slog"
 	"strings"
 
 	"github.com/scatternoodle/wflang/lang/object"
@@ -20,15 +19,12 @@ func (srv *Server) hover(pos lsp.Position) lsp.Hover {
 
 	tok, ok := srv.getTokenAtPos(pos)
 	if !ok {
-		slog.Debug("No token found")
 		return hov
 	}
-	slog.Debug("token found", "token", tok)
 
 	if tok.Type == token.T_BUILTIN {
 		hov.Value, _ = builtinHoverText(strings.ToLower(tok.Literal))
 	}
-
 	return hov
 }
 

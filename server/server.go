@@ -135,7 +135,7 @@ func (srv *Server) getTokenAtPos(pos lsp.Position) (tok token.Token, ok bool) {
 		if t.StartPos.Line != pos.Line {
 			return false
 		}
-		return pos.Character >= t.StartPos.Col && pos.Character < t.EndPos.Col
+		return pos.Character >= t.StartPos.Col && pos.Character <= t.EndPos.Col
 	})
 
 	if idx < 0 {
