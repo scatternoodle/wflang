@@ -61,6 +61,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.prefixParsers[token.T_ALIAS] = p.parseAliasExpression
 	p.prefixParsers[token.T_WHERE] = p.parseWhereExpression
 	p.prefixParsers[token.T_ORDER] = p.parseOrderByExpression
+	p.prefixParsers[token.T_DATE] = p.parseDateLiteral
+	p.prefixParsers[token.T_TIME] = p.parseTimeLiteral
 
 	p.infixParsers[token.T_MINUS] = p.parseInfixExpression
 	p.infixParsers[token.T_PLUS] = p.parseInfixExpression

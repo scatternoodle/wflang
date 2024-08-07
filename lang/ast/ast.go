@@ -6,6 +6,7 @@ package ast
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/scatternoodle/wflang/lang/token"
 )
@@ -506,3 +507,25 @@ func (s SetExpression) Pos() (start, end token.Pos) {
 	_, end = s.Name.Pos()
 	return start, end
 }
+
+// DateLiteral is a literal expression representing a date in the format {yyyy-MM-dd}
+type DateLiteral struct {
+	token.Token
+	time.Time // the actual time represented by the expression
+}
+
+func (d DateLiteral) ExpressionNode()             {}
+func (d DateLiteral) TokenLiteral() string        { return d.Token.Literal }
+func (d DateLiteral) String() string              { return d.Token.Literal }
+func (d DateLiteral) Pos() (start, end token.Pos) { return d.Token.StartPos, d.Token.EndPos }
+
+// TimeLiteral is a literal expression representing a time in the format {hh:mm}
+type TimeLiteral struct {
+	token.Token
+	time.Time // the actual time represented by the expression
+}
+
+func (t TimeLiteral) ExpressionNode()             {}
+func (t TimeLiteral) TokenLiteral() string        { return t.Token.Literal }
+func (t TimeLiteral) String() string              { return t.Token.Literal }
+func (t TimeLiteral) Pos() (start, end token.Pos) { return t.Token.StartPos, t.Token.EndPos }

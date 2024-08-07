@@ -4,11 +4,14 @@ import (
 	"fmt"
 	"strconv"
 	"testing"
+	"time"
 
 	"github.com/scatternoodle/wflang/lang/ast"
 	"github.com/scatternoodle/wflang/lang/lexer"
 	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/lang/types/wdate"
 	testhelp "github.com/scatternoodle/wflang/testhelp"
+	"github.com/scatternoodle/wflang/util"
 )
 
 var testParseInput = `var x = 1;`
@@ -391,6 +394,69 @@ func TestParseInExpression(t *testing.T) {
 	})
 }
 
+func TestParseDateLiteralExpression(t *testing.T) {
+	tests := []struct {
+		input    string
+		wantTime time.Time
+		wantErr  bool
+	}{
+		{`{1899-12-31}`, time.Time{}, true},
+		{`{1900-01-01}`, util.SimpleDate(1900, 1, 1), false},
+		{`{3000-12-31}`, util.SimpleDate(3000, 12, 31), false},
+		{`{3001-01-01}`, time.Time{}, true},
+		{`{1900-01-01`, time.Time{}, true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			wantLen := 0
+			if !tt.wantErr {
+				wantLen++
+			}
+			prs, AST := testRunParser(t, tt.input, wantLen, tt.wantErr)
+
+			if tt.wantErr && len(prs.errors) == 0 {
+				t.Fatalf("did not error when expected")
+			}
+			if tt.wantErr {
+				return
+			}
+			testLiteral(t, testExpressionStatement(t, AST.Statements[0]), tt.wantTime)
+		})
+	}
+}
+
+func TestParseTimeLiteralExpression(t *testing.T) {
+	tests := []struct {
+		input    string
+		wantTime time.Time
+		wantErr  bool
+	}{
+		{`{00:00}`, util.SimpleTime(0, 0), false},
+		{`{23:59}`, util.SimpleTime(23, 59), false},
+		{`{24:00}`, time.Time{}, true},
+		{`{23:59`, time.Time{}, true},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.input, func(t *testing.T) {
+			wantLen := 0
+			if !tt.wantErr {
+				wantLen++
+			}
+			prs, AST := testRunParser(t, tt.input, wantLen, tt.wantErr)
+
+			if tt.wantErr && len(prs.errors) == 0 {
+				t.Fatalf("did not error when expected")
+			}
+			if tt.wantErr {
+				return
+			}
+			testLiteral(t, testExpressionStatement(t, AST.Statements[0]), tt.wantTime)
+		})
+	}
+}
+
 func testOrderByExpression(t *testing.T, exp ast.Expression) bool {
 	obExp := testhelp.AssertType[ast.OrderByExpression](t, exp)
 
@@ -451,6 +517,8 @@ func testLiteral(t testhelp.TH, exp ast.Expression, want any) bool {
 		return testStringLiteral(t, exp, v)
 	case bool:
 		return testBooleanLiteral(t, exp, v)
+	case time.Time:
+		return testDateOrTimeLiteral(t, exp, v)
 	}
 	t.Errorf("unhandled expression type %T", exp)
 	return false
@@ -551,4 +619,24 @@ func testExpressionStatement(t testhelp.TH, stmt ast.Statement) ast.Expression {
 	}
 
 	return eStmt.Expression
+}
+
+func testDateOrTimeLiteral(t testhelp.TH, exp ast.Expression, want time.Time) bool {
+	lit := exp.TokenLiteral()
+	var val time.Time
+
+	if wdate.IsDateLiteral(lit) {
+		stmt := testhelp.AssertType[ast.DateLiteral](t, exp)
+		val = stmt.Time
+	}
+	if wdate.IsTimeLiteral(lit) {
+		stmt := testhelp.AssertType[ast.TimeLiteral](t, exp)
+		val = stmt.Time
+	}
+
+	if val != want {
+		t.Errorf("time literal: have %s, want %s", val.String(), want.String())
+		return false
+	}
+	return true
 }

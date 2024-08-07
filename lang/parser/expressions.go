@@ -6,6 +6,7 @@ import (
 
 	"github.com/scatternoodle/wflang/lang/ast"
 	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/lang/types/wdate"
 )
 
 func blankExpression(t token.Token) ast.Expression {
@@ -498,4 +499,26 @@ func (p *Parser) parseInExpression(left ast.Expression) (ast.Expression, error) 
 	}
 	inExpression.List = list
 	return inExpression, nil
+}
+
+func (p *Parser) parseDateLiteral() (ast.Expression, error) {
+	p.trace.trace("DateLiteral")
+	defer p.trace.untrace("DateLiteral")
+
+	date, err := wdate.ParseDate(p.current.Literal)
+	if err != nil {
+		return nil, fmt.Errorf("parseDateLiteral: error parsing date value: %w", err)
+	}
+	return ast.DateLiteral{Token: p.current, Time: date}, nil
+}
+
+func (p *Parser) parseTimeLiteral() (ast.Expression, error) {
+	p.trace.trace("TimeLiteral")
+	defer p.trace.untrace("TimeLiteral")
+
+	tVal, err := wdate.ParseTime(p.current.Literal)
+	if err != nil {
+		return nil, fmt.Errorf("parseTimeLiteral: error parsing time value: %w", err)
+	}
+	return ast.TimeLiteral{Token: p.current, Time: tVal}, nil
 }
