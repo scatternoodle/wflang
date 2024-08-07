@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	dateRegexp string = `\A{\d{4}-\d{2}-\d{2}}\z`
-	timeRegexp string = `\A{\d{2}:\d{2}}\z`
+	datePattern string = `\A{\d{4}-\d{2}-\d{2}}\z`
+	timePattern string = `\A{\d{2}:\d{2}}\z`
 )
 
 // For parsing into golang objects
@@ -27,7 +27,7 @@ var (
 
 // ParseDate returns the time represented by s.
 func ParseDate(s string) (time.Time, error) {
-	if ok, _ := regexp.MatchString(dateRegexp, s); !ok {
+	if !IsDateLiteral(s) {
 		return time.Time{}, ErrDateFormat
 	}
 
@@ -47,8 +47,22 @@ func ParseDate(s string) (time.Time, error) {
 
 // ParseDate returns the date represented by s.
 func ParseTime(s string) (time.Time, error) {
-	if ok, _ := regexp.MatchString(timeRegexp, s); !ok {
+	if !IsTimeLiteral(s) {
 		return time.Time{}, ErrTimeFormat
 	}
 	return time.Parse(timeLayout, s)
+}
+
+// IsDateLiteral returns true if the given string matches the WFLang regex pattern
+// for date literals.
+func IsDateLiteral(s string) bool {
+	ok, _ := regexp.MatchString(datePattern, s)
+	return ok
+}
+
+// IsDateLiteral returns true if the given string matches the WFLang regex pattern
+// for time literals.
+func IsTimeLiteral(s string) bool {
+	ok, _ := regexp.MatchString(timePattern, s)
+	return ok
 }
