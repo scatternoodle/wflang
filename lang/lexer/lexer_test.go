@@ -44,6 +44,8 @@ func TestNextToken(t *testing.T) {
 		{`by`, token.T_BY},
 		{`// comment line`, token.T_COMMENT_LINE},
 		{`/* comment/*\nblock */`, token.T_COMMENT_BLOCK},
+		{`{1900-01-01}`, token.T_DATE},
+		{`{23:59}`, token.T_TIME},
 	}
 
 	for _, tt := range tests {

@@ -9,6 +9,7 @@ import (
 
 	"github.com/scatternoodle/wflang/lang/object"
 	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/lang/types/wdate"
 	"github.com/scatternoodle/wflang/util"
 )
 
@@ -18,6 +19,15 @@ func New(input string) *Lexer {
 	l := &Lexer{input: input, lines: []uint{0}}
 	l.advance()
 	return l
+}
+
+// Keyword returns the Type of s if it is a keyword, or T_IDENT if not.
+func Keyword(s string) (token.Type, bool) {
+	s = strings.ToLower(s)
+	if t, ok := keywords()[s]; ok {
+		return t, true
+	}
+	return token.T_IDENT, false
 }
 
 // Lexer is the font of all semantic tokens. Here be words.
@@ -53,7 +63,7 @@ const eof byte = 0
 // This is the primary way in which the Parser interfaces with the Lexer.
 func (l *Lexer) NextToken() token.Token {
 	l.logDebug()
-	var tokn token.Token
+	var tok token.Token
 
 	if l.multiline {
 		return l.processMultiline()
@@ -63,63 +73,63 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.ch {
 	case eof:
-		tokn = newToken(l, token.T_EOF, eof, l.here())
-		tokn.Literal = ""
+		tok = newToken(l, token.T_EOF, eof, l.here())
+		tok.Literal = ""
 
 	// this is always a one-shot as = is both assignment and equality. There is no double =.
 	case '=':
-		tokn = newToken(l, token.T_EQ, '=', l.here())
+		tok = newToken(l, token.T_EQ, '=', l.here())
 	case '+':
-		tokn = newToken(l, token.T_PLUS, '+', l.here())
+		tok = newToken(l, token.T_PLUS, '+', l.here())
 	case '-':
-		tokn = newToken(l, token.T_MINUS, '-', l.here())
+		tok = newToken(l, token.T_MINUS, '-', l.here())
 
 	// Bang can either be ! or !=
 	case '!':
 		if l.peek() == '=' {
 			start := l.here()
 			l.advance()
-			tokn = newToken(l, token.T_NEQ, "!=", start)
+			tok = newToken(l, token.T_NEQ, "!=", start)
 		} else {
-			tokn = newToken(l, token.T_BANG, '!', l.here())
+			tok = newToken(l, token.T_BANG, '!', l.here())
 		}
 
 	// Can also be part of a block comment terminator (*/) but as the first char in a token,
 	// this is always a multiplication infix.
 	case '*':
-		tokn = newToken(l, token.T_ASTERISK, '*', l.here())
+		tok = newToken(l, token.T_ASTERISK, '*', l.here())
 
 	// / starts comments or division infix
 	case '/':
 		start := l.here()
 		if l.peek() == '/' {
 			lit := l.readLineComment()
-			tokn = newToken(l, token.T_COMMENT_LINE, lit, start)
+			tok = newToken(l, token.T_COMMENT_LINE, lit, start)
 
 		} else if l.peek() == '*' {
 			lit := l.readBlockComment()
 			if lit == "" {
-				tokn = newToken(l, token.T_ILLEGAL, "", start)
+				tok = newToken(l, token.T_ILLEGAL, "", start)
 			} else {
-				tokn = newToken(l, token.T_COMMENT_BLOCK, lit, start)
+				tok = newToken(l, token.T_COMMENT_BLOCK, lit, start)
 			}
 
 		} else {
-			tokn = newToken(l, token.T_SLASH, '/', start)
+			tok = newToken(l, token.T_SLASH, '/', start)
 		}
 
 	// This will always be a modulo infix
 	case '%':
-		tokn = newToken(l, token.T_MODULO, '%', l.here())
+		tok = newToken(l, token.T_MODULO, '%', l.here())
 
 	// GT or GTE infix
 	case '>':
 		start := l.here()
 		if l.peek() == '=' {
 			l.advance()
-			tokn = newToken(l, token.T_GTE, ">=", start)
+			tok = newToken(l, token.T_GTE, ">=", start)
 		} else {
-			tokn = newToken(l, token.T_GT, '>', start)
+			tok = newToken(l, token.T_GT, '>', start)
 		}
 
 	// LT or LTE infix
@@ -127,65 +137,73 @@ func (l *Lexer) NextToken() token.Token {
 		start := l.here()
 		if l.peek() == '=' {
 			l.advance()
-			tokn = newToken(l, token.T_LTE, "<=", start)
+			tok = newToken(l, token.T_LTE, "<=", start)
 		} else {
-			tokn = newToken(l, token.T_LT, '<', start)
+			tok = newToken(l, token.T_LT, '<', start)
 		}
 
 	// TODO: take a closer look at these... delimeters are a bit more complex.
 	case ',':
-		tokn = newToken(l, token.T_COMMA, ',', l.here())
+		tok = newToken(l, token.T_COMMA, ',', l.here())
 	case ';':
-		tokn = newToken(l, token.T_SEMICOLON, ';', l.here())
+		tok = newToken(l, token.T_SEMICOLON, ';', l.here())
 	case ':':
-		tokn = newToken(l, token.T_COLON, ':', l.here())
+		tok = newToken(l, token.T_COLON, ':', l.here())
 	case '(':
-		tokn = newToken(l, token.T_LPAREN, '(', l.here())
+		tok = newToken(l, token.T_LPAREN, '(', l.here())
 	case ')':
-		tokn = newToken(l, token.T_RPAREN, ')', l.here())
+		tok = newToken(l, token.T_RPAREN, ')', l.here())
+
+	// Brace pairs can only be used for date or time literals
 	case '{':
-		tokn = newToken(l, token.T_LBRACE, '{', l.here())
-	case '}':
-		tokn = newToken(l, token.T_RBRACE, '}', l.here())
+		lit := l.readBraceString()
+		if wdate.IsDateLiteral(lit) {
+			tok = newToken(l, token.T_DATE, lit, l.here())
+		} else if wdate.IsTimeLiteral(lit) {
+			tok = newToken(l, token.T_TIME, lit, l.here())
+		} else {
+			tok = newToken(l, token.T_ILLEGAL, lit, l.here())
+		}
+
 	case '[':
-		tokn = newToken(l, token.T_LBRACKET, '[', l.here())
+		tok = newToken(l, token.T_LBRACKET, '[', l.here())
 	case ']':
-		tokn = newToken(l, token.T_RBRACKET, ']', l.here())
+		tok = newToken(l, token.T_RBRACKET, ']', l.here())
 	case '.':
-		tokn = newToken(l, token.T_PERIOD, '.', l.here())
+		tok = newToken(l, token.T_PERIOD, '.', l.here())
 	case '$':
-		tokn = newToken(l, token.T_DOLLAR, '$', l.here())
+		tok = newToken(l, token.T_DOLLAR, '$', l.here())
 
 	case '&':
 		start := l.here()
 		if l.peek() != '&' {
-			tokn = newToken(l, token.T_ILLEGAL, '&', start)
+			tok = newToken(l, token.T_ILLEGAL, '&', start)
 		} else {
 			l.advance()
-			tokn = newToken(l, token.T_AND, "&&", start)
+			tok = newToken(l, token.T_AND, "&&", start)
 		}
 	case '|':
 		start := l.here()
 		if l.peek() != '|' {
-			tokn = newToken(l, token.T_ILLEGAL, '|', start)
+			tok = newToken(l, token.T_ILLEGAL, '|', start)
 		} else {
 			l.advance()
-			tokn = newToken(l, token.T_OR, "||", start)
+			tok = newToken(l, token.T_OR, "||", start)
 		}
 
 	// Always a string literal.
 	case '"':
 		start := l.here()
-		tokn = newToken(l, token.T_STRING, l.readString(), start)
+		tok = newToken(l, token.T_STRING, l.readString(), start)
 
 	// Otherwise, will be some sort of num / ident, or illegal. This is baking in some opinions about
 	default:
 		start := l.here()
 
 		if util.IsDigit(l.ch) {
-			tokn = newToken(l, token.T_NUM, l.readNumber(), start)
+			tok = newToken(l, token.T_NUM, l.readNumber(), start)
 			l.advance()
-			return tokn
+			return tok
 		}
 
 		if util.IsLetter(l.ch) {
@@ -202,16 +220,16 @@ func (l *Lexer) NextToken() token.Token {
 				tType = token.T_IDENT
 			}
 
-			tokn = newToken(l, tType, lit, start)
+			tok = newToken(l, tType, lit, start)
 			l.advance()
-			return tokn
+			return tok
 		}
 
-		tokn = newToken(l, token.T_ILLEGAL, l.ch, start)
+		tok = newToken(l, token.T_ILLEGAL, l.ch, start)
 	}
 
 	l.advance()
-	return tokn
+	return tok
 }
 
 // newToken creates a new token.Token, drawing Lexer's internal state. literal can
@@ -423,11 +441,19 @@ func (l *Lexer) processMultiline() token.Token {
 	return newToken(l, l.multiType, lit, start)
 }
 
-// Keyword returns the Type of s if it is a keyword, or T_IDENT if not.
-func Keyword(s string) (token.Type, bool) {
-	s = strings.ToLower(s)
-	if t, ok := keywords()[s]; ok {
-		return t, true
+// readBraceString reads a string between two brace ({}) characters. Ends at }, newline
+// or EOF, whichever happens first. Enclosing braces are included in the returned
+// value.
+func (l *Lexer) readBraceString() string {
+	start := l.pos
+
+	for {
+		if l.ch == '}' {
+			return l.input[start : l.pos+1]
+		}
+		if l.ch == '\n' || l.ch == eof {
+			return l.input[start:l.pos]
+		}
+		l.advance()
 	}
-	return token.T_IDENT, false
 }

@@ -11,6 +11,8 @@ const (
 	T_IDENT  Type = "IDENT"
 	T_NUM    Type = "NUMBER" // A la Javascript, a number is atokn = newToken(l, token.T_SLASH, '/') number is a runtime error.
 	T_STRING Type = "STRING"
+	T_DATE   Type = "DATE"
+	T_TIME   Type = "TIME"
 
 	// comments
 
@@ -43,8 +45,6 @@ const (
 	T_COLON       Type = ":" // TODO - check - Not sure if this has a semantic use in WFLang.
 	T_LPAREN      Type = "("
 	T_RPAREN      Type = ")"
-	T_LBRACE      Type = "{" // TODO - check - rare - only use case I'm aware of is to express times.
-	T_RBRACE      Type = "}"
 	T_LBRACKET    Type = "["
 	T_RBRACKET    Type = "]"  // For specific array-like use cases such as "in" expressions.
 	T_PERIOD      Type = "."  // Period can denote a decimal point or member access.
