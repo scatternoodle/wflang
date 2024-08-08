@@ -9,7 +9,8 @@ const (
 	// literals
 
 	T_IDENT  Type = "IDENT"
-	T_NUM    Type = "NUMBER" // A la Javascript, a number is atokn = newToken(l, token.T_SLASH, '/') number is a runtime error.
+	T_INT    Type = "INT"
+	T_FLOAT  Type = "FLOAT"
 	T_STRING Type = "STRING"
 	T_DATE   Type = "DATE"
 	T_TIME   Type = "TIME"
