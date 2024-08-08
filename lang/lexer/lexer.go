@@ -202,7 +202,14 @@ func (l *Lexer) NextToken() token.Token {
 		start := l.here()
 
 		if util.IsDigit(l.ch) {
-			tok = newToken(l, token.T_NUM, l.readNumber(), start)
+			num := l.readNumber()
+			var tt token.Type
+			if strings.Contains(num, ".") {
+				tt = token.T_FLOAT
+			} else {
+				tt = token.T_INT
+			}
+			tok = newToken(l, tt, num, start)
 			l.advance()
 			return tok
 		}
