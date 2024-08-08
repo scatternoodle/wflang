@@ -71,7 +71,8 @@ func tokenMap() map[token.Type]string {
 		token.T_COMMENT_BLOCK: semComment,
 		token.T_COMMENT_LINE:  semComment,
 
-		token.T_NUM:    semNumber,
+		token.T_INT:    semNumber,
+		token.T_FLOAT:  semNumber,
 		token.T_STRING: semString,
 		token.T_DATE:   semNumber,
 		token.T_TIME:   semNumber,

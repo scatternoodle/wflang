@@ -47,7 +47,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.advance()
 	p.advance()
 
-	p.prefixParsers[token.T_NUM] = p.parseNumberLiteral
+	p.prefixParsers[token.T_INT] = p.parseNumberLiteral
+	p.prefixParsers[token.T_FLOAT] = p.parseNumberLiteral
 	p.prefixParsers[token.T_IDENT] = p.parseIdent
 	p.prefixParsers[token.T_MINUS] = p.parsePrefixExpression
 	p.prefixParsers[token.T_BANG] = p.parsePrefixExpression
