@@ -105,3 +105,15 @@ func (srv *Server) handleHoverRequest(w io.Writer, c []byte, id *int) {
 		Hover:    srv.hover(r.Position),
 	})
 }
+
+func (srv *Server) handleDocumentSymbolsRequest(w io.Writer, c []byte, id *int) {
+	var r lsp.DocumentSymbolRequest
+	if !handleAssertID(w, id) || !handleParseContent(&r, w, c, id) {
+		return
+	}
+
+	respond(w, lsp.DocumentSymbolResponse{
+		Response: jrpc2.NewResponse(id, nil),
+		Result:   []lsp.DocumentSymbol{},
+	})
+}

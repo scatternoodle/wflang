@@ -10,4 +10,5 @@ const (
 	MethodDocDidSave         string = "textDocument/didSave"
 	MethodSemanticTokensFull string = "textDocument/semanticTokens/full"
 	MethodHover              string = "textDocument/hover"
+	MethodDocumentSymbols    string = "textDocument/documentSymbol"
 )
