@@ -4,6 +4,7 @@ type ServerCapabilities struct {
 	TextDocumentSync       TextDocumentSyncKind  `json:"textDocumentSync,omitempty"`
 	SemanticTokensProvider SemanticTokensOptions `json:"semanticTokensProvider,omitempty"`
 	HoverProvider          bool                  `json:"hoverProvider,omitempty"`
+	DocumentSymbolProvider bool                  `json:"documentSymbolProvider,omitempty"`
 }
 
 type TextDocumentSyncKind int

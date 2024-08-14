@@ -46,7 +46,7 @@ func TestEvalLiterals(t *testing.T) {
 
 func testRunEval(t testhelp.TH, input string, wantLen int, errOK bool) object.Object {
 	parser, AST := testRunParser(t, input, wantLen, errOK)
-	return parser.Eval(AST)
+	return parser.eval(AST)
 }
 
 func testObjectVal(t testhelp.TH, obj object.Object, want any) bool {

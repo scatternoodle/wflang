@@ -3,7 +3,7 @@ package object
 import (
 	"time"
 
-	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/lang/ast"
 	"github.com/scatternoodle/wflang/lang/types"
 )
 
@@ -15,6 +15,16 @@ type Object interface {
 	Value() (v any, ok bool)
 }
 
+// Undefined is used when an object type cannot be resolved, and likely indicates
+// a syntax or semantic error in the WFLang code.
+type Undefined struct {
+	Val ast.Node
+}
+
+func (u Undefined) Type() types.Type        { return types.T_UNDEFINED }
+func (u Undefined) Methods() []Function     { return nil }
+func (u Undefined) Value() (v any, ok bool) { return u.Val, u.Val != nil }
+
 type Number struct {
 	Static bool
 	Val    float64
@@ -25,9 +35,9 @@ func (n Number) Methods() []Function     { return nil }
 func (n Number) Value() (v any, ok bool) { return n.Val, n.Static }
 
 type Variable struct {
-	Name string
-	Val  Object
-	Pos  token.Pos
+	Name      string
+	Statement *ast.VarStatement
+	Val       Object
 }
 
 func (vr Variable) Methods() []Function { return nil }
