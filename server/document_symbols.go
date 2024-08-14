@@ -33,7 +33,7 @@ func (srv *Server) documentSymbols() []lsp.DocumentSymbol {
 			End:   lsp.Position{Line: varEnd.Line, Character: varEnd.Col},
 		}
 
-		nameStart, nameEnd := v.Statement.Value.Pos()
+		nameStart, nameEnd := v.Statement.Name.Pos()
 		selectionRange := lsp.Range{
 			Start: lsp.Position{Line: nameStart.Line, Character: nameStart.Col},
 			End:   lsp.Position{Line: nameEnd.Line, Character: nameEnd.Col},
