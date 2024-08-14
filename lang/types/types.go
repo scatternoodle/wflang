@@ -25,6 +25,7 @@ const (
 	T_WEEK      Type = "week"
 	T_PERIOD    Type = "period"
 	T_NULL      Type = "null"
+	T_UNDEFINED Type = "undefined"
 )
 
 // IsNullable returns true if the given WFLang base type can be null (and therefore

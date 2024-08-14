@@ -5,6 +5,7 @@ package parser
 
 import (
 	"fmt"
+	"log/slog"
 	"strings"
 
 	"github.com/scatternoodle/wflang/lang/ast"
@@ -42,6 +43,7 @@ func New(l *lexer.Lexer) *Parser {
 		infixParsers:  map[token.Type]infixParser{},
 		errors:        []error{},
 		trace:         &trace{0, &strings.Builder{}},
+		vars:          []object.Variable{},
 	}
 
 	p.advance()
@@ -81,6 +83,9 @@ func New(l *lexer.Lexer) *Parser {
 	p.infixParsers[token.T_IN] = p.parseInExpression
 
 	p.ast = p.parse()
+	if p.ast != nil {
+		p.eval(p.ast)
+	}
 	return p
 }
 
@@ -92,6 +97,8 @@ func (p *Parser) Statements() []ast.Statement { return p.ast.Statements }
 // parse begins the static analysis process, producing an AST from the token stream
 // created by the lexer.
 func (p *Parser) parse() *ast.AST {
+	slog.Debug("starting new parser run")
+
 	p.trace.trace("AST")
 	defer p.trace.untrace("AST")
 
@@ -102,11 +109,20 @@ func (p *Parser) parse() *ast.AST {
 		if err != nil {
 			err = fmt.Errorf("error parsing statement: %w", err)
 			p.errors = append(p.errors, err)
-			return nil
+			return &ast.AST{}
 		}
 
 		AST.Statements = append(AST.Statements, stmt)
 		p.advance()
+	}
+
+	if len(p.errors) > 0 {
+		// logging these errors is still a debug not error level because syntax errors are expected to be ubiquitous while
+		// users type code. These errors do not represent a failure state for the parser or the language server.
+		slog.Debug("parser run finished with the following errors")
+		for _, e := range p.errors {
+			slog.Debug("error", "data", e)
+		}
 	}
 
 	return AST

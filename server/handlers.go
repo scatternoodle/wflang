@@ -114,6 +114,6 @@ func (srv *Server) handleDocumentSymbolsRequest(w io.Writer, c []byte, id *int) 
 
 	respond(w, lsp.DocumentSymbolResponse{
 		Response: jrpc2.NewResponse(id, nil),
-		Result:   []lsp.DocumentSymbol{},
+		Result:   srv.documentSymbols(),
 	})
 }
