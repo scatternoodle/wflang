@@ -52,7 +52,11 @@ func PrintTokens(prs *parser.Parser) {
 
 func PrintStatements(prs *parser.Parser) {
 	for _, stmt := range prs.Statements() {
-		fmt.Println(stmt.String())
+		fmt.Printf("\tType: %T\n", stmt)
+		fmt.Printf("\tString(): %s\n", stmt.String())
+		start, end := stmt.Pos()
+		fmt.Printf("\tStart: %+v\n\tEnd: %+v\n", start, end)
+		fmt.Println()
 	}
 }
 
