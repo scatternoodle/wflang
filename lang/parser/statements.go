@@ -82,6 +82,7 @@ func (p *Parser) parseVarStatement() (ast.VarStatement, error) {
 		return ast.VarStatement{}, eWrap(err)
 	}
 	p.advance()
+	stmt.Semicolon = p.current
 	return stmt, nil
 }
 

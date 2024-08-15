@@ -100,6 +100,7 @@ type VarStatement struct {
 	token.Token // expected to be token.T_VAR type
 	Name        Ident
 	Value       Expression
+	Semicolon   token.Token
 }
 
 func (v VarStatement) StatementNode()       {}
@@ -108,11 +109,9 @@ func (v VarStatement) String() string {
 	return fmt.Sprintf("var %s = %s;", v.Name.String(), v.Value.String())
 }
 
-// Pos returns the StartPos of the var token, and the EndPos of the Value expression.
-func (v VarStatement) Pos() (start, end token.Pos) {
-	_, end = v.Value.Pos()
-	return v.Token.StartPos, end
-}
+// Pos returns the StartPos of the var token, and the EndPos of the terminating
+// semicolon token.
+func (v VarStatement) Pos() (start, end token.Pos) { return v.Token.StartPos, v.Semicolon.EndPos }
 
 // LineCommentStatement is a statement that represents a single line comment, where
 // the token literal is the comment itself (including the leading "//").
