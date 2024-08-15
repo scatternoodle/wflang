@@ -13,6 +13,11 @@ func (srv *Server) documentSymbols() []lsp.DocumentSymbol {
 		}
 
 		varStart, varEnd := v.Statement.Pos()
+
+		// for some reason (at least in VSCode) the end (and the end only) of the larger range in a document
+		// symbol behaves like it's 1-indexed instead of zero-indexed
+		varEnd.Col++
+
 		symbolRange := lsp.Range{
 			Start: lsp.Position{Line: varStart.Line, Character: varStart.Col},
 			End:   lsp.Position{Line: varEnd.Line, Character: varEnd.Col},
