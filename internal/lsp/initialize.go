@@ -2,7 +2,7 @@ package lsp
 
 // https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#lifeCycleMessages
 
-import "github.com/scatternoodle/wflang/jrpc2"
+import "github.com/scatternoodle/wflang/internal/jrpc2"
 
 // InitializeRequest is always the first request sent by the client.
 type InitializeRequest struct {

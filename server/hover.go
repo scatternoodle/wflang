@@ -3,9 +3,9 @@ package server
 import (
 	"strings"
 
+	"github.com/scatternoodle/wflang/internal/lsp"
 	"github.com/scatternoodle/wflang/lang/object"
 	"github.com/scatternoodle/wflang/lang/token"
-	"github.com/scatternoodle/wflang/lsp"
 	"github.com/scatternoodle/wflang/server/hovertext"
 )
 

@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/scatternoodle/wflang/lsp"
+	"github.com/scatternoodle/wflang/internal/lsp"
 )
 
 func (srv *Server) documentSymbols() []lsp.DocumentSymbol {

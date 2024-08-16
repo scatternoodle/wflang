@@ -5,8 +5,8 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/scatternoodle/wflang/jrpc2"
-	"github.com/scatternoodle/wflang/lsp"
+	"github.com/scatternoodle/wflang/internal/jrpc2"
+	"github.com/scatternoodle/wflang/internal/lsp"
 )
 
 // handlerFunc takes an io.Writer and a byte slice containing the contents of an

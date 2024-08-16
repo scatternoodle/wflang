@@ -1,6 +1,6 @@
 package lsp
 
-import "github.com/scatternoodle/wflang/jrpc2"
+import "github.com/scatternoodle/wflang/internal/jrpc2"
 
 // SymbolKind
 //
