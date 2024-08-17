@@ -34,6 +34,8 @@ func New(name, version *string) *Server {
 		lsp.MethodShutdown:           srv.handleShutdownRequest,
 		lsp.MethodExit:               srv.handleExitNotification,
 		lsp.MethodDocumentSymbols:    srv.handleDocumentSymbolsRequest,
+		lsp.MethodDeclaration:        srv.handleGotoDeclarationRequest,
+		// lsp.MethodDefinition:         srv.handleGotoDefinitionRequest,
 	}
 	return srv
 }
@@ -62,6 +64,8 @@ func serverCapabilities() lsp.ServerCapabilities {
 		},
 		HoverProvider:          true,
 		DocumentSymbolProvider: true,
+		DeclarationProvider:    true,
+		// DefinitionProvider:     true,
 	}
 }
 

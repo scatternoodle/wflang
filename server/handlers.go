@@ -117,3 +117,46 @@ func (srv *Server) handleDocumentSymbolsRequest(w io.Writer, c []byte, id *int) 
 		Result:   srv.documentSymbols(),
 	})
 }
+
+func (srv *Server) handleGotoDeclarationRequest(w io.Writer, c []byte, id *int) {
+	var r lsp.GotoDeclarationRequest
+	if !handleAssertID(w, id) || !handleParseContent(&r, w, c, id) {
+		return
+	}
+
+	respond(w, lsp.GotoDeclarationResponse{
+		Response: jrpc2.NewResponse(id, nil),
+		// Result: lsp.Location{
+		// 	URI: r.Params.URI,
+		// 	Range: lsp.Range{
+		// 		Start: lsp.Position{Line: 0, Character: 0},
+		// 		End:   lsp.Position{Line: 0, Character: 9},
+		// 	},
+		// },
+		Result: []lsp.LocationLink{
+			{
+				OriginSelectionRange: lsp.Range{
+					Start: lsp.Position{Line: 1, Character: 1},
+					End:   lsp.Position{Line: 1, Character: 2},
+				},
+				TargetURI: r.Params.URI,
+				TargetRange: lsp.Range{
+					Start: lsp.Position{Line: 0, Character: 0},
+					End:   lsp.Position{Line: 0, Character: 9},
+				},
+				TargetSelectionRange: lsp.Range{
+					Start: lsp.Position{Line: 0, Character: 4},
+					End:   lsp.Position{Line: 0, Character: 5},
+				},
+			},
+		},
+	})
+}
+
+func (srv *Server) handleGotoDefinitionRequest(w io.Writer, c []byte, id *int) {
+	var r lsp.GotoDefinitionRequest
+	if !handleAssertID(w, id) || !handleParseContent(&r, w, c, id) {
+		return
+	}
+	_ = r
+}
