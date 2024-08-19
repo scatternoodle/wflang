@@ -10,7 +10,10 @@ import (
 func main() {
 	slog.SetLogLoggerLevel(slog.LevelDebug)
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
-	log.Fatal(repl.Run())
+
+	if err := repl.Run(); err != nil {
+		log.Fatal(err)
+	}
 }
 
 // func main() {

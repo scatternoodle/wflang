@@ -48,6 +48,8 @@ type Server struct {
 	exiting      bool // set after an shutdown request is received, awaiting exit request
 	parser       *parser.Parser
 	handlers     map[string]handlerFunc
+	symbols      map[string]lsp.DocumentSymbol
+
 	*tokenEncoder
 }
 

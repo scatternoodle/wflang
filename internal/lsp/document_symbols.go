@@ -96,7 +96,7 @@ type DocumentSymbolParams struct {
 // https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_documentSymbol
 type DocumentSymbolResponse struct {
 	jrpc2.Response
-	Result []DocumentSymbol `json:"result"`
+	Result map[string]DocumentSymbol `json:"result"`
 }
 
 // GotoDeclarationRequest is sent from the client to the server to resolve the
