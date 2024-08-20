@@ -96,24 +96,7 @@ type DocumentSymbolParams struct {
 // https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_documentSymbol
 type DocumentSymbolResponse struct {
 	jrpc2.Response
-	Result map[string]DocumentSymbol `json:"result"`
-}
-
-// GotoDeclarationRequest is sent from the client to the server to resolve the
-// declaration location of a symbol at a given text document position.
-//
-// https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_declaration
-type GotoDeclarationRequest struct {
-	jrpc2.Request
-	Params TextDocumentPositionParams `json:"params"`
-}
-
-// GotoDeclarationResponse
-//
-// https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_declaration
-type GotoDeclarationResponse struct {
-	jrpc2.Response
-	Result []LocationLink `json:"result"`
+	Result []DocumentSymbol `json:"result"`
 }
 
 // GotoDefinitionRequest is sent from the client to the server to resolve the
@@ -129,4 +112,6 @@ type GotoDefinitionRequest struct {
 //
 // https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_definition
 type GotoDefinitionResponse struct {
+	jrpc2.Response
+	Params Location `json:"params"`
 }

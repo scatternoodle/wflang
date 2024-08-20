@@ -112,22 +112,16 @@ func (srv *Server) handleDocumentSymbolsRequest(w io.Writer, c []byte, id *int) 
 		return
 	}
 
-	res := map[string]lsp.DocumentSymbol{}
+	res := []lsp.DocumentSymbol{}
 	if srv.symbols != nil {
-		res = srv.symbols
+		for _, sym := range srv.symbols {
+			res = append(res, sym)
+		}
 	}
 	respond(w, lsp.DocumentSymbolResponse{
 		Response: jrpc2.NewResponse(id, nil),
 		Result:   res,
 	})
-}
-
-func (srv *Server) handleGotoDeclarationRequest(w io.Writer, c []byte, id *int) {
-	var r lsp.GotoDeclarationRequest
-	if !handleAssertID(w, id) || !handleParseContent(&r, w, c, id) {
-		return
-	}
-	respond(w, lsp.GotoDeclarationRequest{}) // TODO
 }
 
 func (srv *Server) handleGotoDefinitionRequest(w io.Writer, c []byte, id *int) {

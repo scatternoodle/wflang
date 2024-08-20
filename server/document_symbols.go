@@ -4,8 +4,8 @@ import (
 	"github.com/scatternoodle/wflang/internal/lsp"
 )
 
-func (srv *Server) documentSymbols() []lsp.DocumentSymbol {
-	symbols := []lsp.DocumentSymbol{}
+func (srv *Server) createSymbols() {
+	srv.symbols = map[string]lsp.DocumentSymbol{}
 
 	for _, v := range srv.parser.Vars() {
 		if v.Statement == nil {
@@ -29,12 +29,11 @@ func (srv *Server) documentSymbols() []lsp.DocumentSymbol {
 			End:   lsp.Position{Line: nameEnd.Line, Character: nameEnd.Col},
 		}
 
-		symbols = append(symbols, lsp.DocumentSymbol{
+		srv.symbols[v.Name] = lsp.DocumentSymbol{
 			Name:           v.Name,
 			Kind:           lsp.SYMBOL_KIND_VARIABLE,
 			Range:          symbolRange,
 			SelectionRange: selectionRange,
-		})
+		}
 	}
-	return symbols
 }

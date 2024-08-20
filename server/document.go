@@ -18,4 +18,6 @@ func (srv *Server) updateDocument(doc lsp.TextDocumentItem) {
 		"number of tokens", len(srv.parser.Tokens()),
 		"errors", len(srv.parser.Errors()),
 	)
+
+	srv.createSymbols()
 }
