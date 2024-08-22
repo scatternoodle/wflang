@@ -5,7 +5,6 @@ type ServerCapabilities struct {
 	SemanticTokensProvider SemanticTokensOptions `json:"semanticTokensProvider,omitempty"`
 	HoverProvider          bool                  `json:"hoverProvider,omitempty"`
 	DocumentSymbolProvider bool                  `json:"documentSymbolProvider,omitempty"`
-	DeclarationProvider    bool                  `json:"declarationProvider,omitempty"`
 	DefinitionProvider     bool                  `json:"definitionProvider,omitempty"`
 }
 

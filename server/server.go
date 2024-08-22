@@ -65,8 +65,7 @@ func serverCapabilities() lsp.ServerCapabilities {
 		},
 		HoverProvider:          true,
 		DocumentSymbolProvider: true,
-		DeclarationProvider:    true,
-		// DefinitionProvider:     true,
+		DefinitionProvider:     true,
 	}
 }
 
@@ -192,6 +191,7 @@ func handleParseContent(v any, w io.Writer, c []byte, id *int) bool {
 		respondError(w, id, jrpc2.ERRCODE_PARSE_ERROR, "parse error", err)
 		return false
 	}
+
 	return true
 }
 

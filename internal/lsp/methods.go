@@ -12,5 +12,5 @@ const (
 	MethodHover              string = "textDocument/hover"
 	MethodDocumentSymbols    string = "textDocument/documentSymbol"
 	MethodDeclaration        string = "textDocument/declaration"
-	MethodDefinition         string = "textdocument/definition"
+	MethodDefinition         string = "textDocument/definition"
 )

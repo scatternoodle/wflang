@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"io"
 	"log/slog"
 	"os"
@@ -125,9 +126,27 @@ func (srv *Server) handleDocumentSymbolsRequest(w io.Writer, c []byte, id *int) 
 }
 
 func (srv *Server) handleGotoDefinitionRequest(w io.Writer, c []byte, id *int) {
-	var r lsp.GotoDefinitionRequest
-	if !handleAssertID(w, id) || !handleParseContent(&r, w, c, id) {
+	var reqObj lsp.GotoDefinitionRequest
+	if !handleAssertID(w, id) || !handleParseContent(&reqObj, w, c, id) {
 		return
 	}
-	_ = r
+
+	slog.Debug("req", "ID", *reqObj.ID, "URI", reqObj.Params.URI, "pos", reqObj.Params.Position)
+
+	res := lsp.GotoDefinitionResponse{Response: jrpc2.NewResponse(id, nil)}
+
+	slog.Debug(fmt.Sprintf("new response after jrpc2 call: %+v", res))
+
+	sym, ok := srv.symbolFromPos(reqObj.Params.Position)
+
+	slog.Debug(fmt.Sprintf("ok: %v, sym: %+v", ok, sym))
+
+	if ok {
+		res.Result = lsp.Location{
+			URI:   reqObj.Params.URI,
+			Range: sym.Range,
+		}
+	}
+
+	respond(w, res)
 }

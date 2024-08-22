@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/scatternoodle/wflang/internal/lsp"
+	"github.com/scatternoodle/wflang/lang/token"
 )
 
 func (srv *Server) createSymbols() {
@@ -36,4 +37,20 @@ func (srv *Server) createSymbols() {
 			SelectionRange: selectionRange,
 		}
 	}
+}
+
+func (srv *Server) symbolFromPos(pos lsp.Position) (lsp.DocumentSymbol, bool) {
+	tok, ok := srv.getTokenAtPos(pos)
+	if !ok {
+		return lsp.DocumentSymbol{}, false
+	}
+	if tok.Type != token.T_VAR {
+		return lsp.DocumentSymbol{}, false
+	}
+
+	sym, ok := srv.symbols[tok.Literal]
+	if !ok {
+		return lsp.DocumentSymbol{}, false
+	}
+	return sym, true
 }
