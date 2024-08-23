@@ -34,6 +34,7 @@ func New(name, version *string) *Server {
 		lsp.MethodShutdown:           srv.handleShutdownRequest,
 		lsp.MethodExit:               srv.handleExitNotification,
 		lsp.MethodDocumentSymbols:    srv.handleDocumentSymbolsRequest,
+		lsp.MethodDefinition:         srv.handleGotoDefinitionRequest,
 	}
 	return srv
 }
@@ -46,6 +47,8 @@ type Server struct {
 	exiting      bool // set after an shutdown request is received, awaiting exit request
 	parser       *parser.Parser
 	handlers     map[string]handlerFunc
+	symbols      map[string]lsp.DocumentSymbol
+
 	*tokenEncoder
 }
 
@@ -62,6 +65,7 @@ func serverCapabilities() lsp.ServerCapabilities {
 		},
 		HoverProvider:          true,
 		DocumentSymbolProvider: true,
+		DefinitionProvider:     true,
 	}
 }
 
@@ -187,6 +191,7 @@ func handleParseContent(v any, w io.Writer, c []byte, id *int) bool {
 		respondError(w, id, jrpc2.ERRCODE_PARSE_ERROR, "parse error", err)
 		return false
 	}
+
 	return true
 }
 

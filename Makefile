@@ -4,6 +4,10 @@ build_vscode:
 build_repl:
 	go build -o repl cmd/repl/main.go
 
+build:
+	make build_vscode
+	make build_repl
+
 test:
 	go test ./...
 

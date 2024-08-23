@@ -2,10 +2,11 @@ package server
 
 import (
 	"github.com/scatternoodle/wflang/internal/lsp"
+	"github.com/scatternoodle/wflang/lang/token"
 )
 
-func (srv *Server) documentSymbols() []lsp.DocumentSymbol {
-	symbols := []lsp.DocumentSymbol{}
+func (srv *Server) createSymbols() {
+	srv.symbols = map[string]lsp.DocumentSymbol{}
 
 	for _, v := range srv.parser.Vars() {
 		if v.Statement == nil {
@@ -26,15 +27,30 @@ func (srv *Server) documentSymbols() []lsp.DocumentSymbol {
 		nameStart, nameEnd := v.Statement.Name.Pos()
 		selectionRange := lsp.Range{
 			Start: lsp.Position{Line: nameStart.Line, Character: nameStart.Col},
-			End:   lsp.Position{Line: nameEnd.Line, Character: nameEnd.Col},
+			End:   lsp.Position{Line: nameEnd.Line, Character: nameEnd.Col + 1},
 		}
 
-		symbols = append(symbols, lsp.DocumentSymbol{
+		srv.symbols[v.Name] = lsp.DocumentSymbol{
 			Name:           v.Name,
 			Kind:           lsp.SYMBOL_KIND_VARIABLE,
 			Range:          symbolRange,
 			SelectionRange: selectionRange,
-		})
+		}
 	}
-	return symbols
+}
+
+func (srv *Server) symbolFromPos(pos lsp.Position) (lsp.DocumentSymbol, bool) {
+	tok, ok := srv.getTokenAtPos(pos)
+	if !ok {
+		return lsp.DocumentSymbol{}, false
+	}
+	if tok.Type != token.T_IDENT {
+		return lsp.DocumentSymbol{}, false
+	}
+
+	sym, ok := srv.symbols[tok.Literal]
+	if !ok {
+		return lsp.DocumentSymbol{}, false
+	}
+	return sym, true
 }

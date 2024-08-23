@@ -57,5 +57,15 @@
     "prefix": "testArray",
     "body": ["tests := []struct{", "\tname string", "\t$0", "}{}"],
     "description": "create a slice of test structs"
+  },
+
+  "lsphandler": {
+    "scope": "go",
+    "prefix": "server.handlerFunc",
+    "body": [
+      "func(srv *Server) $1(w io.Writer, c []byte, id *int) {",
+      "\t$0",
+      "}"
+    ]
   }
 }

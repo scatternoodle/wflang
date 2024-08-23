@@ -11,4 +11,6 @@ const (
 	MethodSemanticTokensFull string = "textDocument/semanticTokens/full"
 	MethodHover              string = "textDocument/hover"
 	MethodDocumentSymbols    string = "textDocument/documentSymbol"
+	MethodDeclaration        string = "textDocument/declaration"
+	MethodDefinition         string = "textDocument/definition"
 )
