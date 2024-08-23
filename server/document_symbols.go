@@ -44,7 +44,7 @@ func (srv *Server) symbolFromPos(pos lsp.Position) (lsp.DocumentSymbol, bool) {
 	if !ok {
 		return lsp.DocumentSymbol{}, false
 	}
-	if tok.Type != token.T_VAR {
+	if tok.Type != token.T_IDENT {
 		return lsp.DocumentSymbol{}, false
 	}
 
