@@ -130,7 +130,7 @@ func (srv *Server) handleGotoDefinitionRequest(w io.Writer, c []byte, id *int) {
 	if !handleAssertID(w, id) || !handleParseContent(&reqObj, w, c, id) {
 		return
 	}
-
+	// TODO
 	slog.Debug("req", "ID", *reqObj.ID, "URI", reqObj.Params.URI, "pos", reqObj.Params.Position)
 
 	res := lsp.GotoDefinitionResponse{Response: jrpc2.NewResponse(id, nil)}
