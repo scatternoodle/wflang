@@ -135,7 +135,7 @@ func (srv *Server) handleGotoDefinitionRequest(w io.Writer, c []byte, id *int) {
 	if ok {
 		res.Result = lsp.Location{
 			URI:   reqObj.Params.URI,
-			Range: sym.Range,
+			Range: sym.SelectionRange,
 		}
 	}
 	respond(w, res)

@@ -27,7 +27,7 @@ func (srv *Server) createSymbols() {
 		nameStart, nameEnd := v.Statement.Name.Pos()
 		selectionRange := lsp.Range{
 			Start: lsp.Position{Line: nameStart.Line, Character: nameStart.Col},
-			End:   lsp.Position{Line: nameEnd.Line, Character: nameEnd.Col},
+			End:   lsp.Position{Line: nameEnd.Line, Character: nameEnd.Col + 1},
 		}
 
 		srv.symbols[v.Name] = lsp.DocumentSymbol{
