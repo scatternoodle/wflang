@@ -13,4 +13,5 @@ const (
 	MethodDocumentSymbols    string = "textDocument/documentSymbol"
 	MethodDeclaration        string = "textDocument/declaration"
 	MethodDefinition         string = "textDocument/definition"
+	MethodShowMessage        string = "window/showMessage"
 )
