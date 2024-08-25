@@ -35,6 +35,7 @@ editors/vscode/extension/*.vsix
 editors/vscode/extension/tmp/
 
 # local / temp / files
+*.log
 /editors/vscode/extension/server/logs/*
 .local/*
 tmp/
