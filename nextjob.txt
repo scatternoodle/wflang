@@ -1,6 +1,4 @@
 Function completions are working, next...
-- work out why I'm getting unsupported markdown error even through I'm supposed
-  to be omitting that part of the response.
 - improve the messages themselves - let's find a way to configure those on a
   per-item basis as I'll want different settings for different items (e.g. some
   make more sense as snippets and others as plain text).
