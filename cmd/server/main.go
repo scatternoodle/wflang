@@ -15,15 +15,22 @@ func main() {
 		panic("missing arg: logfile path")
 	}
 	logPath := os.Args[1]
-	setupLogging(logPath, slog.LevelDebug)
+	setupLogging(logPath, true)
 
 	slog.Info("Language Server started.")
 
-	srv := server.New(nil, nil)
+	srv := server.New(nil, nil, true) // TODO this should be a program arg
 	srv.ListenAndServe(os.Stdin, os.Stdout)
 }
 
-func setupLogging(logPath string, level slog.Level) {
+func setupLogging(logPath string, debug bool) {
+	var level slog.Level
+	if debug {
+		level = slog.LevelDebug
+	} else {
+		level = slog.LevelInfo
+	}
+
 	logPath = path.Clean(logPath)
 	logFile, err := os.OpenFile(logPath, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0666)
 	if err == os.ErrNotExist { // That's OK, we'll just create it.
