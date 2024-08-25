@@ -140,3 +140,14 @@ func (srv *Server) handleGotoDefinitionRequest(w io.Writer, c []byte, id *int) {
 	}
 	send(w, res)
 }
+
+func (srv *Server) handleCompletionRequest(w io.Writer, c []byte, id *int) {
+	var req lsp.CompletionRequest
+	if !handleAssertID(w, id) || !handleParseContent(&req, w, c, id) {
+		return
+	}
+	send(w, lsp.CompletionResponse{
+		Response: jrpc2.NewResponse(id, nil),
+		Result:   srv.Completions(req.Params.Position),
+	})
+}

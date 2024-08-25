@@ -16,7 +16,9 @@ import (
 
 var debug bool
 
-func New(name, version *string, debug bool) *Server {
+func New(name, version *string, dbg bool) *Server {
+	debug = dbg
+
 	srv := &Server{
 		name:         name,
 		version:      version,
@@ -37,6 +39,7 @@ func New(name, version *string, debug bool) *Server {
 		lsp.MethodExit:               srv.handleExitNotification,
 		lsp.MethodDocumentSymbols:    srv.handleDocumentSymbolsRequest,
 		lsp.MethodDefinition:         srv.handleGotoDefinitionRequest,
+		lsp.MethodCompletion:         srv.handleCompletionRequest,
 	}
 	return srv
 }
@@ -68,7 +71,8 @@ func serverCapabilities() lsp.ServerCapabilities {
 		HoverProvider:          true,
 		DocumentSymbolProvider: true,
 		DefinitionProvider:     true,
-		CompletionProvider:     lsp.CompletionOptions{
+		CompletionProvider: lsp.CompletionOptions{
+			CompletionItem: &lsp.CompletionItemOptions{LabelDetailsSupport: true},
 			// TODO we'll want trigger on at least ',' once methods implemented
 		},
 	}

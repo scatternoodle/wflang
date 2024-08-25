@@ -87,3 +87,12 @@ type LocationLink struct {
 	// symbol in the editor / drive selection.
 	TargetSelectionRange Range `json:"targetSelectionRange"`
 }
+
+// TextEdit
+//
+// https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textEdit
+type TextEdit struct {
+	Range `json:"range"`
+	// Text to be inserted. Empty string is considered a delete.
+	NewText string `json:"newText"`
+}
