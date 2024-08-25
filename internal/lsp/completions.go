@@ -76,7 +76,7 @@ type CompletionItem struct {
 	Detail string `json:"detail,omitempty"`
 
 	// Doc comment string
-	Documentation MarkupContent `json:"documentation,omitempty"`
+	Documentation *MarkupContent `json:"documentation,omitempty"`
 
 	// Deprecated (is) Deprecated: use Tags instead
 	Deprecated bool `json:"deprecated,omitempty"`
