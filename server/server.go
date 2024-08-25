@@ -14,7 +14,9 @@ import (
 	"github.com/scatternoodle/wflang/lang/token"
 )
 
-func New(name, version *string) *Server {
+var debug bool
+
+func New(name, version *string, debug bool) *Server {
 	srv := &Server{
 		name:         name,
 		version:      version,
@@ -203,4 +205,17 @@ func handleAssertID(w io.Writer, id *int) bool {
 		return false
 	}
 	return true
+}
+
+// debugNotification creates and sends an lsp.ShowMessageNotification on w with
+// message msg.
+func debugNotification(w io.Writer, msg string) {
+	not := lsp.ShowMessageNotification{
+		Notification: jrpc2.NewNotification(lsp.MethodShowMessage),
+		Params: lsp.ShowMessageParams{
+			Type:    lsp.Debug,
+			Message: msg,
+		},
+	}
+	respond(w, not)
 }
