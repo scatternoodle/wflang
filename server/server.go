@@ -152,7 +152,7 @@ func (srv *Server) getTokenAtPos(pos lsp.Position) (tok token.Token, ok bool) {
 	return toks[idx], true
 }
 
-func respond(w io.Writer, v any) {
+func send(w io.Writer, v any) {
 	response, err := jrpc2.EncodeMessage(v)
 	if err != nil {
 		panic(fmt.Errorf("response failed during encoding: %w", err))
@@ -170,7 +170,7 @@ func respondError(w io.Writer, id *int, code int, msg string, dat any) {
 		Data:    dat,
 	}
 	v := jrpc2.NewResponse(id, &rErr)
-	respond(w, v)
+	send(w, v)
 }
 
 // getRequestID returns the Request ID from a content byte slice. Returns null if
@@ -217,5 +217,5 @@ func debugNotification(w io.Writer, msg string) {
 			Message: msg,
 		},
 	}
-	respond(w, not)
+	send(w, not)
 }

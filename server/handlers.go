@@ -19,7 +19,7 @@ func (srv *Server) handleInitializeRequest(w io.Writer, c []byte, id *int) {
 	if !handleAssertID(w, id) || !handleParseContent(&r, w, c, id) {
 		return
 	}
-	respond(w, srv.initialize(id))
+	send(w, srv.initialize(id))
 }
 
 func (srv *Server) handleInitializedNotification(w io.Writer, _ []byte, _ *int) {
@@ -31,7 +31,7 @@ func (srv *Server) handleShutdownRequest(w io.Writer, c []byte, id *int) {
 		return
 	}
 	srv.exiting = true
-	respond(w, struct {
+	send(w, struct {
 		jrpc2.Response
 		Result any `json:"result"`
 	}{
@@ -86,7 +86,7 @@ func (srv *Server) handleSemanticTokensFullRequest(w io.Writer, c []byte, id *in
 	if !handleAssertID(w, id) || !handleParseContent(&r, w, c, id) {
 		return
 	}
-	respond(w, &lsp.SemanticTokensResponse{
+	send(w, &lsp.SemanticTokensResponse{
 		Response: jrpc2.NewResponse(id, nil),
 		Result: lsp.SemanticTokensResult{
 			Data: srv.semTokens,
@@ -100,7 +100,7 @@ func (srv *Server) handleHoverRequest(w io.Writer, c []byte, id *int) {
 		return
 	}
 
-	respond(w, lsp.HoverResponse{
+	send(w, lsp.HoverResponse{
 		Response: jrpc2.NewResponse(id, nil),
 		Hover:    srv.hover(r.Position),
 	})
@@ -118,7 +118,7 @@ func (srv *Server) handleDocumentSymbolsRequest(w io.Writer, c []byte, id *int) 
 			res = append(res, sym)
 		}
 	}
-	respond(w, lsp.DocumentSymbolResponse{
+	send(w, lsp.DocumentSymbolResponse{
 		Response: jrpc2.NewResponse(id, nil),
 		Result:   res,
 	})
@@ -138,5 +138,5 @@ func (srv *Server) handleGotoDefinitionRequest(w io.Writer, c []byte, id *int) {
 			Range: sym.SelectionRange,
 		}
 	}
-	respond(w, res)
+	send(w, res)
 }
