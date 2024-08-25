@@ -1,4 +1,4 @@
 Function completions are working, next...
-- improve the messages themselves - let's find a way to configure those on a
-  per-item basis as I'll want different settings for different items (e.g. some
-  make more sense as snippets and others as plain text).
+- rename server/hover.go and functions inside to use word "doc"/"documentation"
+  instead of "hover", as that file now has a more generic usecase.
+- Ditto server/hover package - we can use that as a store of all docstrings.
