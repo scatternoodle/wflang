@@ -148,6 +148,6 @@ func (srv *Server) handleCompletionRequest(w io.Writer, c []byte, id *int) {
 	}
 	send(w, lsp.CompletionResponse{
 		Response: jrpc2.NewResponse(id, nil),
-		Result:   srv.Completions(req.Params.Position),
+		Result:   srv.completions(req.Params.Position),
 	})
 }

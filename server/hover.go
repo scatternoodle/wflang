@@ -10,22 +10,25 @@ import (
 )
 
 func (srv *Server) hover(pos lsp.Position) lsp.Hover {
-	hov := lsp.Hover{
-		MarkupContent: lsp.MarkupContent{
-			Kind:  lsp.MarkupKindMarkdown,
-			Value: "",
-		},
-	}
-
 	tok, ok := srv.getTokenAtPos(pos)
 	if !ok {
-		return hov
+		return lsp.Hover{}
 	}
-
 	if tok.Type == token.T_BUILTIN {
-		hov.Value, _ = builtinHoverText(strings.ToLower(tok.Literal))
+		return lsp.Hover{MarkupContent: *docMarkdown(strings.ToLower(tok.Literal))}
 	}
-	return hov
+	return lsp.Hover{}
+}
+
+func docMarkdown(name string) *lsp.MarkupContent {
+	content := lsp.MarkupContent{
+		Kind:  lsp.MarkupKindMarkdown,
+		Value: "",
+	}
+	if doc, ok := builtinHoverText(name); ok {
+		content.Value = doc
+	}
+	return &content
 }
 
 func builtinHoverText(name string) (text string, ok bool) {
