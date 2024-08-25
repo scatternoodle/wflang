@@ -68,6 +68,9 @@ func serverCapabilities() lsp.ServerCapabilities {
 		HoverProvider:          true,
 		DocumentSymbolProvider: true,
 		DefinitionProvider:     true,
+		CompletionProvider:     lsp.CompletionOptions{
+			// TODO we'll want trigger on at least ',' once methods implemented
+		},
 	}
 }
 
@@ -132,6 +135,7 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 	handler, ok := srv.handlers[method]
 	if !ok {
 		slog.Warn("Unhandled method", "method", method, "id", requestId)
+		debugNotification(w, fmt.Sprintf("unhandled method: %s", method))
 		return
 	}
 	handler(w, content, requestId)
@@ -210,6 +214,10 @@ func handleAssertID(w io.Writer, id *int) bool {
 // debugNotification creates and sends an lsp.ShowMessageNotification on w with
 // message msg.
 func debugNotification(w io.Writer, msg string) {
+	if !debug {
+		return
+	}
+
 	not := lsp.ShowMessageNotification{
 		Notification: jrpc2.NewNotification(lsp.MethodShowMessage),
 		Params: lsp.ShowMessageParams{

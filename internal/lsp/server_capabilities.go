@@ -6,6 +6,7 @@ type ServerCapabilities struct {
 	HoverProvider          bool                  `json:"hoverProvider,omitempty"`
 	DocumentSymbolProvider bool                  `json:"documentSymbolProvider,omitempty"`
 	DefinitionProvider     bool                  `json:"definitionProvider,omitempty"`
+	CompletionProvider     CompletionOptions     `json:"completionProvider,omitempty"`
 }
 
 type TextDocumentSyncKind int
