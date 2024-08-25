@@ -1,4 +1,4 @@
-package hovertext
+package docstring
 
 const (
 	codeBlockStart   string = "```wflang\nSYNTAX:\n"
