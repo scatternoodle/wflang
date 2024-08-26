@@ -81,6 +81,10 @@ func serverCapabilities() lsp.ServerCapabilities {
 			// TODO we'll want trigger on at least ',' once methods implemented
 		},
 		RenameProvider: true,
+		SignatureHelpProvider: &lsp.SignatureHelpOptions{
+			TriggerChars:   []string{"("},
+			RetriggerChars: nil,
+		},
 	}
 }
 
