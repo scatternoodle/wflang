@@ -22,6 +22,7 @@ func New(name, version *string, dbg bool) *Server {
 	srv := &Server{
 		name:         name,
 		version:      version,
+		uri:          "",
 		initialized:  false,
 		capabilities: serverCapabilities(),
 		parser:       nil,
@@ -40,13 +41,17 @@ func New(name, version *string, dbg bool) *Server {
 		lsp.MethodDocumentSymbols:    srv.handleDocumentSymbolsRequest,
 		lsp.MethodDefinition:         srv.handleGotoDefinitionRequest,
 		lsp.MethodCompletion:         srv.handleCompletionRequest,
+		lsp.MethodRename:             srv.handleRenameRequest,
 	}
 	return srv
 }
 
 type Server struct {
-	name         *string
-	version      *string
+	name    *string
+	version *string
+
+	// for now, server only handles a single document - this likely will need to turn into a map[string]*parser.Parser at some point
+	uri          string
 	capabilities lsp.ServerCapabilities
 	initialized  bool // before this is set true, we only accept requests with initialize method
 	exiting      bool // set after an shutdown request is received, awaiting exit request
@@ -75,6 +80,7 @@ func serverCapabilities() lsp.ServerCapabilities {
 			CompletionItem: &lsp.CompletionItemOptions{LabelDetailsSupport: true},
 			// TODO we'll want trigger on at least ',' once methods implemented
 		},
+		RenameProvider: true,
 	}
 }
 

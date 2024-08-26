@@ -1,12 +1,15 @@
 package server
 
 import (
+	"fmt"
 	"io"
 	"log/slog"
 	"os"
+	"slices"
 
 	"github.com/scatternoodle/wflang/internal/jrpc2"
 	"github.com/scatternoodle/wflang/internal/lsp"
+	"github.com/scatternoodle/wflang/lang/token"
 )
 
 // handlerFunc takes an io.Writer and a byte slice containing the contents of an
@@ -149,5 +152,54 @@ func (srv *Server) handleCompletionRequest(w io.Writer, c []byte, id *int) {
 	send(w, lsp.CompletionResponse{
 		Response: jrpc2.NewResponse(id, nil),
 		Result:   srv.completions(req.Params.Position),
+	})
+}
+
+func (srv *Server) handleRenameRequest(w io.Writer, c []byte, id *int) {
+	var req lsp.RenameRequest
+	if !handleAssertID(w, id) || !handleParseContent(&req, w, c, id) {
+		return
+	}
+
+	reqTok, ok := srv.getTokenAtPos(req.Position)
+	if !ok {
+		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, fmt.Sprintf("no token found at position %+v", req.Position), nil)
+	}
+	if reqTok.Type != token.T_IDENT {
+		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, fmt.Sprintf("invalid token type for rename %s", reqTok.Type), nil)
+	}
+
+	vars := srv.parser.Vars()
+	varNames := make([]string, 0, len(vars))
+	for _, varObj := range vars {
+		varNames = append(varNames, varObj.Name)
+	}
+	if !slices.Contains(varNames, reqTok.Literal) {
+		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, fmt.Sprintf("token %s is not a variable", reqTok.Literal), nil)
+	}
+
+	edits := []lsp.TextEdit{}
+	for _, tok := range srv.parser.Tokens() {
+		if tok.Literal != reqTok.Literal {
+			continue
+		}
+		edits = append(edits, lsp.TextEdit{
+			Range: lsp.Range{
+				Start: lsp.Position{
+					Line:      tok.StartPos.Line,
+					Character: tok.StartPos.Col,
+				},
+				End: lsp.Position{
+					Line:      tok.EndPos.Line,
+					Character: tok.EndPos.Col + 1,
+				},
+			},
+			NewText: req.NewName,
+		})
+	}
+	wsEdit := &lsp.WorkspaceEdit{Changes: map[string][]lsp.TextEdit{srv.uri: edits}}
+	send(w, lsp.RenameResponse{
+		Response: jrpc2.NewResponse(id, nil),
+		Result:   wsEdit,
 	})
 }
