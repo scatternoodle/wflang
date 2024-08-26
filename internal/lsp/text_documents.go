@@ -96,3 +96,12 @@ type TextEdit struct {
 	// Text to be inserted. Empty string is considered a delete.
 	NewText string `json:"newText"`
 }
+
+// WorkspaceEdit represents a set of changes to multiple resources in the workspace.
+//
+// https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#workspaceEdit
+type WorkspaceEdit struct {
+	Changes map[string][]TextEdit `json:"changes,omitempty"`
+	// documentChanges? - not supported currently
+	// changeAnnotations - not supported currently
+}

@@ -15,4 +15,5 @@ const (
 	MethodDefinition         string = "textDocument/definition"
 	MethodShowMessage        string = "window/showMessage"
 	MethodCompletion         string = "textDocument/completion"
+	MethodRename             string = "textDocument/rename"
 )

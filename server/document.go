@@ -9,6 +9,7 @@ import (
 )
 
 func (srv *Server) updateDocument(doc lsp.TextDocumentItem) {
+	srv.uri = doc.URI
 	srv.parser = parser.New(lexer.New(doc.Text))
 	srv.tokenEncoder = newTokenEncoder(srv.parser.Tokens())
 
