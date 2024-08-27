@@ -7,6 +7,7 @@ import (
 	"os"
 	"slices"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/scatternoodle/wflang/internal/jrpc2"
 	"github.com/scatternoodle/wflang/internal/lsp"
 	"github.com/scatternoodle/wflang/lang/token"
@@ -161,7 +162,7 @@ func (srv *Server) handleRenameRequest(w io.Writer, c []byte, id *int) {
 		return
 	}
 
-	reqTok, ok := srv.getTokenAtPos(req.Position)
+	_, reqTok, ok := srv.getTokenAtPos(req.Position)
 	if !ok {
 		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, fmt.Sprintf("no token found at position %+v", req.Position), nil)
 	}
@@ -205,5 +206,18 @@ func (srv *Server) handleRenameRequest(w io.Writer, c []byte, id *int) {
 }
 
 func (srv *Server) handleSignatureHelpRequest(w io.Writer, c []byte, id *int) {
-	debugNotification(w, "sighelp request recevied.")
+	var req lsp.SignatureHelpRequest
+	if !handleAssertID(w, id) || !handleParseContent(&req, w, c, id) {
+		return
+	}
+	debugNotification(w, fmt.Sprintf("request object: \n\n%s", spew.Sdump(req)))
+
+	idx, cursorToken, _ := srv.getTokenAtPos(cursorPos(req.Position))
+	debugNotification(w, fmt.Sprintf("token found: %s", spew.Sdump(cursorToken)))
+
+	if idx > 0 {
+		idx--
+	}
+	sigToken := srv.parser.Tokens()[idx]
+	debugNotification(w, fmt.Sprintf("signature token type: %s, literal %s", sigToken.Type, sigToken.Literal))
 }

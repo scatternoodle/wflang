@@ -40,7 +40,7 @@ func (srv *Server) createSymbols() {
 }
 
 func (srv *Server) symbolFromPos(pos lsp.Position) (lsp.DocumentSymbol, bool) {
-	tok, ok := srv.getTokenAtPos(pos)
+	_, tok, ok := srv.getTokenAtPos(pos)
 	if !ok {
 		return lsp.DocumentSymbol{}, false
 	}

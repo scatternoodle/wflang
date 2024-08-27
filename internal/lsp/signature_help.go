@@ -26,8 +26,8 @@ type SignatureHelpRequest struct {
 //
 // https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#signatureHelpParams
 type SignatureHelpParams struct {
-	TextDocumentPositionParams
-	Context *SignatureHelpContext `json:"context,omitempty"`
+	TextDocumentPositionParams                       // Specifically, the position of the cursor at the point of request.
+	Context                    *SignatureHelpContext `json:"context,omitempty"`
 }
 
 // SignatureHelpContext contains additional information about the context in which

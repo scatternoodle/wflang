@@ -10,7 +10,7 @@ import (
 )
 
 func (srv *Server) hover(pos lsp.Position) lsp.Hover {
-	tok, ok := srv.getTokenAtPos(pos)
+	_, tok, ok := srv.getTokenAtPos(pos)
 	if !ok {
 		return lsp.Hover{}
 	}

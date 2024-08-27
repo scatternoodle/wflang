@@ -156,7 +156,7 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 	handler(w, content, requestId)
 }
 
-func (srv *Server) getTokenAtPos(pos lsp.Position) (tok token.Token, ok bool) {
+func (srv *Server) getTokenAtPos(pos lsp.Position) (index int, tok token.Token, ok bool) {
 	toks := srv.parser.Tokens()
 	idx := slices.IndexFunc(toks, func(t token.Token) bool {
 		if t.StartPos.Line != pos.Line {
@@ -166,9 +166,9 @@ func (srv *Server) getTokenAtPos(pos lsp.Position) (tok token.Token, ok bool) {
 	})
 
 	if idx < 0 {
-		return token.Token{}, false
+		return -1, token.Token{}, false
 	}
-	return toks[idx], true
+	return idx, toks[idx], true
 }
 
 func send(w io.Writer, v any) {
@@ -209,7 +209,8 @@ func getRequestID(b []byte) *int {
 // false.
 func handleParseContent(v any, w io.Writer, c []byte, id *int) bool {
 	if err := json.Unmarshal(c, v); err != nil {
-		respondError(w, id, jrpc2.ERRCODE_PARSE_ERROR, "parse error", err)
+		slog.Error("error parsing request", "id", *id, "err", err)
+		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, fmt.Sprintf("parse error: %s", err), nil)
 		return false
 	}
 
@@ -220,7 +221,7 @@ func handleParseContent(v any, w io.Writer, c []byte, id *int) bool {
 // the appropriate error and returns false.
 func handleAssertID(w io.Writer, id *int) bool {
 	if id == nil {
-		respondError(w, id, jrpc2.ERRCODE_INVALID_REQUEST, "request ID cannot be nil", nil)
+		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, "request ID cannot be nil", nil)
 		return false
 	}
 	return true
@@ -241,4 +242,14 @@ func debugNotification(w io.Writer, msg string) {
 		},
 	}
 	send(w, not)
+}
+
+// cursorPos returns the "cursor position" of a given lsp.Position, which is
+// at column-1. If column is zero, returns zero.
+func cursorPos(pos lsp.Position) lsp.Position {
+	cursorPos := pos
+	if cursorPos.Character > 0 {
+		cursorPos.Character--
+	}
+	return cursorPos
 }
