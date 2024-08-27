@@ -42,6 +42,7 @@ func New(name, version *string, dbg bool) *Server {
 		lsp.MethodDefinition:         srv.handleGotoDefinitionRequest,
 		lsp.MethodCompletion:         srv.handleCompletionRequest,
 		lsp.MethodRename:             srv.handleRenameRequest,
+		lsp.MethodSignatureHelp:      srv.handleSignatureHelpRequest,
 	}
 	return srv
 }

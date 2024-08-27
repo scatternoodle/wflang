@@ -203,3 +203,7 @@ func (srv *Server) handleRenameRequest(w io.Writer, c []byte, id *int) {
 		Result:   wsEdit,
 	})
 }
+
+func (srv *Server) handleSignatureHelpRequest(w io.Writer, c []byte, id *int) {
+	debugNotification(w, "sighelp request recevied.")
+}
