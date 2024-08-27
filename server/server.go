@@ -182,7 +182,7 @@ func send(w io.Writer, v any) {
 	slog.Debug(fmt.Sprintf("Wrote content=%s", string(response)))
 }
 
-func respondError(w io.Writer, id *int, code int, msg string, dat any) {
+func respondError(w io.Writer, id *int, code int, msg string, dat ...any) {
 	rErr := jrpc2.ResponseError{
 		Code:    code,
 		Message: msg,

@@ -212,12 +212,16 @@ func (srv *Server) handleSignatureHelpRequest(w io.Writer, c []byte, id *int) {
 	}
 	debugNotification(w, fmt.Sprintf("request object: \n\n%s", spew.Sdump(req)))
 
-	idx, cursorToken, _ := srv.getTokenAtPos(cursorPos(req.Position))
-	debugNotification(w, fmt.Sprintf("token found: %s", spew.Sdump(cursorToken)))
+	idx, cursorToken, ok := srv.getTokenAtPos(cursorPos(req.Position))
+	if !ok {
+		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, "no valid token at cursor")
+	}
+	debugNotification(w, fmt.Sprintf("cursor token: %s", spew.Sdump(cursorToken)))
 
 	if idx > 0 {
 		idx--
 	}
-	sigToken := srv.parser.Tokens()[idx]
-	debugNotification(w, fmt.Sprintf("signature token type: %s, literal %s", sigToken.Type, sigToken.Literal))
+	callable := srv.parser.Tokens()[idx]
+	debugNotification(w, fmt.Sprintf("callable token: %s", spew.Sdump(callable)))
+	// CURRENT
 }
