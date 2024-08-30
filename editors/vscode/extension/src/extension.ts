@@ -5,6 +5,8 @@ import {
   LanguageClientOptions,
   TransportKind,
   ServerOptions,
+  Trace,
+  SetTraceNotification,
 } from "vscode-languageclient/node";
 
 import fs from "fs";
@@ -67,6 +69,10 @@ export function activate(context: ExtensionContext) {
 
   client = new LanguageClient("wflsrv", serverOptions, clientOptions);
   client.start();
+
+  // I don't know why, but this appears to be the only way to get a server trace value of anything other than "off".
+  // If we set initial setting in initialization, it's ignored. Using client.SetTrace() also appears to have no effect.
+  client.sendNotification(SetTraceNotification.type.method, { value: Trace.Verbose });
 }
 
 export function deactivate() {
