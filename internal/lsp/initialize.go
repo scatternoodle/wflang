@@ -10,12 +10,6 @@ type InitializeRequest struct {
 	Params InitializeRequestParams `json:"params"`
 }
 
-const (
-	TraceOff      = "off"
-	TraceMessages = "messages"
-	TraceVerbose  = "verbose"
-)
-
 type InitializeRequestParams struct {
 	// Parent process. Can be null if client process did not start the server
 	ProcessID  *int     `json:"processId"`
@@ -35,7 +29,7 @@ type InitializeRequestParams struct {
 
 	// execution trace verbosity. Permitted values:
 	//   "off" | "messages" | "verbose"
-	Trace string `json:"trace"`
+	Trace TraceValue `json:"trace"`
 }
 
 type ClientInitializationOptions struct {

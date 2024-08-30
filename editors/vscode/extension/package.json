@@ -31,6 +31,22 @@
         "configuration": "./language-configuration.json"
       }
     ],
+    "configuration": {
+      "title": "WFLang",
+      "properties": {
+        "wflang.trace.server": {
+          "scope": "window",
+          "type": "string",
+          "description": "Traces the communication between VS Code and the language server.",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "verbose"
+        }
+      }
+    },
     "snippets": [
       {
         "language": "wflang",
