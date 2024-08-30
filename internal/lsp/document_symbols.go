@@ -113,5 +113,5 @@ type GotoDefinitionRequest struct {
 // https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_definition
 type GotoDefinitionResponse struct {
 	jrpc2.Response
-	Result Location `json:"result"`
+	Result *Location `json:"result"`
 }

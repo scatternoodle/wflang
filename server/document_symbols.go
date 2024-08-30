@@ -39,18 +39,18 @@ func (srv *Server) createSymbols() {
 	}
 }
 
-func (srv *Server) symbolFromPos(pos lsp.Position) (lsp.DocumentSymbol, bool) {
+func (srv *Server) symbolFromPos(pos lsp.Position) (*lsp.DocumentSymbol, bool) {
 	_, tok, ok := srv.getTokenAtPos(pos)
 	if !ok {
-		return lsp.DocumentSymbol{}, false
+		return nil, false
 	}
 	if tok.Type != token.T_IDENT {
-		return lsp.DocumentSymbol{}, false
+		return nil, false
 	}
 
 	sym, ok := srv.symbols[tok.Literal]
 	if !ok {
-		return lsp.DocumentSymbol{}, false
+		return nil, false
 	}
-	return sym, true
+	return &sym, true
 }

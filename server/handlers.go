@@ -7,7 +7,6 @@ import (
 	"os"
 	"slices"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/scatternoodle/wflang/internal/jrpc2"
 	"github.com/scatternoodle/wflang/internal/lsp"
 	"github.com/scatternoodle/wflang/lang/token"
@@ -153,7 +152,7 @@ func (srv *Server) handleGotoDefinitionRequest(w io.Writer, c []byte, id *int) {
 	res := lsp.GotoDefinitionResponse{Response: jrpc2.NewResponse(id, nil)}
 	sym, ok := srv.symbolFromPos(reqObj.Params.Position)
 	if ok {
-		res.Result = lsp.Location{
+		res.Result = &lsp.Location{
 			URI:   reqObj.Params.URI,
 			Range: sym.SelectionRange,
 		}
