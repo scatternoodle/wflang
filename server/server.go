@@ -276,3 +276,20 @@ func cursorPos(pos lsp.Position) lsp.Position {
 	}
 	return cursorPos
 }
+
+// logTrace creates and sends an lsp.LogTraceNotification on the given writer.
+// Message will always be sent, wherease the verbose param is only send it the
+// server's trace setting is on "verbose".
+func (s *Server) logTrace(w io.Writer, message, verbose string) {
+	if s.trace == lsp.TraceOff {
+		return
+	}
+	trace := lsp.LogTraceNotification{
+		Notification: jrpc2.NewNotification(lsp.MethodLogTrace),
+		LogTraceParams: lsp.LogTraceParams{
+			Message: message,
+			Verbose: verbose,
+		},
+	}
+	send(w, trace)
+}
