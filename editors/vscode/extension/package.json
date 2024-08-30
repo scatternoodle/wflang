@@ -43,7 +43,7 @@
             "messages",
             "verbose"
           ],
-          "default": "verbose"
+          "default": "off"
         }
       }
     },
