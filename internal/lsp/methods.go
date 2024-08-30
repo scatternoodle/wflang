@@ -17,4 +17,6 @@ const (
 	MethodCompletion         string = "textDocument/completion"
 	MethodRename             string = "textDocument/rename"
 	MethodSignatureHelp      string = "textDocument/signatureHelp"
+	MethodSetTrace           string = "$/setTrace"
+	MethodLogTrace           string = "$/logTrace"
 )

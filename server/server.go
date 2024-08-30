@@ -22,6 +22,7 @@ func New(name, version *string, dbg bool) *Server {
 	srv := &Server{
 		name:         name,
 		version:      version,
+		trace:        lsp.TraceOff,
 		uri:          "",
 		initialized:  false,
 		capabilities: serverCapabilities(),
@@ -43,6 +44,7 @@ func New(name, version *string, dbg bool) *Server {
 		lsp.MethodCompletion:         srv.handleCompletionRequest,
 		lsp.MethodRename:             srv.handleRenameRequest,
 		lsp.MethodSignatureHelp:      srv.handleSignatureHelpRequest,
+		lsp.MethodSetTrace:           srv.handleSetTraceNotification,
 	}
 	return srv
 }
@@ -50,7 +52,7 @@ func New(name, version *string, dbg bool) *Server {
 type Server struct {
 	name    *string
 	version *string
-
+	trace   lsp.TraceValue
 	// for now, server only handles a single document - this likely will need to turn into a map[string]*parser.Parser at some point
 	uri          string
 	capabilities lsp.ServerCapabilities
@@ -89,7 +91,22 @@ func serverCapabilities() lsp.ServerCapabilities {
 	}
 }
 
-func (srv *Server) initialize(id *int) lsp.InitializeResponse {
+func (srv *Server) setInit(req lsp.InitializeRequestParams) error {
+	return srv.setTrace(req.Trace)
+}
+
+func (srv *Server) setTrace(t lsp.TraceValue) error {
+	switch t {
+	case lsp.TraceOff, lsp.TraceMessages, lsp.TraceVerbose:
+		slog.Debug("setting trace", "before", srv.trace, "after", t)
+		srv.trace = t
+	default:
+		return fmt.Errorf("unrecognized trace value: %s", t)
+	}
+	return nil
+}
+
+func (srv *Server) initializeResponse(id *int) lsp.InitializeResponse {
 	var srvInfo *lsp.AppInfo
 	if srv.name == nil {
 		srvInfo = nil
@@ -150,7 +167,6 @@ func (srv *Server) handleMessage(w io.Writer, msg []byte) {
 	handler, ok := srv.handlers[method]
 	if !ok {
 		slog.Warn("Unhandled method", "method", method, "id", requestId)
-		debugNotification(w, fmt.Sprintf("unhandled method: %s", method))
 		return
 	}
 	handler(w, content, requestId)
@@ -209,7 +225,13 @@ func getRequestID(b []byte) *int {
 // false.
 func handleParseContent(v any, w io.Writer, c []byte, id *int) bool {
 	if err := json.Unmarshal(c, v); err != nil {
-		slog.Error("error parsing request", "id", *id, "err", err)
+		var idStr string
+		if id == nil {
+			idStr = "nil"
+		} else {
+			idStr = string(*id)
+		}
+		slog.Error("error parsing request", "id", idStr, "err", err)
 		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, fmt.Sprintf("parse error: %s", err), nil)
 		return false
 	}
@@ -227,23 +249,6 @@ func handleAssertID(w io.Writer, id *int) bool {
 	return true
 }
 
-// debugNotification creates and sends an lsp.ShowMessageNotification on w with
-// message msg.
-func debugNotification(w io.Writer, msg string) {
-	if !debug {
-		return
-	}
-
-	not := lsp.ShowMessageNotification{
-		Notification: jrpc2.NewNotification(lsp.MethodShowMessage),
-		Params: lsp.ShowMessageParams{
-			Type:    lsp.Debug,
-			Message: msg,
-		},
-	}
-	send(w, not)
-}
-
 // cursorPos returns the "cursor position" of a given lsp.Position, which is
 // at column-1. If column is zero, returns zero.
 func cursorPos(pos lsp.Position) lsp.Position {
@@ -252,4 +257,21 @@ func cursorPos(pos lsp.Position) lsp.Position {
 		cursorPos.Character--
 	}
 	return cursorPos
+}
+
+// logTrace creates and sends an lsp.LogTraceNotification on the given writer.
+// Message will always be sent, wherease the verbose param is only send it the
+// server's trace setting is on "verbose".
+func (s *Server) logTrace(w io.Writer, message, verbose string) {
+	if s.trace == lsp.TraceOff {
+		return
+	}
+	trace := lsp.LogTraceNotification{
+		Notification: jrpc2.NewNotification(lsp.MethodLogTrace),
+		LogTraceParams: lsp.LogTraceParams{
+			Message: message,
+			Verbose: verbose,
+		},
+	}
+	send(w, trace)
 }

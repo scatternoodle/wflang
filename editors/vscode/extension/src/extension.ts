@@ -23,11 +23,7 @@ const clientOptions: LanguageClientOptions = {
   synchronize: {
     fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
   },
-  traceOutputChannel: outputChannel,
   outputChannel: outputChannel,
-  initializationOptions: {
-    LogLevel: "verbose",
-  },
 };
 
 const serverOptions: ServerOptions = {
@@ -65,7 +61,7 @@ export function activate(context: ExtensionContext) {
     return;
   }
 
-  client = new LanguageClient("wflsrv", serverOptions, clientOptions);
+  client = new LanguageClient("wflang", "WF Language Server", serverOptions, clientOptions);
   client.start();
 }
 

@@ -23,7 +23,11 @@ func (srv *Server) handleInitializeRequest(w io.Writer, c []byte, id *int) {
 	if !handleAssertID(w, id) || !handleParseContent(&r, w, c, id) {
 		return
 	}
-	send(w, srv.initialize(id))
+	if err := srv.setInit(r.Params); err != nil {
+		slog.Error("processing client initialize request failed", "error", err)
+		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, err.Error())
+	}
+	send(w, srv.initializeResponse(id))
 }
 
 func (srv *Server) handleInitializedNotification(w io.Writer, _ []byte, _ *int) {
@@ -51,6 +55,18 @@ func (srv *Server) handleExitNotification(_ io.Writer, _ []byte, _ *int) {
 	}
 	slog.Info("Server exiting", "code", errCode)
 	os.Exit(errCode)
+}
+
+func (srv *Server) handleSetTraceNotification(w io.Writer, c []byte, id *int) {
+	var r lsp.SetTraceNotification
+	if !handleParseContent(&r, w, c, id) {
+		return
+	}
+	if err := srv.setTrace(r.TraceValue); err != nil {
+		slog.Error("unable to set trace", "error", err)
+		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, err.Error())
+	}
+	srv.trace = r.TraceValue
 }
 
 func (srv *Server) handleDocDidOpenNotification(w io.Writer, c []byte, id *int) {
@@ -210,18 +226,15 @@ func (srv *Server) handleSignatureHelpRequest(w io.Writer, c []byte, id *int) {
 	if !handleAssertID(w, id) || !handleParseContent(&req, w, c, id) {
 		return
 	}
-	debugNotification(w, fmt.Sprintf("request object: \n\n%s", spew.Sdump(req)))
 
 	idx, cursorToken, ok := srv.getTokenAtPos(cursorPos(req.Position))
 	if !ok {
 		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, "no valid token at cursor")
 	}
-	debugNotification(w, fmt.Sprintf("cursor token: %s", spew.Sdump(cursorToken)))
 
 	if idx > 0 {
 		idx--
 	}
-	callable := srv.parser.Tokens()[idx]
-	debugNotification(w, fmt.Sprintf("callable token: %s", spew.Sdump(callable)))
 	// CURRENT
+	_ = cursorToken
 }
