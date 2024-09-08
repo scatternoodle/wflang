@@ -25,13 +25,13 @@ func docMarkdown(name string) *lsp.MarkupContent {
 		Kind:  lsp.MarkupKindMarkdown,
 		Value: "",
 	}
-	if doc, ok := builtinHoverText(name); ok {
+	if doc, ok := builtinDocString(name); ok {
 		content.Value = doc
 	}
 	return &content
 }
 
-func builtinHoverText(name string) (text string, ok bool) {
+func builtinDocString(name string) (text string, ok bool) {
 	switch name {
 	case object.Min:
 		return docstring.Min, true

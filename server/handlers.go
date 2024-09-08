@@ -226,14 +226,29 @@ func (srv *Server) handleSignatureHelpRequest(w io.Writer, c []byte, id *int) {
 		return
 	}
 
-	idx, cursorToken, ok := srv.getTokenAtPos(cursorPos(req.Position))
-	if !ok {
-		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, "no valid token at cursor")
+	resp := lsp.SignatureHelpResponse{
+		Response:      jrpc2.NewResponse(id, nil),
+		SignatureHelp: nil,
 	}
+
+	idx, tkn, ok := srv.getTokenAtPos(cursorPos(req.Position))
+	if !ok {
+		send(w, resp)
+	}
+	_ = tkn
 
 	if idx > 0 {
 		idx--
+		if idx >= len(srv.parser.Tokens()) {
+			respondError(w, id, lsp.ERRCODE_REQUEST_FAILED,
+				fmt.Sprintf("token idx %d is out of bounds with token array length %d", idx, len(srv.parser.Tokens())))
+		}
+		tkn = srv.parser.Tokens()[idx]
 	}
-	// CURRENT
-	_ = cursorToken
+
+	if tkn.Type != token.T_BUILTIN {
+		send(w, resp)
+	}
+
+	send(w, resp)
 }

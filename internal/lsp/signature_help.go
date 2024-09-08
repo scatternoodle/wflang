@@ -81,3 +81,11 @@ type ParamInfo struct {
 	Label         [2]int         `json:"label"`
 	Documentation *MarkupContent `json:"documentation,omitempty"`
 }
+
+// SignatureHelpResponse
+//
+// https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_signatureHelp
+type SignatureHelpResponse struct {
+	jrpc2.Response
+	*SignatureHelp `json:"result"`
+}
