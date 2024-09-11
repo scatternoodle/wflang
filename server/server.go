@@ -10,6 +10,7 @@ import (
 
 	"github.com/scatternoodle/wflang/internal/jrpc2"
 	"github.com/scatternoodle/wflang/internal/lsp"
+	"github.com/scatternoodle/wflang/lang/ast"
 	"github.com/scatternoodle/wflang/lang/parser"
 	"github.com/scatternoodle/wflang/lang/token"
 )
@@ -27,6 +28,7 @@ func New(name, version *string, dbg bool) *Server {
 		initialized:  false,
 		capabilities: serverCapabilities(),
 		parser:       nil,
+		ast:          nil,
 	}
 
 	srv.handlers = map[string]handlerFunc{
@@ -59,6 +61,7 @@ type Server struct {
 	initialized  bool // before this is set true, we only accept requests with initialize method
 	exiting      bool // set after an shutdown request is received, awaiting exit request
 	parser       *parser.Parser
+	ast          *ast.AST
 	handlers     map[string]handlerFunc
 	symbols      map[string]lsp.DocumentSymbol
 

@@ -4,6 +4,7 @@
 package parser
 
 import (
+	"errors"
 	"fmt"
 	"log/slog"
 	"strings"
@@ -87,6 +88,16 @@ func New(l *lexer.Lexer) *Parser {
 		p.eval(p.ast)
 	}
 	return p
+}
+
+func (p *Parser) AST() (*ast.AST, error) {
+	if p.ast == nil {
+		p.ast = p.parse()
+		if p.ast == nil {
+			return nil, errors.New("AST is nil")
+		}
+	}
+	return p.ast, nil
 }
 
 func (p *Parser) Errors() []error             { return p.errors }

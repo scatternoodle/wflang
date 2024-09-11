@@ -225,7 +225,6 @@ func (srv *Server) handleSignatureHelpRequest(w io.Writer, c []byte, id *int) {
 	if !handleAssertID(w, id) || !handleParseContent(&req, w, c, id) {
 		return
 	}
-
 	resp := lsp.SignatureHelpResponse{
 		Response:      jrpc2.NewResponse(id, nil),
 		SignatureHelp: nil,
@@ -236,7 +235,6 @@ func (srv *Server) handleSignatureHelpRequest(w io.Writer, c []byte, id *int) {
 		send(w, resp)
 	}
 	_ = tkn
-
 	if idx > 0 {
 		idx--
 		if idx >= len(srv.parser.Tokens()) {
@@ -249,6 +247,8 @@ func (srv *Server) handleSignatureHelpRequest(w io.Writer, c []byte, id *int) {
 	if tkn.Type != token.T_BUILTIN {
 		send(w, resp)
 	}
+	node, ok := srv.ast.NodeAtPos(tkn.StartPos)
+	_, _ = node, ok
 
 	send(w, resp)
 }

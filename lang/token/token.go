@@ -29,6 +29,18 @@ type Pos struct {
 	Col  uint // Column number within the current line.
 }
 
+// Compare takes a Pos range and returns -1 if p is to the left of the range,
+// 0 if p is within the it, and 1 if to the right.
+func (p Pos) Compare(start Pos, end Pos) int {
+	if p.Num < start.Num {
+		return -1
+	}
+	if p.Num > end.Num {
+		return 1
+	}
+	return 0
+}
+
 func (p Pos) String() string {
 	return fmt.Sprintf("[n:%d, l:%d, c:%d]", p.Num, p.Line, p.Col)
 }
