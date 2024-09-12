@@ -50,16 +50,6 @@ func (a *AST) String() string {
 	return out.String()
 }
 
-func (a *AST) NodeAtPos(pos token.Pos) (n Node, ok bool) {
-	for _, stmt := range a.Statements {
-		start, end := stmt.Pos()
-		if pos.Compare(start, end) == 0 {
-			return stmt, true
-		}
-	}
-	return nil, false
-}
-
 func (a *AST) TokenLiteral() string {
 	if len(a.Statements) == 0 {
 		return ""

@@ -161,53 +161,53 @@ x * 42
 	}{
 		{
 			0,
-			token.Pos{Num: 0, Line: 0, Col: 0},
-			token.Pos{Num: 2, Line: 0, Col: 2},
+			token.Pos{Line: 0, Col: 0},
+			token.Pos{Line: 0, Col: 2},
 		}, // var
 		{
 			1,
-			token.Pos{Num: 4, Line: 0, Col: 4},
-			token.Pos{Num: 4, Line: 0, Col: 4},
+			token.Pos{Line: 0, Col: 4},
+			token.Pos{Line: 0, Col: 4},
 		}, // x
 		{
 			2,
-			token.Pos{Num: 6, Line: 0, Col: 6},
-			token.Pos{Num: 6, Line: 0, Col: 6},
+			token.Pos{Line: 0, Col: 6},
+			token.Pos{Line: 0, Col: 6},
 		}, // =
 		{
 			3,
-			token.Pos{Num: 8, Line: 0, Col: 8},
-			token.Pos{Num: 8, Line: 0, Col: 8},
+			token.Pos{Line: 0, Col: 8},
+			token.Pos{Line: 0, Col: 8},
 		}, // 1
 		{
 			4,
-			token.Pos{Num: 9, Line: 0, Col: 9},
-			token.Pos{Num: 9, Line: 0, Col: 9},
+			token.Pos{Line: 0, Col: 9},
+			token.Pos{Line: 0, Col: 9},
 		}, // ;
 		{
 			5,
-			token.Pos{Num: 11, Line: 1, Col: 0},
-			token.Pos{Num: 11, Line: 1, Col: 0},
+			token.Pos{Line: 1, Col: 0},
+			token.Pos{Line: 1, Col: 0},
 		}, // x
 		{
 			6,
-			token.Pos{Num: 13, Line: 1, Col: 2},
-			token.Pos{Num: 13, Line: 1, Col: 2},
+			token.Pos{Line: 1, Col: 2},
+			token.Pos{Line: 1, Col: 2},
 		}, // *
 		{
 			7,
-			token.Pos{Num: 15, Line: 1, Col: 4},
-			token.Pos{Num: 16, Line: 1, Col: 5},
+			token.Pos{Line: 1, Col: 4},
+			token.Pos{Line: 1, Col: 5},
 		}, // 42
 		{
 			8,
-			token.Pos{Num: 18, Line: 2, Col: 0},
-			token.Pos{Num: 54, Line: 2, Col: 36},
+			token.Pos{Line: 2, Col: 0},
+			token.Pos{Line: 2, Col: 36},
 		}, // "so long and thanks for all the fish"
 		{
 			9,
-			token.Pos{Num: 55, Line: 2, Col: 36},
-			token.Pos{Num: 55, Line: 2, Col: 36},
+			token.Pos{Line: 2, Col: 36},
+			token.Pos{Line: 2, Col: 36},
 		}, // EOF
 	}
 

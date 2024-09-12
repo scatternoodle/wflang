@@ -256,7 +256,6 @@ func newToken[T token.Literal](l *Lexer, tType token.Type, lit T, start token.Po
 		Len:      tLen,
 		StartPos: start,
 		EndPos: token.Pos{
-			Num:  l.pos,
 			Line: l.line,
 			Col:  l.lPos,
 		},
@@ -418,7 +417,6 @@ func (l *Lexer) readBlockComment() string {
 // is used as a helper for generating start and end positions for new tokens.
 func (l *Lexer) here() token.Pos {
 	return token.Pos{
-		Num:  l.pos,
 		Line: l.line,
 		Col:  l.lPos,
 	}

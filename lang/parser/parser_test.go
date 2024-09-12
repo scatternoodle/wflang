@@ -133,9 +133,9 @@ var x = 1; // comment at end of line`
 		start     token.Pos
 		end       token.Pos
 	}{
-		{0, "// this is a comment", token.Pos{Num: 0, Line: 0, Col: 0}, token.Pos{Num: 19, Line: 0, Col: 19}},
-		{1, "// and another", token.Pos{Num: 21, Line: 1, Col: 0}, token.Pos{Num: 34, Line: 1, Col: 13}},
-		{3, "// comment at end of line", token.Pos{Num: 47, Line: 2, Col: 11}, token.Pos{Num: 71, Line: 2, Col: 35}},
+		{0, "// this is a comment", token.Pos{Line: 0, Col: 0}, token.Pos{Line: 0, Col: 19}},
+		{1, "// and another", token.Pos{Line: 1, Col: 0}, token.Pos{Line: 1, Col: 13}},
+		{3, "// comment at end of line", token.Pos{Line: 2, Col: 11}, token.Pos{Line: 2, Col: 35}},
 	}
 
 	_, AST := testRunParser(t, input, 4, false)
@@ -190,9 +190,9 @@ func TestParseBlockComment(t *testing.T) {
 		start     token.Pos
 		end       token.Pos
 	}{
-		{0, "/* 1 */", token.Pos{Num: 0, Line: 0, Col: 0}, token.Pos{Num: 6, Line: 0, Col: 6}},
-		{1, "/* 2.1", token.Pos{Num: 8, Line: 1, Col: 0}, token.Pos{Num: 13, Line: 1, Col: 5}},
-		{2, "2.2 */", token.Pos{Num: 15, Line: 2, Col: 0}, token.Pos{Num: 21, Line: 2, Col: 5}},
+		{0, "/* 1 */", token.Pos{Line: 0, Col: 0}, token.Pos{Line: 0, Col: 6}},
+		{1, "/* 2.1", token.Pos{Line: 1, Col: 0}, token.Pos{Line: 1, Col: 5}},
+		{2, "2.2 */", token.Pos{Line: 2, Col: 0}, token.Pos{Line: 2, Col: 5}},
 	}
 
 	_, AST := testRunParser(t, input, 3, false)

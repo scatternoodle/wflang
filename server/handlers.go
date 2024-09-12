@@ -247,8 +247,6 @@ func (srv *Server) handleSignatureHelpRequest(w io.Writer, c []byte, id *int) {
 	if tkn.Type != token.T_BUILTIN {
 		send(w, resp)
 	}
-	node, ok := srv.ast.NodeAtPos(tkn.StartPos)
-	_, _ = node, ok // TODO: finish this off once we have the needed ast traversal and type checking utilities coded.
 
 	send(w, resp)
 }

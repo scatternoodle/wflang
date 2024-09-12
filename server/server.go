@@ -232,7 +232,7 @@ func handleParseContent(v any, w io.Writer, c []byte, id *int) bool {
 		if id == nil {
 			idStr = "nil"
 		} else {
-			idStr = string(*id)
+			idStr = fmt.Sprint(*id)
 		}
 		slog.Error("error parsing request", "id", idStr, "err", err)
 		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, fmt.Sprintf("parse error: %s", err), nil)
