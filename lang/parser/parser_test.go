@@ -292,11 +292,11 @@ func TestMacroExpression(t *testing.T) {
 			if macro.Name.String() != tt.ident {
 				t.Errorf("macro.Name: have %s, want %s", macro.Name.Literal, tt.ident)
 			}
-			if len(macro.Params) != len(tt.params) {
-				t.Fatalf("macro.Params lenght: have %d, want %d", len(macro.Params), len(tt.params))
+			if len(macro.Args) != len(tt.params) {
+				t.Fatalf("macro.Params lenght: have %d, want %d", len(macro.Args), len(tt.params))
 			}
 
-			for i, param := range macro.Params {
+			for i, param := range macro.Args {
 				if !testLiteral(t, param, tt.params[i]) {
 					t.Errorf("caught on macro.Params[%d]", i)
 					continue

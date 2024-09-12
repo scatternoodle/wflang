@@ -224,13 +224,13 @@ func (p *Parser) parseMacroExpression() (ast.Expression, error) {
 		return nil, eWrap(err)
 	}
 
-	macro.Params = []ast.Expression{}
+	macro.Args = []ast.Expression{}
 	for {
 		param, err := p.parseExpression()
 		if err != nil {
 			return nil, eWrap(err)
 		}
-		macro.Params = append(macro.Params, param)
+		macro.Args = append(macro.Args, param)
 
 		if p.next.Type != token.T_COMMA {
 			break

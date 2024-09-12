@@ -309,7 +309,7 @@ func (b BlankExpression) Pos() (start, end token.Pos) { return b.Token.StartPos,
 type MacroExpression struct {
 	token.Token
 	Name    Ident
-	Params  []Expression // TODO - check - how expressive are we allowed to be with Macro params?
+	Args    []Expression // TODO - check - how expressive are we allowed to be with Macro params?
 	RDollar token.Token
 }
 
@@ -320,9 +320,9 @@ func (m MacroExpression) String() string {
 	var out strings.Builder
 
 	out.WriteString("$" + m.Name.String() + "(")
-	for i, p := range m.Params {
+	for i, p := range m.Args {
 		out.WriteString(p.String())
-		if i < len(m.Params)-1 {
+		if i < len(m.Args)-1 {
 			out.WriteString(", ")
 		}
 	}
