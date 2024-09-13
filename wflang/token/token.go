@@ -22,6 +22,12 @@ type Literal interface {
 	rune | byte | ~string
 }
 
+// Positional represents a type that has a start and end position, each
+// represented by a Pos struct.
+type Positional interface {
+	Pos() (start, end Pos)
+}
+
 // Pos represents the textual position of a token
 type Pos struct {
 	Line uint // Line number.
@@ -32,8 +38,32 @@ func (p Pos) String() string {
 	return fmt.Sprintf("[l:%d, c:%d]", p.Line, p.Col)
 }
 
-// Positional represents a type that has a start and end position, each
-// represented by a Pos struct.
-type Positional interface {
-	Pos() (start, end Pos)
+// GT returns true if Pos p is greater than Pos x.
+func (p Pos) GT(x Pos) bool {
+	return (p.Line > x.Line) || (p.Line >= x.Line && p.Col > x.Col)
+}
+
+// GT returns true if Pos p is less than Pos x.
+func (p Pos) LT(x Pos) bool {
+	return (p.Line < x.Line) || (p.Line <= x.Line && p.Col < x.Col)
+}
+
+// GT returns true if Pos p is equal to Pos x.
+func (p Pos) EQ(x Pos) bool {
+	return p.Line == x.Line && p.Col == x.Col
+}
+
+// GT returns true if Pos p is greater than or equal to Pos x.
+func (p Pos) GTE(x Pos) bool {
+	return p.GT(x) || p.EQ(x)
+}
+
+// GT returns true if Pos p is less than or equal to Pos x.
+func (p Pos) LTE(x Pos) bool {
+	return p.LT(x) || p.EQ(x)
+}
+
+// InRange returns true if Pos p is within range start>>end.
+func (p Pos) InRange(start, end Pos) bool {
+	return start.LTE(p) && p.LTE(end)
 }

@@ -3,9 +3,7 @@ package wflang
 import "github.com/scatternoodle/wflang/internal/lsp"
 
 func SignatureHelp(pos lsp.Position) (info lsp.SignatureInfo, activeParam int, err error) {
-	// CURRENT
-	// get all nodes within range
-	// find callExpression in those nodes
+	// get node at pos, return if not a callExpression
 	// look up function object
 	// get params
 	// convert them to protocol info
