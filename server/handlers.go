@@ -230,23 +230,5 @@ func (srv *Server) handleSignatureHelpRequest(w io.Writer, c []byte, id *int) {
 		SignatureHelp: nil,
 	}
 
-	idx, tkn, ok := srv.getTokenAtPos(cursorPos(req.Position))
-	if !ok {
-		send(w, resp)
-	}
-	_ = tkn
-	if idx > 0 {
-		idx--
-		if idx >= len(srv.parser.Tokens()) {
-			respondError(w, id, lsp.ERRCODE_REQUEST_FAILED,
-				fmt.Sprintf("token idx %d is out of bounds with token array length %d", idx, len(srv.parser.Tokens())))
-		}
-		tkn = srv.parser.Tokens()[idx]
-	}
-
-	if tkn.Type != token.T_BUILTIN {
-		send(w, resp)
-	}
-
 	send(w, resp)
 }
