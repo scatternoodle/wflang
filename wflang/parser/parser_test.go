@@ -6,12 +6,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/scatternoodle/wflang/lang/ast"
-	"github.com/scatternoodle/wflang/lang/lexer"
-	"github.com/scatternoodle/wflang/lang/token"
-	"github.com/scatternoodle/wflang/lang/types/wdate"
 	testhelp "github.com/scatternoodle/wflang/testhelp"
 	"github.com/scatternoodle/wflang/util"
+	"github.com/scatternoodle/wflang/wflang/ast"
+	"github.com/scatternoodle/wflang/wflang/lexer"
+	"github.com/scatternoodle/wflang/wflang/token"
+	"github.com/scatternoodle/wflang/wflang/types/wdate"
 )
 
 var testParseInput = `var x = 1;`
@@ -170,7 +170,7 @@ func TestParseFunctionCall(t *testing.T) {
 			_, AST := testRunParser(t, tt.input, 1, tt.err)
 
 			exp := testExpressionStatement(t, AST.Statements[0])
-			fCall := testhelp.AssertType[ast.FunctionCall](t, exp)
+			fCall := testhelp.AssertType[ast.BuiltinCall](t, exp)
 
 			if len(fCall.Args) != tt.argLen {
 				t.Fatalf("have %d arguments, want %d", len(fCall.Args), tt.argLen)

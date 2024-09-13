@@ -1,4 +1,5 @@
 signature help handling
-1 - handler func is just the entry point - hand off to a function in its own file
+1 - we added new CallExpression interface to AST - we now need to ensure all the
+	implementing types populate the L and RParen data during parsing.
 2 - visitor func to walk ast and retrieve the function call node at pos
 3 - ... - for now, just print the function name to prove we're getting the right node

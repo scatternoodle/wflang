@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"slices"
 
-	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/wflang/token"
 )
 
 // See Microsoft LSP spec for detailed explanation on semantic token encoding.

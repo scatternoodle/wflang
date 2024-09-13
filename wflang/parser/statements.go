@@ -3,8 +3,8 @@ package parser
 import (
 	"fmt"
 
-	"github.com/scatternoodle/wflang/lang/ast"
-	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/wflang/ast"
+	"github.com/scatternoodle/wflang/wflang/token"
 )
 
 // parseStatement is the triage function for the parser. It delegates to the

@@ -9,10 +9,10 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/scatternoodle/wflang/lang/ast"
-	"github.com/scatternoodle/wflang/lang/lexer"
-	"github.com/scatternoodle/wflang/lang/object"
-	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/wflang/ast"
+	"github.com/scatternoodle/wflang/wflang/lexer"
+	"github.com/scatternoodle/wflang/wflang/object"
+	"github.com/scatternoodle/wflang/wflang/token"
 )
 
 // Parser is the struct that controls the lexer and produces the AST. It is the
@@ -60,7 +60,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.prefixParsers[token.T_FALSE] = p.parseBooleanLiteral
 	p.prefixParsers[token.T_LPAREN] = p.parseParenExpression
 	p.prefixParsers[token.T_DOLLAR] = p.parseMacroExpression
-	p.prefixParsers[token.T_BUILTIN] = p.parseFunctionCall
+	p.prefixParsers[token.T_BUILTIN] = p.parseBuiltinCall
 	p.prefixParsers[token.T_OVER] = p.parseOverExpression
 	p.prefixParsers[token.T_ALIAS] = p.parseAliasExpression
 	p.prefixParsers[token.T_WHERE] = p.parseWhereExpression

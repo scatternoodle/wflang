@@ -4,9 +4,9 @@ import (
 	"strings"
 
 	"github.com/scatternoodle/wflang/internal/lsp"
-	"github.com/scatternoodle/wflang/lang/object"
-	"github.com/scatternoodle/wflang/lang/token"
 	"github.com/scatternoodle/wflang/server/docstring"
+	"github.com/scatternoodle/wflang/wflang/object"
+	"github.com/scatternoodle/wflang/wflang/token"
 )
 
 func (srv *Server) hover(pos lsp.Position) lsp.Hover {

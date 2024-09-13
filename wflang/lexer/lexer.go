@@ -7,9 +7,9 @@ import (
 	"log/slog"
 	"strings"
 
-	"github.com/scatternoodle/wflang/lang/object"
-	"github.com/scatternoodle/wflang/lang/token"
-	"github.com/scatternoodle/wflang/lang/types/wdate"
+	"github.com/scatternoodle/wflang/wflang/object"
+	"github.com/scatternoodle/wflang/wflang/token"
+	"github.com/scatternoodle/wflang/wflang/types/wdate"
 	"github.com/scatternoodle/wflang/util"
 )
 

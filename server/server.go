@@ -10,9 +10,9 @@ import (
 
 	"github.com/scatternoodle/wflang/internal/jrpc2"
 	"github.com/scatternoodle/wflang/internal/lsp"
-	"github.com/scatternoodle/wflang/lang/ast"
-	"github.com/scatternoodle/wflang/lang/parser"
-	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/wflang/ast"
+	"github.com/scatternoodle/wflang/wflang/parser"
+	"github.com/scatternoodle/wflang/wflang/token"
 )
 
 var debug bool

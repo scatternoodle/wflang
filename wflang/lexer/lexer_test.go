@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/wflang/token"
 )
 
 func TestNextToken(t *testing.T) {

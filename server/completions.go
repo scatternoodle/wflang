@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/scatternoodle/wflang/internal/lsp"
-	"github.com/scatternoodle/wflang/lang/object"
+	"github.com/scatternoodle/wflang/wflang/object"
 )
 
 func (srv *Server) completions(pos lsp.Position) []lsp.CompletionItem {

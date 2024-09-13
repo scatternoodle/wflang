@@ -74,7 +74,7 @@ func Walk(v Visitor, node Node) {
 		if len(n.Args) > 0 {
 			walkList(v, n.Args)
 		}
-	case FunctionCall:
+	case BuiltinCall:
 		if len(n.Args) > 0 {
 			walkList(v, n.Args)
 		}

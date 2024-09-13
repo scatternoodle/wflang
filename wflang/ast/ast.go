@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/wflang/token"
 )
 
 // Node is the base interface that all parts of the AST must implement, including
@@ -293,65 +293,6 @@ func (b BlankExpression) ExpressionNode()             {}
 func (b BlankExpression) TokenLiteral() string        { return b.Token.Literal }
 func (b BlankExpression) String() string              { return "" }
 func (b BlankExpression) Pos() (start, end token.Pos) { return b.Token.StartPos, b.Token.EndPos }
-
-// MacroExpression brings the scope of a Macro into a formula. Macros are the
-// closest thing that WFLang has to user-defined functions.
-type MacroExpression struct {
-	token.Token
-	Name    Ident
-	Args    []Expression // TODO - check - how expressive are we allowed to be with Macro params?
-	RDollar token.Token
-}
-
-func (m MacroExpression) ExpressionNode()      {}
-func (m MacroExpression) TokenLiteral() string { return m.Token.Literal }
-
-func (m MacroExpression) String() string {
-	var out strings.Builder
-
-	out.WriteString("$" + m.Name.String() + "(")
-	for i, p := range m.Args {
-		out.WriteString(p.String())
-		if i < len(m.Args)-1 {
-			out.WriteString(", ")
-		}
-	}
-	out.WriteString(")$")
-	return out.String()
-}
-
-func (m MacroExpression) Pos() (start, end token.Pos) {
-	return m.Token.StartPos, m.RDollar.EndPos
-}
-
-// FunctionCall - to the Parser, a function call is simply an Ident and an group of
-// arguments, all of which are BlockExpressions.
-type FunctionCall struct {
-	token.Token
-	Name   string
-	Args   []Expression
-	RParen token.Token
-}
-
-func (f FunctionCall) ExpressionNode()      {}
-func (f FunctionCall) TokenLiteral() string { return f.Token.Literal }
-
-func (f FunctionCall) String() string {
-	var out strings.Builder
-	out.WriteString(f.Name + "(")
-	for i, arg := range f.Args {
-		out.WriteString(arg.String())
-		if i == len(f.Args)-1 {
-			out.WriteString(",")
-		}
-	}
-	out.WriteString(")")
-	return out.String()
-}
-
-func (f FunctionCall) Pos() (start, end token.Pos) {
-	return f.Token.StartPos, f.RParen.EndPos
-}
 
 // OverExpression represents the "over" keyword, which occurs as the first subExpression
 // of all summary functions. It prefaces the summary context of the function call
