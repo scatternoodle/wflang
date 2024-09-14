@@ -20,14 +20,32 @@ func NodeAtPos(root Node, pos token.Pos) (node Node, err error) {
 	}
 	Walk(visit, root)
 	if node == nil {
-		return nil, fmt.Errorf(
-			"invalid position %s for root %s",
-			pos.String(),
-			func() string {
-				s, e := root.Pos()
-				return fmt.Sprintf("start=%s end=%s", s, e)
-			}(),
-		)
+		rootStart, rootEnd := root.Pos()
+		return nil, fmt.Errorf("invalid position %s for root %s", pos,
+			"start="+rootStart.String()+" end="+rootEnd.String())
 	}
 	return node, nil
+}
+
+// NodesEnclosing walks the AST starting at root and returns a slice of nodes
+// enclosing the given Pos in order of furthest to closest ancestor.
+func NodesEnclosing(root Node, pos token.Pos) (nodes []Node, err error) {
+	rootStart, rootEnd := root.Pos()
+	if !pos.InRange(rootStart, rootEnd) {
+		return nil, fmt.Errorf("invalid position %s for root %s", pos,
+			"start="+rootStart.String()+" end="+rootEnd.String())
+	}
+	var visit inspector = func(n Node) bool {
+		nodeStart, nodeEnd := n.Pos()
+		if !pos.InRange(nodeStart, nodeEnd) {
+			return false
+		}
+		if _, isAST := n.(*AST); isAST {
+			return true // then carry on walking, we don't need to include the AST itself
+		}
+		nodes = append(nodes, n)
+		return true
+	}
+	Walk(visit, root)
+	return nodes, nil
 }
