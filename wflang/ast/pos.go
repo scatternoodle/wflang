@@ -7,7 +7,8 @@ import (
 )
 
 // NodeAtPos walks the AST starting at root and returns a pointer to the Node at
-// pos.
+// pos. Only the deepest node enclosing pos will be assigned, with any ancestors
+// ignored.
 func NodeAtPos(root Node, pos token.Pos) (node Node, err error) {
 	var visit inspector = func(n Node) bool {
 		nodeStart, nodeEnd := n.Pos()
