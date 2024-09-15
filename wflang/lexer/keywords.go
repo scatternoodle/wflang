@@ -1,6 +1,6 @@
 package lexer
 
-import "github.com/scatternoodle/wflang/lang/token"
+import "github.com/scatternoodle/wflang/wflang/token"
 
 func keywords() map[string]token.Type {
 	// We define keywords here, including builtin functions.

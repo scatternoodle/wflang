@@ -1,7 +1,7 @@
 package parser
 
 import (
-	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/wflang/token"
 )
 
 func newParseErr(msg string, tok token.Token) ParseErr {

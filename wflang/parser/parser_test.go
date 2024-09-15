@@ -6,12 +6,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/scatternoodle/wflang/lang/ast"
-	"github.com/scatternoodle/wflang/lang/lexer"
-	"github.com/scatternoodle/wflang/lang/token"
-	"github.com/scatternoodle/wflang/lang/types/wdate"
 	testhelp "github.com/scatternoodle/wflang/testhelp"
 	"github.com/scatternoodle/wflang/util"
+	"github.com/scatternoodle/wflang/wflang/ast"
+	"github.com/scatternoodle/wflang/wflang/lexer"
+	"github.com/scatternoodle/wflang/wflang/token"
+	"github.com/scatternoodle/wflang/wflang/types/wdate"
 )
 
 var testParseInput = `var x = 1;`
@@ -133,9 +133,9 @@ var x = 1; // comment at end of line`
 		start     token.Pos
 		end       token.Pos
 	}{
-		{0, "// this is a comment", token.Pos{Num: 0, Line: 0, Col: 0}, token.Pos{Num: 19, Line: 0, Col: 19}},
-		{1, "// and another", token.Pos{Num: 21, Line: 1, Col: 0}, token.Pos{Num: 34, Line: 1, Col: 13}},
-		{3, "// comment at end of line", token.Pos{Num: 47, Line: 2, Col: 11}, token.Pos{Num: 71, Line: 2, Col: 35}},
+		{0, "// this is a comment", token.Pos{Line: 0, Col: 0}, token.Pos{Line: 0, Col: 19}},
+		{1, "// and another", token.Pos{Line: 1, Col: 0}, token.Pos{Line: 1, Col: 13}},
+		{3, "// comment at end of line", token.Pos{Line: 2, Col: 11}, token.Pos{Line: 2, Col: 35}},
 	}
 
 	_, AST := testRunParser(t, input, 4, false)
@@ -170,7 +170,7 @@ func TestParseFunctionCall(t *testing.T) {
 			_, AST := testRunParser(t, tt.input, 1, tt.err)
 
 			exp := testExpressionStatement(t, AST.Statements[0])
-			fCall := testhelp.AssertType[ast.FunctionCall](t, exp)
+			fCall := testhelp.AssertType[ast.BuiltinCall](t, exp)
 
 			if len(fCall.Args) != tt.argLen {
 				t.Fatalf("have %d arguments, want %d", len(fCall.Args), tt.argLen)
@@ -190,9 +190,9 @@ func TestParseBlockComment(t *testing.T) {
 		start     token.Pos
 		end       token.Pos
 	}{
-		{0, "/* 1 */", token.Pos{Num: 0, Line: 0, Col: 0}, token.Pos{Num: 6, Line: 0, Col: 6}},
-		{1, "/* 2.1", token.Pos{Num: 8, Line: 1, Col: 0}, token.Pos{Num: 13, Line: 1, Col: 5}},
-		{2, "2.2 */", token.Pos{Num: 15, Line: 2, Col: 0}, token.Pos{Num: 21, Line: 2, Col: 5}},
+		{0, "/* 1 */", token.Pos{Line: 0, Col: 0}, token.Pos{Line: 0, Col: 6}},
+		{1, "/* 2.1", token.Pos{Line: 1, Col: 0}, token.Pos{Line: 1, Col: 5}},
+		{2, "2.2 */", token.Pos{Line: 2, Col: 0}, token.Pos{Line: 2, Col: 5}},
 	}
 
 	_, AST := testRunParser(t, input, 3, false)
@@ -292,11 +292,11 @@ func TestMacroExpression(t *testing.T) {
 			if macro.Name.String() != tt.ident {
 				t.Errorf("macro.Name: have %s, want %s", macro.Name.Literal, tt.ident)
 			}
-			if len(macro.Params) != len(tt.params) {
-				t.Fatalf("macro.Params lenght: have %d, want %d", len(macro.Params), len(tt.params))
+			if len(macro.Args) != len(tt.params) {
+				t.Fatalf("macro.Params lenght: have %d, want %d", len(macro.Args), len(tt.params))
 			}
 
-			for i, param := range macro.Params {
+			for i, param := range macro.Args {
 				if !testLiteral(t, param, tt.params[i]) {
 					t.Errorf("caught on macro.Params[%d]", i)
 					continue

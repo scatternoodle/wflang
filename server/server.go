@@ -10,9 +10,9 @@ import (
 
 	"github.com/scatternoodle/wflang/internal/jrpc2"
 	"github.com/scatternoodle/wflang/internal/lsp"
-	"github.com/scatternoodle/wflang/lang/ast"
-	"github.com/scatternoodle/wflang/lang/parser"
-	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/wflang/ast"
+	"github.com/scatternoodle/wflang/wflang/parser"
+	"github.com/scatternoodle/wflang/wflang/token"
 )
 
 var debug bool
@@ -232,7 +232,7 @@ func handleParseContent(v any, w io.Writer, c []byte, id *int) bool {
 		if id == nil {
 			idStr = "nil"
 		} else {
-			idStr = string(*id)
+			idStr = fmt.Sprint(*id)
 		}
 		slog.Error("error parsing request", "id", idStr, "err", err)
 		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, fmt.Sprintf("parse error: %s", err), nil)

@@ -4,7 +4,7 @@ import (
 	"log"
 	"log/slog"
 
-	"github.com/scatternoodle/wflang/lang/repl"
+	"github.com/scatternoodle/wflang/wflang/repl"
 )
 
 func main() {

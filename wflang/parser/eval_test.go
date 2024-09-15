@@ -3,8 +3,8 @@ package parser
 import (
 	"testing"
 
-	"github.com/scatternoodle/wflang/lang/object"
-	"github.com/scatternoodle/wflang/lang/types"
+	"github.com/scatternoodle/wflang/wflang/object"
+	"github.com/scatternoodle/wflang/wflang/types"
 	"github.com/scatternoodle/wflang/testhelp"
 )
 

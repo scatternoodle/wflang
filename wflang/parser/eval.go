@@ -1,8 +1,8 @@
 package parser
 
 import (
-	"github.com/scatternoodle/wflang/lang/ast"
-	"github.com/scatternoodle/wflang/lang/object"
+	"github.com/scatternoodle/wflang/wflang/ast"
+	"github.com/scatternoodle/wflang/wflang/object"
 )
 
 // eval descends an AST recursively and evaluates the statements, resolving

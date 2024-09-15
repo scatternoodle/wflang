@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/scatternoodle/wflang/lang/ast"
-	"github.com/scatternoodle/wflang/lang/token"
-	"github.com/scatternoodle/wflang/lang/types/wdate"
+	"github.com/scatternoodle/wflang/wflang/ast"
+	"github.com/scatternoodle/wflang/wflang/token"
+	"github.com/scatternoodle/wflang/wflang/types/wdate"
 )
 
 func blankExpression(t token.Token) ast.Expression {
@@ -220,17 +220,20 @@ func (p *Parser) parseMacroExpression() (ast.Expression, error) {
 	macro.Name = name.(ast.Ident)
 
 	// ...([]<Expression>)$
-	if err = p.passIf(token.T_LPAREN); err != nil {
+	if err = p.wantPeek(token.T_LPAREN); err != nil {
 		return nil, eWrap(err)
 	}
+	p.advance()
+	macro.LPar = p.current
+	p.advance()
 
-	macro.Params = []ast.Expression{}
+	macro.Args = []ast.Expression{}
 	for {
 		param, err := p.parseExpression()
 		if err != nil {
 			return nil, eWrap(err)
 		}
-		macro.Params = append(macro.Params, param)
+		macro.Args = append(macro.Args, param)
 
 		if p.next.Type != token.T_COMMA {
 			break
@@ -243,6 +246,7 @@ func (p *Parser) parseMacroExpression() (ast.Expression, error) {
 		return nil, eWrap(err)
 	}
 	p.advance()
+	macro.RPar = p.current
 	if err = p.wantPeek(token.T_DOLLAR); err != nil {
 		return nil, eWrap(err)
 	}
@@ -252,10 +256,10 @@ func (p *Parser) parseMacroExpression() (ast.Expression, error) {
 	return macro, nil
 }
 
-// parseFunctionCall - function calls in WFLang always take the same structure:
+// parseBuiltinCall - function calls in WFLang always take the same structure:
 //
 //	Name<Ident>(Args[]<BlockExpression>)
-func (p *Parser) parseFunctionCall() (ast.Expression, error) {
+func (p *Parser) parseBuiltinCall() (ast.Expression, error) {
 	p.trace.trace("FunctionCall")
 	defer p.trace.untrace("FunctionCall")
 
@@ -263,7 +267,7 @@ func (p *Parser) parseFunctionCall() (ast.Expression, error) {
 		return fmt.Errorf("parseFunctionCall: %w", e)
 	}
 
-	funCall := ast.FunctionCall{Token: p.current}
+	funCall := ast.BuiltinCall{Token: p.current}
 
 	name := p.current.Literal
 	if name == "" {
@@ -271,9 +275,12 @@ func (p *Parser) parseFunctionCall() (ast.Expression, error) {
 	}
 	funCall.Name = name
 
-	if err := p.passIf(token.T_LPAREN); err != nil {
+	if err := p.wantPeek(token.T_LPAREN); err != nil {
 		return nil, wrap(err)
 	}
+	p.advance()
+	funCall.LPar = p.current
+	p.advance()
 
 	funCall.Args = []ast.Expression{}
 	for {
@@ -294,7 +301,7 @@ func (p *Parser) parseFunctionCall() (ast.Expression, error) {
 		return nil, wrap(err)
 	}
 	p.advance()
-	funCall.RParen = p.current
+	funCall.RPar = p.current
 	return funCall, nil
 }
 

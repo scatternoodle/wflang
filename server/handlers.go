@@ -9,7 +9,8 @@ import (
 
 	"github.com/scatternoodle/wflang/internal/jrpc2"
 	"github.com/scatternoodle/wflang/internal/lsp"
-	"github.com/scatternoodle/wflang/lang/token"
+	"github.com/scatternoodle/wflang/wflang"
+	"github.com/scatternoodle/wflang/wflang/token"
 )
 
 // handlerFunc takes an io.Writer and a byte slice containing the contents of an
@@ -225,30 +226,24 @@ func (srv *Server) handleSignatureHelpRequest(w io.Writer, c []byte, id *int) {
 	if !handleAssertID(w, id) || !handleParseContent(&req, w, c, id) {
 		return
 	}
+
+	info, activeParam, err := wflang.SignatureHelp(req.Position)
+	if err != nil {
+		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, err.Error())
+		return
+	}
 	resp := lsp.SignatureHelpResponse{
-		Response:      jrpc2.NewResponse(id, nil),
-		SignatureHelp: nil,
+		Response: jrpc2.NewResponse(id, nil),
+		SignatureHelp: &lsp.SignatureHelp{
+			Signatures: []lsp.SignatureInfo{info}, // only one is possible.
+			// TODO: handle active signature in request params?
+			// gopls implementation appears to ignore it and instead
+			// calculates it themselves every time (I suppose this
+			// is more reliable if a little more costly?)
+			ActiveSignature: 0, // hardcoded as only one sig is possible.
+			ActiveParameter: activeParam,
+		},
 	}
-
-	idx, tkn, ok := srv.getTokenAtPos(cursorPos(req.Position))
-	if !ok {
-		send(w, resp)
-	}
-	_ = tkn
-	if idx > 0 {
-		idx--
-		if idx >= len(srv.parser.Tokens()) {
-			respondError(w, id, lsp.ERRCODE_REQUEST_FAILED,
-				fmt.Sprintf("token idx %d is out of bounds with token array length %d", idx, len(srv.parser.Tokens())))
-		}
-		tkn = srv.parser.Tokens()[idx]
-	}
-
-	if tkn.Type != token.T_BUILTIN {
-		send(w, resp)
-	}
-	node, ok := srv.ast.NodeAtPos(tkn.StartPos)
-	_, _ = node, ok // TODO: finish this off once we have the needed ast traversal and type checking utilities coded.
 
 	send(w, resp)
 }

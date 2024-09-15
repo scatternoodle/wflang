@@ -1,6 +1,6 @@
 package object
 
-import "github.com/scatternoodle/wflang/lang/types"
+import "github.com/scatternoodle/wflang/wflang/types"
 
 type Function struct {
 	Name       string

@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/scatternoodle/wflang/lang/lexer"
-	"github.com/scatternoodle/wflang/lang/parser"
+	"github.com/scatternoodle/wflang/wflang/lexer"
+	"github.com/scatternoodle/wflang/wflang/parser"
 )
 
 func Run() error {

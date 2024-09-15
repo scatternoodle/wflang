@@ -4,8 +4,8 @@ import (
 	"log/slog"
 
 	"github.com/scatternoodle/wflang/internal/lsp"
-	"github.com/scatternoodle/wflang/lang/lexer"
-	"github.com/scatternoodle/wflang/lang/parser"
+	"github.com/scatternoodle/wflang/wflang/lexer"
+	"github.com/scatternoodle/wflang/wflang/parser"
 )
 
 func (srv *Server) updateDocument(doc lsp.TextDocumentItem) {

@@ -3,8 +3,8 @@ package object
 import (
 	"time"
 
-	"github.com/scatternoodle/wflang/lang/ast"
-	"github.com/scatternoodle/wflang/lang/types"
+	"github.com/scatternoodle/wflang/wflang/ast"
+	"github.com/scatternoodle/wflang/wflang/types"
 )
 
 // Object is the base interface for any formula object in WFLang, and is the ultimate

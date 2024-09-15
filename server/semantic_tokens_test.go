@@ -5,8 +5,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/scatternoodle/wflang/lang/lexer"
-	"github.com/scatternoodle/wflang/lang/parser"
+	"github.com/scatternoodle/wflang/wflang/lexer"
+	"github.com/scatternoodle/wflang/wflang/parser"
 )
 
 func TestEncode(t *testing.T) {
