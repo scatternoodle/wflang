@@ -1,5 +1,7 @@
-signature help handling
-1 - we added new CallExpression interface to AST - we now need to ensure all the
-	implementing types populate the L and RParen data during parsing.
-2 - visitor func to walk ast and retrieve the function call node at pos
-3 - ... - for now, just print the function name to prove we're getting the right node
+doing signaturehelp...
+- right now it's erroring out because the parser craps out on a function call unless all of the arguments are present.
+  this is a matter better left for static analysis and diagnostics later, and should not prevent parsing. We need to be
+  permissive of this so that the LSP can detect it's in a callable expression and provide signature / autocomplete.
+- once we're done, review whether we're pushing errors unnecessarily for sighelp failures... we want a message if something
+  is indicating a bug, but we shouldn't get errors in the editor when a signature simply can't be found... that'll get
+  very annoying for the user.
