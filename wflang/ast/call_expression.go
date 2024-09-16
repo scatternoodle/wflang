@@ -12,6 +12,7 @@ type CallExpression interface {
 	LParen() token.Pos
 	RParen() token.Pos
 	Params() []Expression
+	FName() string
 }
 
 // BuiltinCall represents a call to a builtin function in WFLang and implements
@@ -44,8 +45,10 @@ func (f BuiltinCall) Pos() (start, end token.Pos) {
 	return f.Token.StartPos, f.RPar.EndPos
 }
 
-func (b BuiltinCall) LParen() token.Pos { return b.LPar.StartPos }
-func (b BuiltinCall) RParen() token.Pos { return b.RPar.StartPos }
+func (b BuiltinCall) LParen() token.Pos    { return b.LPar.StartPos }
+func (b BuiltinCall) RParen() token.Pos    { return b.RPar.StartPos }
+func (b BuiltinCall) FName() string        { return b.Name }
+func (b BuiltinCall) Params() []Expression { return b.Args }
 
 // MacroExpression brings the scope of a Macro into a formula. Macros are the
 // closest thing that WFLang has to user-defined functions. Implements the
@@ -80,5 +83,7 @@ func (m MacroExpression) Pos() (start, end token.Pos) {
 	return m.Token.StartPos, m.RDollar.EndPos
 }
 
-func (m MacroExpression) LParen() token.Pos { return m.LPar.StartPos }
-func (m MacroExpression) RParen() token.Pos { return m.RPar.StartPos }
+func (m MacroExpression) LParen() token.Pos    { return m.LPar.StartPos }
+func (m MacroExpression) RParen() token.Pos    { return m.RPar.StartPos }
+func (m MacroExpression) FName() string        { return m.Name.String() }
+func (m MacroExpression) Params() []Expression { return m.Args }

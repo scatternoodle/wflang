@@ -1,6 +1,10 @@
 package object
 
-import "github.com/scatternoodle/wflang/wflang/types"
+import (
+	"github.com/scatternoodle/wflang/internal/lsp"
+	"github.com/scatternoodle/wflang/server/docstring"
+	"github.com/scatternoodle/wflang/wflang/types"
+)
 
 const (
 	If                         string = "if"
@@ -198,4 +202,150 @@ func Builtins() map[string]Function {
 		MaxException:               {Name: MaxException, ReturnType: types.T_NUMBER},
 		AvgException:               {Name: AvgException, ReturnType: types.T_NUMBER},
 	}
+}
+
+func DocMarkdown(name string) *lsp.MarkupContent {
+	content := lsp.MarkupContent{
+		Kind:  lsp.MarkupKindMarkdown,
+		Value: "",
+	}
+	if doc, ok := builtinDocString(name); ok {
+		content.Value = doc
+	}
+	return &content
+}
+
+func builtinDocString(name string) (text string, ok bool) {
+	switch name {
+	case Min:
+		return docstring.Min, true
+	case Max:
+		return docstring.Max, true
+	case Contains:
+		return docstring.Contains, true
+	case Sum:
+		return docstring.Sum, true
+	case Count:
+		return docstring.Count, true
+	case If:
+		return docstring.If, true
+	case SumTime:
+		return docstring.SumTime, true
+	case CountTime:
+		return docstring.CountTime, true
+	case FindFirstTime:
+		return docstring.FindFirstTime, true
+	case SumSchedule:
+		return docstring.SumSchedule, true
+	case CountSchedule:
+		return docstring.CountSchedule, true
+	case FindFirstSchedule:
+		return docstring.FindFirstSchedule, true
+	case CountException:
+		return docstring.CountException, true
+	case FindFirstTorDetail:
+		return docstring.FindFirstTorDetail, true
+	case FindFirstDayForward:
+		return docstring.FindFirstDayForward, true
+	case FindFirstDayBackward:
+		return docstring.FindFirstDayBackward, true
+	case FindFirstDeletedTime:
+		return docstring.FindFirstDeletedTime, true
+	case LongestConsecutiveRange:
+		return docstring.LongestConsecutiveRange, true
+	case FirstConsecutiveDay:
+		return docstring.FirstConsecutiveDay, true
+	case LastConsecutiveDay:
+		return docstring.LastConsecutiveDay, true
+	case FindNthTime:
+		return docstring.FindNthTime, true
+	case Accrued:
+		return docstring.Accrued, true
+	case BalanceAccruedBefore:
+		return docstring.BalanceAccruedBefore, true
+	case ConvertDttmByTimezone:
+		return docstring.ConvertDttmByTimezone, true
+	case CountHolidays:
+		return docstring.CountHolidays, true
+	case GetHoliday:
+		return docstring.GetHoliday, true
+	case EmployeeAttributeExists:
+		return docstring.Employee_attribute_exists, true
+	case EmployeeAttribute:
+		return docstring.Employee_attribute, true
+	case GetAttributeCalcDate:
+		return docstring.GetAttributeCalculationDate, true
+	case GetBooleanFieldFromTor:
+		return docstring.GetBooleanFieldFromTor, true
+	case GetDateFieldFromTor:
+		return docstring.GetDateFieldFromTor, true
+	case GetSelectFieldValueFromTor:
+		return docstring.GetSelectFieldValueFromTor, true
+	case GetNumberFieldFromTor:
+		return docstring.GetNumberFieldFromTor, true
+	case GetStringFieldFromTor:
+		return docstring.GetStringValueFromTor, true
+	case GetSysDateByTimezone:
+		return docstring.GetSysDateByTimezone, true
+	case LdLookup:
+		return docstring.LDLookup, true
+	case LdValidate:
+		return docstring.LDValidate, true
+	case IndexOf:
+		return docstring.IndexOf, true
+	case GetPayCurrencyCode:
+		return docstring.GetPayCurrencyCode, true
+	case CallSql:
+		return docstring.CallSQL, true
+	case LengthOfService:
+		return docstring.LengthOfService, true
+	case MakeDate:
+		return docstring.MakeDate, true
+	case MakeDateTime:
+		return docstring.MakeDateTime, true
+	case MakeDateTimeRange:
+		return docstring.MakeDateTimeRange, true
+	case PayCodeInScheduleMap:
+		return docstring.PayCodeInScheduleMap, true
+	case PayCodeInTimeSheetMap:
+		return docstring.PayCodeInTimeSheetMap, true
+	case Round:
+		return docstring.Round, true
+	case RoundDown:
+		return docstring.RoundDown, true
+	case RoundUp:
+		return docstring.RoundUp, true
+	case RoundToInt:
+		return docstring.RoundToInt, true
+	case SemiMonthlyPeriod:
+		return docstring.SemiMonthlyPeriod, true
+	case Substr:
+		return docstring.Substr, true
+	case ToLowerCase:
+		return docstring.ToLowerCase, true
+	case ToUpperCase:
+		return docstring.ToUpperCase, true
+	case MinSchedule:
+		return docstring.MinSchedule, true
+	case MaxSchedule:
+		return docstring.MaxSchedule, true
+	case AvgSchedule:
+		return docstring.AvgSchedule, true
+	case MinTime:
+		return docstring.MinTime, true
+	case MaxTime:
+		return docstring.MaxTime, true
+	case AvgTime:
+		return docstring.AvgTime, true
+	case SumException:
+		return docstring.SumException, true
+	case MinException:
+		return docstring.MinException, true
+	case MaxException:
+		return docstring.MaxException, true
+	case AvgException:
+		return docstring.AvgException, true
+	}
+
+	return "", false
 }

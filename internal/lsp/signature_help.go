@@ -73,6 +73,10 @@ type SignatureInfo struct {
 	ActiveParam   int            `json:"activeparameter,omitempty"`
 }
 
+func (s SignatureInfo) IsValid() bool {
+	return s.Label != ""
+}
+
 // ParamInfo represents a parameter of a callable-signature.
 //
 // https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#parameterInformation
