@@ -19,7 +19,7 @@ func (srv *Server) completions(pos lsp.Position) []lsp.CompletionItem {
 			// and we don't really have a need for this. Detail gets displayed above the doc string, but
 			// in a completely different font and it's kinda weird (at least in VS****).
 
-			Documentation:  docMarkdown(label),
+			Documentation:  object.DocMarkdown(label),
 			Kind:           lsp.CompItemFunc,
 			InsertText:     label,
 			InsertFormat:   lsp.InsFormatPlainText,
