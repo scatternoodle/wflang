@@ -203,12 +203,12 @@ func (srv *Server) handleRenameRequest(w io.Writer, c []byte, id *int) {
 		edits = append(edits, lsp.TextEdit{
 			Range: lsp.Range{
 				Start: lsp.Position{
-					Line:      tok.StartPos.Line,
-					Character: tok.StartPos.Col,
+					Line: tok.StartPos.Line,
+					Col:  tok.StartPos.Col,
 				},
 				End: lsp.Position{
-					Line:      tok.EndPos.Line,
-					Character: tok.EndPos.Col + 1,
+					Line: tok.EndPos.Line,
+					Col:  tok.EndPos.Col + 1,
 				},
 			},
 			NewText: req.NewName,
@@ -227,7 +227,7 @@ func (srv *Server) handleSignatureHelpRequest(w io.Writer, c []byte, id *int) {
 		return
 	}
 
-	info, activeParam, err := wflang.SignatureHelp(req.Position)
+	info, activeParam, err := wflang.SignatureHelp(srv.ast, token.Pos(req.Position))
 	if err != nil {
 		respondError(w, id, lsp.ERRCODE_REQUEST_FAILED, err.Error())
 		return

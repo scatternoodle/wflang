@@ -1,6 +1,8 @@
 package lsp
 
-import "github.com/scatternoodle/wflang/internal/jrpc2"
+import (
+	"github.com/scatternoodle/wflang/internal/jrpc2"
+)
 
 type TextDocumentItem struct {
 	URI     string `json:"uri"`
@@ -46,8 +48,8 @@ type TextDocumentPositionParams struct {
 }
 
 type Position struct {
-	Line      uint `json:"line"`
-	Character uint `json:"character"`
+	Line uint `json:"line"`
+	Col  uint `json:"character"`
 }
 
 // Range represents a range in a text document expressed as (zero-based) start and

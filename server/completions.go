@@ -5,7 +5,9 @@ import (
 	"github.com/scatternoodle/wflang/wflang/object"
 )
 
+// TODO: only partially implemented.
 func (srv *Server) completions(pos lsp.Position) []lsp.CompletionItem {
+	_ = pos
 	funcs := object.Builtins()
 	items := make([]lsp.CompletionItem, 0, len(funcs))
 	for _, fn := range funcs {

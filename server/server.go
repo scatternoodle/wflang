@@ -181,7 +181,7 @@ func (srv *Server) getTokenAtPos(pos lsp.Position) (index int, tok token.Token, 
 		if t.StartPos.Line != pos.Line {
 			return false
 		}
-		return pos.Character >= t.StartPos.Col && pos.Character <= t.EndPos.Col
+		return pos.Col >= t.StartPos.Col && pos.Col <= t.EndPos.Col
 	})
 
 	if idx < 0 {
@@ -256,8 +256,8 @@ func handleAssertID(w io.Writer, id *int) bool {
 // at column-1. If column is zero, returns zero.
 func cursorPos(pos lsp.Position) lsp.Position {
 	cursorPos := pos
-	if cursorPos.Character > 0 {
-		cursorPos.Character--
+	if cursorPos.Col > 0 {
+		cursorPos.Col--
 	}
 	return cursorPos
 }

@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/scatternoodle/wflang/internal/lsp"
-	"github.com/scatternoodle/wflang/server/docstring"
 	"github.com/scatternoodle/wflang/wflang/ast"
 	"github.com/scatternoodle/wflang/wflang/object"
 	"github.com/scatternoodle/wflang/wflang/token"
@@ -34,7 +33,8 @@ func SignatureHelp(root ast.Node, pos token.Pos) (info lsp.SignatureInfo, active
 	var fnct object.Function
 	switch callable.(type) {
 	case ast.BuiltinCall:
-		fnct, ok := object.Builtins()[callable.FName()]
+		var ok bool
+		fnct, ok = object.Builtins()[callable.FName()]
 		if !ok {
 			err = fmt.Errorf("no builtin function found for FName()=%s", callable.FName())
 			return lsp.SignatureInfo{}, 0, nil
@@ -47,17 +47,24 @@ func SignatureHelp(root ast.Node, pos token.Pos) (info lsp.SignatureInfo, active
 		return lsp.SignatureInfo{}, 0, err
 	}
 
+	fName := callable.FName()
 	info = lsp.SignatureInfo{
-		Label:       callable.FName(),
-		ActiveParam: 0,
-		Params:      []lsp.ParamInfo{},
+		Label:         fName, // TODO: needs to be implemented (full signature not just function name)
+		ActiveParam:   0,
+		Params:        []lsp.ParamInfo{},
+		Documentation: object.DocMarkdown(fName),
 	}
-	// CURRENT - get docstring
 
-	// get params
-	// convert them to protocol info
-	// determine active param
-	// return sig info
+	for _, fParam := range fnct.Params {
+		_ = fParam // we're still working out how to convert this one.
+		info.Params = append(info.Params, lsp.ParamInfo{
+			Label: [2]int{0, 0},
+			// TODO: not yet implemented - doscstring has it but will need to be split out
+			Documentation: &lsp.MarkupContent{Kind: lsp.MarkupKindMarkdown, Value: ""},
+		})
+	}
 
-	return lsp.SignatureInfo{}, 0, nil
+	// TODO: determine active param
+
+	return info, 0, nil
 }
