@@ -2,6 +2,8 @@ doing signaturehelp...
 - right now it's erroring out because the parser craps out on a function call unless all of the arguments are present.
   this is a matter better left for static analysis and diagnostics later, and should not prevent parsing. We need to be
   permissive of this so that the LSP can detect it's in a callable expression and provide signature / autocomplete.
+    - OK so I fixed that, but now it's erroring if I don't yet have an RParen... need to somehow allow it to go forward
+      without that. Not sure how that impacts the subsequent statement parsing though...
 - once we're done, review whether we're pushing errors unnecessarily for sighelp failures... we want a message if something
   is indicating a bug, but we shouldn't get errors in the editor when a signature simply can't be found... that'll get
   very annoying for the user.

@@ -10,7 +10,13 @@ import (
 )
 
 func SignatureHelp(root ast.Node, pos token.Pos) (info lsp.SignatureInfo, activeParam int, err error) {
-	nodes, err := ast.NodesEnclosing(root, token.Pos(pos))
+	// we consider the requested pos to be for the character BEHIND the cursor,
+	// and need to adjust for this.
+	if pos.Col > 0 {
+		pos.Col--
+	}
+
+	nodes, err := ast.NodesEnclosing(root, pos)
 	if err != nil {
 		return lsp.SignatureInfo{}, 0, err
 	}
