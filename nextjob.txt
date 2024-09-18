@@ -1,6 +1,9 @@
 doing signaturehelp...
-- bug: not getting parser errors anymore, but now it's just returning blank for a valid builtin (whatever I try). Needs
-  debugging.
+- testing out the new way of doing docstrings - hover needs a tad work, then go sort the signaturehelp
+- make signature label the actual full signature not the function name, e.g. min(lower, higher) as opposed to just "min"
+- handle function params docstrings... ugh why didn't I foresee this when I hardcoded those full markdown strings :(
+  let's make a FunctionDoc type for this, make internal unexported variables for this as I can't face yet another massive
+  map copy function.
 - once we're done, review whether we're pushing errors unnecessarily for sighelp failures... we want a message if something
   is indicating a bug, but we shouldn't get errors in the editor when a signature simply can't be found... that'll get
   very annoying for the user.

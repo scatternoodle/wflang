@@ -224,6 +224,12 @@ func DocMarkdown(name string) *lsp.MarkupContent {
 	if doc, ok := builtinDocString(name); ok {
 		content.Value = doc
 	}
+	if name == Contains {
+		doc, ok := docstring.BuiltinDoc(name)
+		if ok {
+			content.Value = doc.String()
+		}
+	}
 	return &content
 }
 
@@ -233,8 +239,8 @@ func builtinDocString(name string) (text string, ok bool) {
 		return docstring.Min, true
 	case Max:
 		return docstring.Max, true
-	case Contains:
-		return docstring.Contains, true
+	// case Contains:
+	// 	return docstring.Contains, true
 	case Sum:
 		return docstring.Sum, true
 	case Count:
