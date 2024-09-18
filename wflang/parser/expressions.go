@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/scatternoodle/wflang/wflang/ast"
 	"github.com/scatternoodle/wflang/wflang/token"
@@ -265,7 +266,7 @@ func (p *Parser) parseBuiltinCall() (ast.Expression, error) {
 
 	call := ast.BuiltinCall{Token: p.current}
 
-	name := p.current.Literal
+	name := strings.ToLower(p.current.Literal)
 	if name == "" {
 		return nil, wrap(newParseErr("name cannot be blank", p.current))
 	}

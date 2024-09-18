@@ -2,6 +2,7 @@ package wflang
 
 import (
 	"fmt"
+	"log/slog"
 
 	"github.com/scatternoodle/wflang/internal/lsp"
 	"github.com/scatternoodle/wflang/wflang/ast"
@@ -10,6 +11,7 @@ import (
 )
 
 func SignatureHelp(root ast.Node, pos token.Pos) (info lsp.SignatureInfo, activeParam int, err error) {
+	slog.Debug("called with", "root", root, "pos", pos)
 	// we consider the requested pos to be for the character BEHIND the cursor,
 	// and need to adjust for this.
 	if pos.Col > 0 {
@@ -17,6 +19,7 @@ func SignatureHelp(root ast.Node, pos token.Pos) (info lsp.SignatureInfo, active
 	}
 
 	nodes, err := ast.NodesEnclosing(root, pos)
+	slog.Debug("found enclosing nodes", "nodes", nodes, "err", err)
 	if err != nil {
 		return lsp.SignatureInfo{}, 0, err
 	}
@@ -25,13 +28,16 @@ func SignatureHelp(root ast.Node, pos token.Pos) (info lsp.SignatureInfo, active
 		return lsp.SignatureInfo{}, 0, nil
 	}
 	var callable ast.CallExpression = nil
-	for _, node := range nodes {
+	slog.Debug("searching nodes for callable")
+	for i, node := range nodes {
+		slog.Debug(fmt.Sprintf("index %d, node: %+v", i, node))
 		switch node.(type) {
 		case ast.CallExpression:
 			callable = node.(ast.CallExpression)
 		}
 	}
 	if callable == nil {
+		slog.Debug("no callable found, returning empty")
 		// again, no error, this is perfectly valid
 		return lsp.SignatureInfo{}, 0, nil
 	}
@@ -40,16 +46,19 @@ func SignatureHelp(root ast.Node, pos token.Pos) (info lsp.SignatureInfo, active
 	switch callable.(type) {
 	case ast.BuiltinCall:
 		var ok bool
-		fnct, ok = object.Builtins()[callable.FName()]
+		fnct, ok = object.Builtin(callable.FName())
 		if !ok {
 			err = fmt.Errorf("no builtin function found for FName()=%s", callable.FName())
+			slog.Debug(err.Error())
 			return lsp.SignatureInfo{}, 0, nil
 		}
 	case ast.MacroExpression:
 		// TODO: once macros properly implemented. For now, return empty
+		slog.Debug("it's a macro, so returning empty")
 		return lsp.SignatureInfo{}, 0, nil
 	default:
 		err = fmt.Errorf("cannot evaluate node of type %T val %+v as an ast.CallExpression", callable, callable)
+		slog.Debug(err.Error())
 		return lsp.SignatureInfo{}, 0, err
 	}
 
