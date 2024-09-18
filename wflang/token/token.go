@@ -13,6 +13,12 @@ type Token struct {
 	Len      int    // The length of the token, in bytes.
 }
 
+// Valid returns true if the token is a zero-value, in which case, uniquely, the
+// token literal will be an empty string.
+func (tk Token) Valid() bool {
+	return tk.Literal != ""
+}
+
 // Type is a string that represents the type of a token. See the consts beginning
 // with "T_" in this package.
 type Type string

@@ -140,10 +140,6 @@ func (p *Parser) parseBlockExpression() (ast.Expression, error) {
 
 	blockExp := ast.BlockExpression{Token: p.current, Vars: []ast.VarStatement{}}
 	for {
-		if p.next.Type == token.T_EOF {
-			return nil, newParseErr("EOF reached before BlockStatement end", p.current)
-		}
-
 		if p.current.Type == token.T_VAR {
 			vStmt, err := p.parseVarStatement()
 			if err != nil {
@@ -283,11 +279,14 @@ func (p *Parser) parseBuiltinCall() (ast.Expression, error) {
 	p.advance()
 	call.Args = []ast.Expression{}
 	if p.current.Type == token.T_RPAREN {
-		call.RPar = p.current
+		call.Last = p.current
 		return call, nil
 	}
 
 	for {
+		if p.next.Type == token.T_EOF {
+			break
+		}
 		arg, err := p.parseBlockExpression()
 		if err != nil {
 			return nil, wrap(err)
@@ -301,11 +300,8 @@ func (p *Parser) parseBuiltinCall() (ast.Expression, error) {
 		p.advance()
 	}
 
-	if err := p.wantPeek(token.T_RPAREN); err != nil {
-		return nil, wrap(err)
-	}
 	p.advance()
-	call.RPar = p.current
+	call.Last = p.current
 	return call, nil
 }
 
