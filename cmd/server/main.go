@@ -42,7 +42,7 @@ func setupLogging(logPath string, debug bool) {
 		panic(fmt.Errorf("error opening logfile: %w", err))
 	}
 
-	slog.SetDefault(slog.New(slog.NewJSONHandler(logFile, &slog.HandlerOptions{Level: level, AddSource: true})))
+	// slog.SetDefault(slog.New(slog.NewJSONHandler(logFile, &slog.HandlerOptions{Level: level, AddSource: true})))
 	slog.SetLogLoggerLevel(level)
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 	log.SetOutput(logFile)
