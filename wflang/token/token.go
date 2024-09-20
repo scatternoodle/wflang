@@ -73,3 +73,15 @@ func (p Pos) LTE(x Pos) bool {
 func (p Pos) InRange(start, end Pos) bool {
 	return start.LTE(p) && p.LTE(end)
 }
+
+// Right returns the Pos shifted n columns to the right. Assumes n to be positive,
+// so if you pass a negative value then it has the same effect as calling Left().
+func (p Pos) Right(n int) Pos {
+	return Pos{Line: p.Line, Col: p.Col + uint(n)}
+}
+
+// Left returns the Pos shifted n columns to the left. Assumes n to be positive,
+// so if you pass a negative value then it has the same effect as calling Right().
+func (p Pos) Left(n int) Pos {
+	return Pos{Line: p.Line, Col: p.Col - uint(n)}
+}
