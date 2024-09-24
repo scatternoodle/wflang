@@ -13,6 +13,12 @@ type Token struct {
 	Len      int    // The length of the token, in bytes.
 }
 
+// Valid returns true if the token is a zero-value, in which case, uniquely, the
+// token literal will be an empty string.
+func (tk Token) Valid() bool {
+	return tk.Literal != ""
+}
+
 // Type is a string that represents the type of a token. See the consts beginning
 // with "T_" in this package.
 type Type string
@@ -66,4 +72,19 @@ func (p Pos) LTE(x Pos) bool {
 // InRange returns true if Pos p is within range start>>end.
 func (p Pos) InRange(start, end Pos) bool {
 	return start.LTE(p) && p.LTE(end)
+}
+
+// Right returns the Pos shifted n columns to the right. Assumes n to be positive,
+// so if you pass a negative value then it has the same effect as calling Left().
+func (p Pos) Right(n int) Pos {
+	return Pos{Line: p.Line, Col: p.Col + uint(n)}
+}
+
+// Left returns the Pos shifted n columns to the left. Assumes n to be positive,
+// so if you pass a negative value then it has the same effect as calling Right().
+func (p Pos) Left(n int) Pos {
+	if p.Col == 0 {
+		return p
+	}
+	return Pos{Line: p.Line, Col: p.Col - uint(n)}
 }

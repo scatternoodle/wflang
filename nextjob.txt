@@ -1,5 +1,9 @@
-signature help handling
-1 - we added new CallExpression interface to AST - we now need to ensure all the
-	implementing types populate the L and RParen data during parsing.
-2 - visitor func to walk ast and retrieve the function call node at pos
-3 - ... - for now, just print the function name to prove we're getting the right node
+doing signaturehelp...
+- testing out the new way of doing docstrings - hover needs a tad work, then go sort the signaturehelp
+- make signature label the actual full signature not the function name, e.g. min(lower, higher) as opposed to just "min"
+- handle function params docstrings... ugh why didn't I foresee this when I hardcoded those full markdown strings :(
+  let's make a FunctionDoc type for this, make internal unexported variables for this as I can't face yet another massive
+  map copy function.
+- once we're done, review whether we're pushing errors unnecessarily for sighelp failures... we want a message if something
+  is indicating a bug, but we shouldn't get errors in the editor when a signature simply can't be found... that'll get
+  very annoying for the user.

@@ -22,7 +22,9 @@ type BuiltinCall struct {
 	Name string
 	Args []Expression
 	LPar token.Token
-	RPar token.Token
+	// the last token in the node. Ideally a terminating LPAREN after the args,
+	// but could also be EOF if the call is incomplete.
+	Last token.Token
 }
 
 func (f BuiltinCall) ExpressionNode()      {}
@@ -42,11 +44,11 @@ func (f BuiltinCall) String() string {
 }
 
 func (f BuiltinCall) Pos() (start, end token.Pos) {
-	return f.Token.StartPos, f.RPar.EndPos
+	return f.Token.StartPos, f.Last.EndPos
 }
 
 func (b BuiltinCall) LParen() token.Pos    { return b.LPar.StartPos }
-func (b BuiltinCall) RParen() token.Pos    { return b.RPar.StartPos }
+func (b BuiltinCall) RParen() token.Pos    { return b.Last.StartPos }
 func (b BuiltinCall) FName() string        { return b.Name }
 func (b BuiltinCall) Params() []Expression { return b.Args }
 

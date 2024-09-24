@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/scatternoodle/wflang/wflang/ast"
 	"github.com/scatternoodle/wflang/wflang/token"
@@ -140,10 +141,6 @@ func (p *Parser) parseBlockExpression() (ast.Expression, error) {
 
 	blockExp := ast.BlockExpression{Token: p.current, Vars: []ast.VarStatement{}}
 	for {
-		if p.next.Type == token.T_EOF {
-			return nil, newParseErr("EOF reached before BlockStatement end", p.current)
-		}
-
 		if p.current.Type == token.T_VAR {
 			vStmt, err := p.parseVarStatement()
 			if err != nil {
@@ -260,35 +257,42 @@ func (p *Parser) parseMacroExpression() (ast.Expression, error) {
 //
 //	Name<Ident>(Args[]<BlockExpression>)
 func (p *Parser) parseBuiltinCall() (ast.Expression, error) {
-	p.trace.trace("FunctionCall")
-	defer p.trace.untrace("FunctionCall")
+	p.trace.trace("BuiltinCall")
+	defer p.trace.untrace("BuiltinCall")
 
 	wrap := func(e error) error {
-		return fmt.Errorf("parseFunctionCall: %w", e)
+		return fmt.Errorf("parseBuiltinCall: %w", e)
 	}
 
-	funCall := ast.BuiltinCall{Token: p.current}
+	call := ast.BuiltinCall{Token: p.current}
 
-	name := p.current.Literal
+	name := strings.ToLower(p.current.Literal)
 	if name == "" {
 		return nil, wrap(newParseErr("name cannot be blank", p.current))
 	}
-	funCall.Name = name
+	call.Name = name
 
 	if err := p.wantPeek(token.T_LPAREN); err != nil {
 		return nil, wrap(err)
 	}
 	p.advance()
-	funCall.LPar = p.current
+	call.LPar = p.current
 	p.advance()
+	call.Args = []ast.Expression{}
+	if p.current.Type == token.T_RPAREN {
+		call.Last = p.current
+		return call, nil
+	}
 
-	funCall.Args = []ast.Expression{}
 	for {
+		if p.next.Type == token.T_EOF {
+			break
+		}
 		arg, err := p.parseBlockExpression()
 		if err != nil {
 			return nil, wrap(err)
 		}
-		funCall.Args = append(funCall.Args, arg)
+		call.Args = append(call.Args, arg)
 
 		if p.next.Type != token.T_COMMA {
 			break
@@ -297,12 +301,9 @@ func (p *Parser) parseBuiltinCall() (ast.Expression, error) {
 		p.advance()
 	}
 
-	if err := p.wantPeek(token.T_RPAREN); err != nil {
-		return nil, wrap(err)
-	}
 	p.advance()
-	funCall.RPar = p.current
-	return funCall, nil
+	call.Last = p.current
+	return call, nil
 }
 
 // parseOverExpression - looks like:

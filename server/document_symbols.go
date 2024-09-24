@@ -20,14 +20,14 @@ func (srv *Server) createSymbols() {
 		varEnd.Col++
 
 		symbolRange := lsp.Range{
-			Start: lsp.Position{Line: varStart.Line, Character: varStart.Col},
-			End:   lsp.Position{Line: varEnd.Line, Character: varEnd.Col},
+			Start: lsp.Position{Line: varStart.Line, Col: varStart.Col},
+			End:   lsp.Position{Line: varEnd.Line, Col: varEnd.Col},
 		}
 
 		nameStart, nameEnd := v.Statement.Name.Pos()
 		selectionRange := lsp.Range{
-			Start: lsp.Position{Line: nameStart.Line, Character: nameStart.Col},
-			End:   lsp.Position{Line: nameEnd.Line, Character: nameEnd.Col + 1},
+			Start: lsp.Position{Line: nameStart.Line, Col: nameStart.Col},
+			End:   lsp.Position{Line: nameEnd.Line, Col: nameEnd.Col + 1},
 		}
 
 		srv.symbols[v.Name] = lsp.DocumentSymbol{

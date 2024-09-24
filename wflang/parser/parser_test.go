@@ -20,6 +20,16 @@ func TestParse(t *testing.T) {
 	_, _ = testRunParser(t, testParseInput, 1, false)
 }
 
+// test for bug where AST has a 0,0 Pos() value on a file with valid code in it
+func TestASTPos(t *testing.T) {
+	input := `sumTime()`
+	_, AST := testRunParser(t, input, 1, true)
+	wantStart, wantEnd := token.Pos{Line: 0, Col: 0}, token.Pos{Line: 0, Col: 8}
+	if start, end := AST.Pos(); start != wantStart || end != wantEnd {
+		t.Fatalf("have start=%s, end=%s want start=%s, end=%s", start, end, wantStart, wantEnd)
+	}
+}
+
 func TestParseVarStatement(t *testing.T) {
 	tests := []struct {
 		input   string
