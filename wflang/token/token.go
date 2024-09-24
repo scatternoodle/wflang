@@ -83,5 +83,8 @@ func (p Pos) Right(n int) Pos {
 // Left returns the Pos shifted n columns to the left. Assumes n to be positive,
 // so if you pass a negative value then it has the same effect as calling Right().
 func (p Pos) Left(n int) Pos {
+	if p.Col == 0 {
+		return p
+	}
 	return Pos{Line: p.Line, Col: p.Col - uint(n)}
 }

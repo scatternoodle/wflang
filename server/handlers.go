@@ -235,7 +235,7 @@ func (srv *Server) handleSignatureHelpRequest(w io.Writer, c []byte, id *int) {
 	resp := lsp.SignatureHelpResponse{
 		Response: jrpc2.NewResponse(id, nil),
 		SignatureHelp: &lsp.SignatureHelp{
-			Signatures: []lsp.SignatureInfo{info}, // only one is possible.
+			Signatures: []lsp.SignatureInfo{*info}, // only one is possible.
 			// TODO: handle active signature in request params?
 			// gopls implementation appears to ignore it and instead
 			// calculates it themselves every time (I suppose this
