@@ -19,7 +19,7 @@ func (f inspector) Visit(node Node) Visitor {
 }
 
 // Inspect provides a closure around Walk that allows you to walk the AST with
-// an inspector function f, which is curried into a Visitor and passed to the
+// an inspector function f, which is transformed into a Visitor and passed to the
 // Walk function.
 func Inspect(n Node, f func(Node) bool) {
 	Walk(inspector(f), n)
