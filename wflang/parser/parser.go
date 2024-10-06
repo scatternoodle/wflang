@@ -84,9 +84,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.infixParsers[token.T_IN] = p.parseInExpression
 
 	p.ast = p.parse()
-	if p.ast != nil {
-		p.eval(p.ast)
-	}
 	return p
 }
 
