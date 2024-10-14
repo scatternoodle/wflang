@@ -75,7 +75,7 @@ func SignatureHelp(root ast.Node, pos token.Pos) (*lsp.SignatureInfo, int, error
 			},
 		}
 	}
-	if len(callable.Params()) > len(paramInfos) {
+	if !function.Variadic() && len(callable.Params()) > len(paramInfos) {
 		err = fmt.Errorf("callable param len %d exceeds stored param info len %d for the function",
 			len(callable.Params()), len(paramInfos))
 		slog.Error(err.Error())

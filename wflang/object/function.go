@@ -18,3 +18,14 @@ type Param struct {
 	PairA    bool // is 1st in pair of params
 	PairB    bool // is 2nd in pair of params
 }
+
+// Variadic returns true if the Function is variadic; in that one or more parameters
+// can take unlimited arguments - e.g. min(args...)
+func (f Function) Variadic() bool {
+	for _, param := range f.Params {
+		if param.List {
+			return true
+		}
+	}
+	return false
+}
