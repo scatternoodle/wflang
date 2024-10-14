@@ -15,21 +15,26 @@ var builtinDocs = map[string]FunctionDoc{
 		Params: []*ParamDoc{
 			{
 				Name:  "args",
-				Label: [2]int{0, 14},
+				Label: [2]int{4, 19},
 				Type:  "number",
 				Desc:  "list of numbers to compare",
 			},
 		},
 	},
 
-	"contains": {
-		Name:      "Contains",
-		Signature: "contains(x: string, y: string)",
-		Returns:   "boolean",
-		Desc:      "Returns true if `y` is a substring of `x`.",
+	"max": {
+		Name:      "Max",
+		Signature: "max(args: number...)",
+		Returns:   "number",
+		Desc: "Returns the largest of its arguments. It takes a list of arguments as long " +
+			"as you like, which can be any expression that evaluates to a number.",
 		Params: []*ParamDoc{
-			{Name: "x", Label: [2]int{9, 18}, Type: "string", Desc: "the string to search in"},
-			{Name: "y", Label: [2]int{20, 29}, Type: "string", Desc: "the string to search in"},
+			{
+				Name:  "args",
+				Label: [2]int{4, 19},
+				Type:  "number",
+				Desc:  "list of numbers to compare",
+			},
 		},
 	},
 }
