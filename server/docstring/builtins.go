@@ -37,4 +37,24 @@ var builtinDocs = map[string]FunctionDoc{
 			},
 		},
 	},
+	"contains": {
+		Name:      "Contains",
+		Signature: "contains(x: string, y: string)",
+		Returns:   "boolean",
+		Desc:      "Returns true if `y` is a substring of `x`.",
+		Params: []*ParamDoc{
+			{
+				Name:  "x",
+				Label: [2]int{9, 18},
+				Type:  "string",
+				Desc:  "the string to search in",
+			},
+			{
+				Name:  "y",
+				Label: [2]int{20, 29},
+				Type:  "string",
+				Desc:  "the string to search for",
+			},
+		},
+	},
 }
